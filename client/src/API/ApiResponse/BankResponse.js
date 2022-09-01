@@ -3,6 +3,7 @@ import { useEffect } from "react";
 import { useStateContext } from "../../Contexts/ContextProvider";
 
 
+
 const BankResponse = () => {
   //get data variable from contextprovider
   const { BankData, setBankData, LivePrice } = useStateContext();
@@ -15,7 +16,7 @@ const bankRoundOffPrice=(LivePrice?.data[18]?.last)-roundoff;
   //fetch,process and stored data
   const getBankChain =  async () => {
     const response = await fetch(
-      process.env.REACT_APP_BANKNIFTY_DATA
+      "https://tradingcompass.herokuapp.com/api/banknifty" 
     );
     const responseJSON =  await response.json();
     const data = responseJSON.filtered?.data;

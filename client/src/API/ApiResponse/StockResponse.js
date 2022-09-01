@@ -3,6 +3,7 @@ import { useEffect } from "react";
 import { useStateContext } from "../../Contexts/ContextProvider";
 
 
+
 const StockResponse = () => {
 
    //get data variable from contextprovider
@@ -13,7 +14,7 @@ const StockResponse = () => {
 
   const getstockPrice =  async () => {
     const response =  await fetch(
-      process.env.REACT_APP_STOCKS_DATA
+      "https://tradingcompass.herokuapp.com/api/stocks"
     );
     const responseJSON =  await response.json();
     const data=responseJSON

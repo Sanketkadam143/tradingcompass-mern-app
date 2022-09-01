@@ -3,13 +3,14 @@ import { useEffect } from "react";
 import { useStateContext } from "../../Contexts/ContextProvider";
 
 
+
 const LivePriceResponse = () => {
   //get data variable from contextprovider
   const { LivePrice, setLivePrice } = useStateContext();
 
   //fetch,process and stored data
   const getPrice = async () => {
-    const response =  await fetch(process.env.REACT_APP_LIVEPRICE_DATA);
+    const response =  await fetch("https://tradingcompass.herokuapp.com/api/liveprice");
     const responseJSON =  await response.json();
 
     //assign value to liveprice and store reponse in local storage for future need
