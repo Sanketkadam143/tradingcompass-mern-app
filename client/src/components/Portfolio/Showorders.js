@@ -1,0 +1,180 @@
+import React from "react";
+import { Divider } from "@mui/material";
+import { makeStyles } from "@mui/styles";
+import AccessTimeIcon from "@mui/icons-material/AccessTime";
+import { Button } from "@mui/material";
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import DialogContentText from "@mui/material/DialogContentText";
+import DialogTitle from "@mui/material/DialogTitle";
+import Slide from "@mui/material/Slide";
+import { useStateContext } from "../../Contexts/ContextProvider";
+
+const Transition = React.forwardRef(function Transition(props, ref) {
+  return <Slide direction="up" ref={ref} {...props} />;
+});
+
+const useStyles = makeStyles((theme) => {
+  return {
+    paperDiv: {
+      margin: "5%",
+      display: "flex",
+      flexDirection: "column",
+      justifyContent: "center",
+      alignItems: "center",
+      flexWrap: "wrap",
+    },
+
+    orderDiv: {
+      margin: "1em",
+    },
+
+    // buttonDiv:{
+    //     justifyContent:"center",
+    //     alignItems:"center",
+
+    // }
+  };
+});
+
+const Showorders = ({ orderDetails, index }) => {
+  const { NiftyData, BankData, orderBook } = useStateContext();
+  const classes = useStyles();
+
+  const [anchorEl, setAnchorEl] = React.useState(null);
+
+  const exitPosition = (event) => {
+    setAnchorEl(event.currentTarget);
+
+    orderBook[index].exitPrice = latestPrice;
+    orderBook[index].exitTime = new Date().toString().split("G")
+    localStorage.setItem("orderBook", JSON.stringify(orderBook));
+
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
+  let latestPrice =
+    orderDetails.indexName === "NIFTY"
+      ? orderDetails.optionType === "CE"
+        ? NiftyData[
+            NiftyData?.findIndex(
+              (element) => element?.strikePrice === orderDetails.strikePrice
+            )
+          ]?.CE?.lastPrice
+        : NiftyData[
+            NiftyData?.findIndex(
+              (element) => element?.strikePrice === orderDetails.strikePrice
+            )
+          ]?.PE?.lastPrice
+      : orderDetails.optionType === "CE"
+      ? BankData[
+          BankData?.findIndex(
+            (element) => element?.strikePrice === orderDetails.strikePrice
+          )
+        ]?.CE?.lastPrice
+      : BankData[
+          BankData?.findIndex(
+            (element) => element?.strikePrice === orderDetails.strikePrice
+          )
+        ]?.PE?.lastPrice;
+
+  let profit =
+    orderDetails.exitPrice !== undefined
+      ? (
+          (orderDetails.exitPrice - orderDetails.price) *
+          (orderDetails.indexName === "NIFTY" ? 50 : 25) *
+          orderDetails.lots
+        ).toFixed(2)
+      : (
+          (latestPrice - orderDetails.price) *
+          (orderDetails.indexName === "NIFTY" ? 50 : 25) *
+          orderDetails.lots
+        ).toFixed(2);
+
+  orderDetails.orderType==="optionSelling" && (profit = -(profit))
+
+  orderBook[index].profit = profit;
+  localStorage.setItem("orderBook", JSON.stringify(orderBook));
+
+  return (
+    <div className={classes.paperDiv}>
+      <div className={classes.orderDiv}>
+        {orderDetails.indexName} {orderDetails.strikePrice}{" "}
+        {orderDetails.optionType}{" "}
+        {orderDetails.orderType}
+      </div>
+
+      <div>
+        <AccessTimeIcon /> 
+        Entry Time {orderDetails.orderTime[0]}
+      </div>
+      <div>
+        Quantity {orderDetails.lots}
+        {orderDetails.indexName === "NIFTY" ? " X 50" : " X 25"}{" "}
+      </div>
+      <div>{orderDetails.orderType === "optionBuying" ? "Buy Price" : "Sell Price"} {orderDetails.price}</div>
+
+      {orderDetails.exitPrice!==undefined && <div> {orderDetails.orderType === "optionBuying" ? "Sell Price" : "Buy Price"} {orderDetails.exitPrice}</div>}
+
+      {orderDetails.exitPrice!==undefined && <div> Exit Time {orderDetails?.exitTime[0]}</div>}
+
+      <div>Current Price {latestPrice}</div>
+      <div>Profit {profit}</div>
+     
+
+      <div className={classes.buttonDiv}>
+        <Button
+          type="submit"
+          fullWidth
+          variant="contained"
+          color="primary"
+          style={{ margin: "1em" }}
+          disableElevation
+          onClick={exitPosition}
+          disabled={orderDetails.exitPrice !== undefined}
+        >
+          {orderDetails.exitPrice !== undefined ? "Closed" : "Exit"}
+        </Button>
+
+
+
+        <Dialog
+          open={anchorEl}
+          TransitionComponent={Transition}
+          keepMounted
+          onClose={() => {
+            handleClose();
+          }}
+          aria-describedby="alert-dialog-slide-description"
+        >
+          <DialogTitle>
+            {"Your Position was Successfully Exited !!!"}
+          </DialogTitle>
+          <DialogContent>
+            <DialogContentText>
+              This is a virtual option trading platform. Money will neither be
+              debited nor credited in your Bank Account
+            </DialogContentText>
+          </DialogContent>
+          <DialogActions>
+            <Button
+              onClick={() => {
+                handleClose();
+              }}
+            >
+              OK
+            </Button>
+          </DialogActions>
+        </Dialog>
+      </div>
+
+      <Divider style={{width:"100%"}}/>
+</div>
+  );
+};
+
+export default Showorders;
