@@ -4,18 +4,18 @@ import cors from "cors"
 import axios from "axios"
 import * as dotenv from 'dotenv'
 dotenv.config()
-import path from 'path';
-import {fileURLToPath} from 'url';
+// import path from 'path';
+// import {fileURLToPath} from 'url';
 
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+// const __filename = fileURLToPath(import.meta.url);
+// const __dirname = path.dirname(__filename);
 
-app.use(express.static(path.join(__dirname, "client", "build")))
+// app.use(express.static(path.join(__dirname, "client", "build")))
 
-app.get("*", (req, res) => {
-    res.sendFile(path.join(__dirname, "client", "build", "index.html"));
-})
+// app.get("*", (req, res) => {
+//     res.sendFile(path.join(__dirname, "client", "build", "index.html"));
+// })
 
 const PORT = process.env.PORT || 5000;
 
