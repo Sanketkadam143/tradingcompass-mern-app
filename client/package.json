@@ -1,5 +1,5 @@
 {
-  "name": "materialuiproject",
+  "name": "tradingcompass",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -14,7 +14,6 @@
     "ajv": "^8.11.0",
     "axios": "^0.27.2",
     "chart.js": "^3.9.1",
-    "dotenv": "^16.0.2",
     "gapi-script": "^1.2.0",
     "jwt-decode": "^3.1.2",
     "material-ui-popup-state": "^4.0.1",
@@ -57,5 +56,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "dotenv": "^16.0.2"
   }
 }
