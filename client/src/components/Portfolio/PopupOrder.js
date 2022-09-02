@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Popover from "@mui/material/Popover";
 import Button from "@mui/material/Button";
 import InputLabel from "@mui/material/InputLabel";
@@ -20,7 +20,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
-export default function PopupOrder({ name, niftyData, bankData ,orderType}) {
+export default function PopupOrder({ name, niftyData, bankData, orderType }) {
   const { orderBook } = useStateContext();
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [openSuccess, setOpenSuccess] = useState(false);
@@ -28,11 +28,10 @@ export default function PopupOrder({ name, niftyData, bankData ,orderType}) {
   const [pos, setPos] = useState(1);
   const [cepePos, setCepePos] = useState(3);
   const [data, setData] = useState(niftyData);
-  const [selectedStrike, setSelectedStrike] = useState(
-    niftyData[20]?.strikePrice
-  );
+  const [selectedStrike, setSelectedStrike] = useState(niftyData[20]?.strikePrice);
   const [lots, setLots] = useState(0);
-  const [lotsize, setLotsize] = useState(true);
+  const [isnifty, setIsnifty] = useState(true);
+  const [currentPrice, setCurrentPrice] = useState();
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -53,15 +52,17 @@ export default function PopupOrder({ name, niftyData, bankData ,orderType}) {
 
   const handleChange = (event) => {
     setPos(event.target.value);
-    setLotsize(!lotsize);
+    
 
-    data[0]?.strikePrice === niftyData[0]?.strikePrice
-      ? setSelectedStrike(bankData[20]?.strikePrice)
+    // data[0]?.strikePrice === niftyData[0]?.strikePrice
+    isnifty  ? setSelectedStrike(bankData[20]?.strikePrice)
       : setSelectedStrike(niftyData[20]?.strikePrice);
 
-    data[0]?.strikePrice === niftyData[0]?.strikePrice
-      ? setData(bankData)
+    // data[0]?.strikePrice === niftyData[0]?.strikePrice
+      isnifty ? setData(bankData)
       : setData(niftyData);
+
+      setIsnifty(!isnifty);
   };
 
   const handleChange2 = (event) => {
@@ -80,25 +81,47 @@ export default function PopupOrder({ name, niftyData, bankData ,orderType}) {
     orderBook?.unshift(orderDetails);
     localStorage.setItem("orderBook", JSON.stringify(orderBook));
   };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  useEffect(() => {
+    setCurrentPrice(
+      cepePos === 4
+        ? data[
+            data?.findIndex(
+              (element) => element?.strikePrice === selectedStrike
+            )
+          ]?.PE?.lastPrice
+        : data[
+            data?.findIndex(
+              (element) => element?.strikePrice === selectedStrike
+            )
+          ]?.CE?.lastPrice
+    );
+    
+   
+  });
+ 
 
-  let currentPrice =
-    cepePos === 4
-      ? data[
-          data?.findIndex((element) => element?.strikePrice === selectedStrike)
-        ]?.PE?.lastPrice
-      : data[
-          data?.findIndex((element) => element?.strikePrice === selectedStrike)
-        ]?.CE?.lastPrice;
+  // const currentPrice =
+  //   cepePos === 4
+  //     ? data[
+  //         data?.findIndex((element) => element?.strikePrice === selectedStrike)
+  //       ]?.PE?.lastPrice
+  //     : data[
+  //         data?.findIndex((element) => element?.strikePrice === selectedStrike)
+  //       ]?.CE?.lastPrice;
 
-  let requiredMargin =
+      
+        // console.log(isnifty);
+
+  const requiredMargin =
     lots > 0
-      ? lotsize
+      ? isnifty
         ? currentPrice * lots * 50
         : currentPrice * lots * 25
       : 0;
 
-  var orderDetails = {
-    indexName: lotsize ? "NIFTY" : "BANKNIFTY",
+  const orderDetails = {
+    indexName: isnifty ? "NIFTY" : "BANKNIFTY",
     strikePrice: selectedStrike,
     optionType: cepePos === 3 ? "CE" : "PE",
     price: currentPrice,
@@ -196,7 +219,7 @@ export default function PopupOrder({ name, niftyData, bankData ,orderType}) {
             <TextField
               id="outlined-number"
               onChange={enableButton}
-              label={lotsize ? " Lots Size 50 " : " Lots Size 25 "}
+              label={isnifty ? " Lots Size 50 " : " Lots Size 25 "}
               type="number"
               placeholder="No of Lots"
               inputProps={{ inputMode: "numeric", pattern: "[0-9]*" }}
@@ -211,7 +234,7 @@ export default function PopupOrder({ name, niftyData, bankData ,orderType}) {
           </FormControl>
         </div>
 
-        <div style={{padding:"1em"}}>
+        <div style={{ padding: "1em" }}>
           <Button
             aria-describedby={id}
             disabled={lots <= 0}

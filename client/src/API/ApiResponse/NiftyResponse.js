@@ -15,7 +15,7 @@ const NiftyResponse = () => {
   //fetch,process and stored data
 
   const getNiftyChain =  async () => {
-    const response =  await fetch("https://tradingcompass.herokuapp.com/api/nifty");
+    const response =  await fetch("https://www.nseindia.com/api/option-chain-indices?symbol=NIFTY");
     const responseJSON =  await response.json();
  
     const data = responseJSON.filtered?.data;
@@ -42,7 +42,7 @@ const NiftyResponse = () => {
   useEffect(() => {
     const interval = setInterval(() => {
       const date = new Date();
-      if (date.getMinutes() % 2 === 0) {
+      if (date.getMinutes() % 1 === 0) {
         getNiftyChain();
       }
     }, 20000);
