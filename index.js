@@ -33,36 +33,36 @@ app.get("/api/nifty", async (req,res)=>{
   
 })
 
-app.get("/api/banknifty", async (req,res)=>{
+// app.get("/api/banknifty", async (req,res)=>{
 
-    axios.get(process.env.BANKNIFTY_API).then(response=>{
-        res.json(response.data)
-    }).catch(error =>{
-        // res.json(error)
-    })
+//     axios.get(process.env.BANKNIFTY_API).then(response=>{
+//         res.json(response.data)
+//     }).catch(error =>{
+//         // res.json(error)
+//     })
   
-})
+// })
 
-app.get("/api/stocks", async (req,res)=>{
+// app.get("/api/stocks", async (req,res)=>{
 
-    axios.get(process.env.STOCKS_API).then(response=>{
-        res.json(response.data)
-    }).catch(error =>{
-        // res.json(error)
-    })
+//     axios.get(process.env.STOCKS_API).then(response=>{
+//         res.json(response.data)
+//     }).catch(error =>{
+//         // res.json(error)
+//     })
   
-})
+// })
 
-app.get("/api/liveprice", async (req,res)=>{
+// app.get("/api/liveprice", async (req,res)=>{
 
-    axios.get(process.env.LIVEPRICE_API).then(response=>{
-        res.json(response.data)
-    }).catch(error =>{
-        // res.json(error)
-    })
+//     axios.get(process.env.LIVEPRICE_API).then(response=>{
+//         res.json(response.data)
+//     }).catch(error =>{
+//         // res.json(error)
+//     })
 
   
-})
+// })
 
 
 if(process.env.NODE_ENV == "production"){
