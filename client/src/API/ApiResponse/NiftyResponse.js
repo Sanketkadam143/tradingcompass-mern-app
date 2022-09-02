@@ -42,7 +42,7 @@ const NiftyResponse = () => {
   useEffect(() => {
     const interval = setInterval(() => {
       const date = new Date();
-      if (date.getMinutes() % 1 === 0) {
+      if (date.getMinutes() % 2 === 0) {
         getNiftyChain();
       }
     }, 20000);
