@@ -15,12 +15,30 @@ import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import Slide from "@mui/material/Slide";
 import { useStateContext } from "../../Contexts/ContextProvider";
+import { makeStyles } from "@mui/styles";
+
+
+const useStyles = makeStyles((theme) => {
+  return { 
+    boxDiv:{
+      
+      padding:"0.9em",
+      border:"1px solid #e0e0e0",
+      borderRadius:theme.shape.borderRadius
+      
+  
+
+    }
+   };
+});
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
 export default function PopupOrder({ name, niftyData, bankData, orderType }) {
+
+  const classes = useStyles();
   const { orderBook } = useStateContext();
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [openSuccess, setOpenSuccess] = useState(false);
@@ -128,6 +146,7 @@ export default function PopupOrder({ name, niftyData, bankData, orderType }) {
     lots: lots,
     orderTime: new Date().toString().split("G"),
     orderType: orderType,
+    margin:requiredMargin,
   };
 
   return (
@@ -210,7 +229,11 @@ export default function PopupOrder({ name, niftyData, bankData, orderType }) {
             </Select>
           </FormControl>
           <FormControl sx={{ m: 1, minWidth: 130 }} style={{ margin: "1em" }}>
-            <Typography>{currentPrice}</Typography>
+            
+            <div className={classes.boxDiv}>
+              <Typography>	&#8377; {currentPrice}</Typography>
+            </div>
+            <FormHelperText>Current Price</FormHelperText>
           </FormControl>
         </div>
 
@@ -227,10 +250,13 @@ export default function PopupOrder({ name, niftyData, bankData, orderType }) {
                 shrink: true,
               }}
             />
-            <FormHelperText>Required</FormHelperText>
+           
           </FormControl>
           <FormControl sx={{ m: 1, minWidth: 130 }} style={{ margin: "1em" }}>
-            <Typography>{requiredMargin.toFixed(2)}</Typography>
+            <div className={classes.boxDiv}>
+              <Typography>	&#8377; {requiredMargin.toFixed(2)}  </Typography>
+            </div>
+            <FormHelperText>Required Margin</FormHelperText>
           </FormControl>
         </div>
 
