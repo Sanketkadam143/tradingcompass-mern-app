@@ -165,7 +165,7 @@ const Showorders = ({ orderDetails, index }) => {
                   color: profit < 0 ? "#a84032" : "#32a852",
                 }}
               >
-              {  profit>0 && "+" }{profit} {( profit/orderDetails.margin)*100 } %
+              {  profit>0 && "+" }{profit} {(( profit/orderDetails.margin)*100).toFixed(2) } %
               </span>
              </div>
         </div>

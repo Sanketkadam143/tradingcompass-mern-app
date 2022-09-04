@@ -63,11 +63,15 @@ const Position = () => {
   orderBook?.forEach((x) => {
     totalProfit += parseInt(x.profit);
   });
-  let invested = 0;
+
+  let invested = 0,investedProfit = 0;
   orderBook?.forEach((x) => {
-    invested += parseInt(x.margin);
+    x.exitPrice === undefined &&
+   ( invested += parseInt(x.margin));
+   ( investedProfit += parseInt(x.profit));
   });
-console.log(invested);
+ 
+
   return (
     <>
       <div className={classes.positionPageDiv}>
@@ -79,7 +83,7 @@ console.log(invested);
                 Invested 
                 </div>
                <div>
-               <Typography variant="h6">{invested}</Typography>
+               <Typography variant="h5">{invested}</Typography>
                </div>
                 
               </div>
@@ -88,9 +92,11 @@ console.log(invested);
                 Current
                 </div>
                <div  style={{
-                  color: invested+totalProfit < invested ? "#a84032" : "#32a852",
+                  color: invested+investedProfit < invested ? "#a84032" : "#32a852",
                 }}>
-               <Typography variant="h6">{invested+totalProfit}</Typography>
+               <Typography variant="h5">{invested+investedProfit}</Typography>
+
+               <Typography variant="subtitle2">{((invested+investedProfit-invested)/invested*100).toFixed(2)} %</Typography>
                
                </div>
                 
