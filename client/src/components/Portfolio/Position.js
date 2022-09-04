@@ -67,8 +67,8 @@ const Position = () => {
   let invested = 0,investedProfit = 0;
   orderBook?.forEach((x) => {
     x.exitPrice === undefined &&
-   ( invested += parseInt(x.margin));
-   ( investedProfit += parseInt(x.profit));
+  ( ( invested += parseInt(x.margin))
+   ( investedProfit += parseInt(x.profit)));
   });
  
 
