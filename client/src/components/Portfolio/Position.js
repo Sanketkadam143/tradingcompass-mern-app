@@ -1,5 +1,5 @@
 import React from "react";
-import { Paper,Divider, Typography } from "@mui/material";
+import { Paper, Divider, Typography } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import PopupOrder from "./PopupOrder";
 import { useStateContext } from "../../Contexts/ContextProvider";
@@ -15,30 +15,28 @@ const useStyles = makeStyles((theme) => {
       alignItems: "center",
       justifyContent: "center",
     },
-    investedDiv:{
-      display:"flex",
-      justifyContent:"space-around",
-      width:"100%",
-      marginTop:"1em"
-
+    investedDiv: {
+      display: "flex",
+      justifyContent: "space-around",
+      width: "100%",
+      marginTop: "1em",
     },
     orderDiv: {
       display: "flex",
       flexDirection: "row",
       justifyContent: "space-evenly",
-      [theme.breakpoints.down('sm')]: {
-        flexDirection:"column",
-
+      [theme.breakpoints.down("sm")]: {
+        flexDirection: "column",
       },
     },
 
     pnlDiv: {
-      width:"100%",
+      width: "100%",
       marginBottom: "1em",
       fontSize: "20px",
       fontFamily: "Arial",
-      display:"flex",
-      justifyContent:"space-around"
+      display: "flex",
+      justifyContent: "space-around",
     },
 
     paperDiv: {
@@ -64,13 +62,12 @@ const Position = () => {
     totalProfit += parseInt(x.profit);
   });
 
-  let invested = 0,investedProfit = 0;
+  let invested = 0,
+    investedProfit = 0;
   orderBook?.forEach((x) => {
-    x.exitPrice === undefined &&
-  ( ( invested += parseInt(x.margin))
-   ( investedProfit += parseInt(x.profit)));
+    x.exitPrice === undefined && (invested += parseInt(x.margin));
+    x.exitPrice === undefined && (investedProfit += parseInt(x.profit));
   });
- 
 
   return (
     <>
@@ -78,41 +75,46 @@ const Position = () => {
         <div className={classes.orderDiv}>
           <Paper className={classes.paperDiv} elevation={3}>
             <div className={classes.investedDiv}>
-              <div >
+              <div>
+                <div>Invested</div>
                 <div>
-                Invested 
+                  <Typography variant="h5">{invested}</Typography>
                 </div>
-               <div>
-               <Typography variant="h5">{invested}</Typography>
-               </div>
-                
               </div>
-              <div >
-                <div>
-                Current
+              <div>
+                <div>Current</div>
+                <div
+                  style={{
+                    color:
+                      invested + investedProfit < invested
+                        ? "#a84032"
+                        : "#32a852",
+                  }}
+                >
+                  <Typography variant="h5">
+                    {invested + investedProfit}
+                  </Typography>
+
+                  <Typography variant="subtitle2">
+                    {(
+                      ((invested + investedProfit - invested) / invested) *
+                      100
+                    ).toFixed(2)}{" "}
+                    %
+                  </Typography>
                 </div>
-               <div  style={{
-                  color: invested+investedProfit < invested ? "#a84032" : "#32a852",
-                }}>
-               <Typography variant="h5">{invested+investedProfit}</Typography>
-
-               <Typography variant="subtitle2">{((invested+investedProfit-invested)/invested*100).toFixed(2)} %</Typography>
-               
-               </div>
-                
               </div>
-
-              
             </div>
-            <Divider style={{ width: "90%",margin:"1em"}} />
+            <Divider style={{ width: "90%", margin: "1em" }} />
             <div className={classes.pnlDiv}>
-              <span>Total P&L </span> 
-               <span
+              <span>Total P&L </span>
+              <span
                 style={{
                   color: totalProfit < 0 ? "#a84032" : "#32a852",
                 }}
               >
-              {  totalProfit>0 && "+" }{totalProfit}
+                {totalProfit > 0 && "+"}
+                {totalProfit}
               </span>
             </div>
           </Paper>
