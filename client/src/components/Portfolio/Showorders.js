@@ -17,7 +17,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 const useStyles = makeStyles((theme) => {
   return {
     paperDiv: {
-      margin: "5%",
+      margin: "2em",
       display: "flex",
       flexDirection: "column",
       justifyContent: "center",
@@ -26,7 +26,10 @@ const useStyles = makeStyles((theme) => {
     },
 
     orderDiv: {
-      margin: "1em",
+      marginBottom: "1em",
+      padding:"0.9em",
+      border:"1px solid #e0e0e0",
+      borderRadius:theme.shape.borderRadius
     },
 
     statusDiv:{
@@ -155,7 +158,16 @@ const Showorders = ({ orderDetails, index }) => {
           )}
           
           <div>Current Price {latestPrice}</div>
-          <div>Profit {profit} { profit/orderDetails.margin } %</div>
+          <div>
+          Profit{" "}
+          <span
+                style={{
+                  color: profit < 0 ? "#a84032" : "#32a852",
+                }}
+              >
+              {  profit>0 && "+" }{profit} {( profit/orderDetails.margin)*100 } %
+              </span>
+             </div>
         </div>
       </div>
 
@@ -187,6 +199,8 @@ const Showorders = ({ orderDetails, index }) => {
           </DialogTitle>
           <DialogActions>
             <Button
+            variant="contained"
+            color="primary"
               onClick={() => {
                 exitPosition();
               }}

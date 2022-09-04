@@ -1,5 +1,5 @@
 import React from "react";
-import { Paper } from "@mui/material";
+import { Paper,Divider, Typography } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import PopupOrder from "./PopupOrder";
 import { useStateContext } from "../../Contexts/ContextProvider";
@@ -15,30 +15,43 @@ const useStyles = makeStyles((theme) => {
       alignItems: "center",
       justifyContent: "center",
     },
+    investedDiv:{
+      display:"flex",
+      justifyContent:"space-around",
+      width:"100%",
+      marginTop:"1em"
+
+    },
     orderDiv: {
       display: "flex",
       flexDirection: "row",
-      justifyContent:"space-evenly"
+      justifyContent: "space-evenly",
+      [theme.breakpoints.down('sm')]: {
+        flexDirection:"column",
+
+      },
     },
 
     pnlDiv: {
-      margin: "1em",
-      fontSize: "23px",
+      width:"100%",
+      marginBottom: "1em",
+      fontSize: "20px",
       fontFamily: "Arial",
+      display:"flex",
+      justifyContent:"space-around"
     },
-    
+
     paperDiv: {
       margin: "1em",
       display: "flex",
       justifyContent: "center",
       alignItems: "center",
       flexWrap: "wrap",
-       maxWidth: "50%",
-   
+      // maxWidth: "50%",
     },
-    positionDiv:{
-        minWidth:"80%"
-    }
+    positionDiv: {
+      minWidth: "80%",
+    },
   };
 });
 
@@ -50,13 +63,52 @@ const Position = () => {
   orderBook?.forEach((x) => {
     totalProfit += parseInt(x.profit);
   });
-
+  let invested = 0;
+  orderBook?.forEach((x) => {
+    invested += parseInt(x.margin);
+  });
+console.log(invested);
   return (
     <>
       <div className={classes.positionPageDiv}>
         <div className={classes.orderDiv}>
           <Paper className={classes.paperDiv} elevation={3}>
-            <div className={classes.pnlDiv}>Total P&L : {totalProfit}</div>
+            <div className={classes.investedDiv}>
+              <div >
+                <div>
+                Invested 
+                </div>
+               <div>
+               <Typography variant="h6">{invested}</Typography>
+               </div>
+                
+              </div>
+              <div >
+                <div>
+                Current
+                </div>
+               <div  style={{
+                  color: invested+totalProfit < invested ? "#a84032" : "#32a852",
+                }}>
+               <Typography variant="h6">{invested+totalProfit}</Typography>
+               
+               </div>
+                
+              </div>
+
+              
+            </div>
+            <Divider style={{ width: "90%",margin:"1em"}} />
+            <div className={classes.pnlDiv}>
+              <span>Total P&L </span> 
+               <span
+                style={{
+                  color: totalProfit < 0 ? "#a84032" : "#32a852",
+                }}
+              >
+              {  totalProfit>0 && "+" }{totalProfit}
+              </span>
+            </div>
           </Paper>
 
           <Paper className={classes.paperDiv} elevation={3}>
@@ -75,13 +127,11 @@ const Position = () => {
           </Paper>
         </div>
 
-       
-          <Paper className={classes.positionDiv}   elevation={3}>
-            {orderBook.map((x, index) => (
-              <Showorders orderDetails={x} index={index} />
-            ))}
-          </Paper>
-       
+        <Paper className={classes.positionDiv} elevation={3}>
+          {orderBook.map((x, index) => (
+            <Showorders orderDetails={x} index={index} />
+          ))}
+        </Paper>
       </div>
     </>
   );

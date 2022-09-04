@@ -157,7 +157,7 @@ export default function PopupOrder({ name, niftyData, bankData, orderType }) {
         fullWidth
         variant="contained"
         color="primary"
-        style={{ margin: "2em" }}
+        style={{ margin: "1.2em" }}
         disableElevation
         onClick={handleClick}
       >
