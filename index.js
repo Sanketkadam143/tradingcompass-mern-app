@@ -25,7 +25,7 @@ app.use(cors({
 
 app.get("/api/nifty", async (req,res)=>{
 
-    axios.get("https://www.nseindia.com/api/option-chain-indices?symbol=NIFTY").then(response=>{
+    axios.get("https://catfact.ninja/fact").then(response=>{
         res.json(response.data)
     }).catch(error =>{
         // res.json(error)
@@ -45,7 +45,7 @@ app.get("/api/banknifty", async (req,res)=>{
 
 app.get("/api/stocks", async (req,res)=>{
 
-    axios.get("https://www.nseindia.com/api/equity-stockIndices?index=NIFTY%2050").then(response=>{
+    axios.get("https://official-joke-api.appspot.com/random_joke").then(response=>{
         res.json(response.data)
     }).catch(error =>{
         // res.json(error)
