@@ -14,7 +14,7 @@ const StockResponse = () => {
 
   const getstockPrice =  async () => {
     const response =  await fetch(
-      "https://www.nseindia.com/api/equity-stockIndices?index=NIFTY%2050"
+      "https://tradingcompass.herokuapp.com/api/stocks"
     );
     const responseJSON =  await response.json();
     const data=responseJSON
