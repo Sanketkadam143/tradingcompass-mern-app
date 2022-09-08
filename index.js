@@ -45,7 +45,7 @@ app.get("/api/banknifty", async (req,res)=>{
 
 app.get("/api/stocks", async (req,res)=>{
 
-    axios.get("https://official-joke-api.appspot.com/random_joke").then(response=>{
+    axios.get("https://api.coindesk.com/v1/bpi/currentprice.json").then(response=>{
         res.json(response.data)
     }).catch(error =>{
         // res.json(error)
@@ -55,7 +55,7 @@ app.get("/api/stocks", async (req,res)=>{
 
 app.get("/api/liveprice", async (req,res)=>{
 
-    axios.get("https://www.nseindia.com/api/allIndices").then(response=>{
+    axios.get("https://ebs.tredcode.com/zoption-new/NIFTY20220908?timestamp=1662611380").then(response=>{
         res.json(response.data)
     }).catch(error =>{
         // res.json(error)
