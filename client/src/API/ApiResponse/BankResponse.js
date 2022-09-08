@@ -16,7 +16,7 @@ const bankRoundOffPrice=(LivePrice?.data[18]?.last)-roundoff;
   //fetch,process and stored data
   const getBankChain =  async () => {
     const response = await fetch(
-      "https://tradingcompass.herokuapp.com/api/banknifty" 
+      "api/option-chain-indices?symbol=BANKNIFTY" 
     );
     const responseJSON =  await response.json();
     const data = responseJSON.filtered?.data;

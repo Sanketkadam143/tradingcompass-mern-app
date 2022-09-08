@@ -2,7 +2,7 @@
   "name": "tradingcompass",
   "version": "0.1.0",
   "private": true,
-  "proxy": "https://tradingcompass.herokuapp.com/",
+  "proxy": "https://www.nseindia.com/",
   "dependencies": {
     "@emotion/react": "^11.9.3",
     "@emotion/styled": "^11.9.3",

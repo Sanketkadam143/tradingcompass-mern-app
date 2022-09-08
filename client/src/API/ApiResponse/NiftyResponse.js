@@ -15,7 +15,7 @@ const NiftyResponse = () => {
   //fetch,process and stored data
 
   const getNiftyChain =  async () => {
-    const response =  await fetch("https://tradingcompass.herokuapp.com/api/nifty");
+    const response =  await fetch("api/option-chain-indices?symbol=NIFTY");
     const responseJSON =  await response.json();
  
     const data = responseJSON.filtered?.data;
