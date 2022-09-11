@@ -10,16 +10,16 @@ const BankResponse = () => {
 
   
 //take roundoff live price to find the index of strike price
-const roundoff=LivePrice?.data[18]?.last%100
-const bankRoundOffPrice=(LivePrice?.data[18]?.last)-roundoff;
+const roundoff=LivePrice[0]?.data[18]?.last%100
+const bankRoundOffPrice=(LivePrice[0]?.data[18]?.last)-roundoff;
 
   //fetch,process and stored data
   const getBankChain =  async () => {
     const response = await fetch(
-      "api/option-chain-indices?symbol=BANKNIFTY" 
+      process.env.REACT_APP_BANKNIFTY_DATA
     );
     const responseJSON =  await response.json();
-    const data = responseJSON.filtered?.data;
+    const data = responseJSON.data;
 
     
    //finding index of live strike price

@@ -14,14 +14,14 @@ const StockResponse = () => {
 
   const getstockPrice =  async () => {
     const response =  await fetch(
-      "api/equity-stockIndices?index=NIFTY%2050"
+      process.env.REACT_APP_STOCKS_DATA
     );
     const responseJSON =  await response.json();
-    const data=responseJSON
+    const data=responseJSON[0].data;
 
 
  //assign value to stockdata and store reponse in local storage for future need
-
+   
     setStockData(data);
     localStorage.setItem("prevStockRes", JSON.stringify(data));
 

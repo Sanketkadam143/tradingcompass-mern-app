@@ -121,7 +121,7 @@ const Navbar = () => {
               <p className={classes.date} variant="subtitle2" color="secondary">
                 Last Updated on
                 <br />
-                {LivePrice?.timestamp}
+                {LivePrice[0]?._id}
               </p>
             </div>
           </div>

@@ -15,12 +15,12 @@ const TopGainers = () => {
   const { StockData } = useStateContext();
 
   //not considering 1st object as it was nifty and its not a stock
-  const stocks = StockData?.data?.slice(1);
+  const stocks = StockData.slice(1);
 
   //filtering and storing top gainers into new array
   let topGainers = [];
   stocks?.forEach((x) => {
-    if (x?.pChange > 0) {
+    if (x?.percentChange > 0) {
       topGainers.push(x);
     }
   });
@@ -30,7 +30,7 @@ const TopGainers = () => {
 
   topGainers?.forEach((x) => {
     const symbol = x?.symbol;
-    const pChange = x?.pChange;
+    const pChange = x?.percentChange;
 
     rows.push({ symbol, pChange });
   });

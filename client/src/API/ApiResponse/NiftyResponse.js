@@ -9,16 +9,16 @@ const NiftyResponse = () => {
   const { NiftyData, setNiftyData, LivePrice } = useStateContext();
 
   //take roundoff live price to find the index of strike price
-  const roundoff = LivePrice?.data[0]?.last % 50;
-  const niftyLivePrice = LivePrice?.data[0]?.last - roundoff;
+  const roundoff = LivePrice[0]?.data[0]?.last % 50;
+  const niftyLivePrice = LivePrice[0]?.data[0]?.last - roundoff;
 
   //fetch,process and stored data
 
   const getNiftyChain =  async () => {
-    const response =  await fetch("api/option-chain-indices?symbol=NIFTY");
+    const response =  await fetch(process.env.REACT_APP_NIFTY_DATA);
     const responseJSON =  await response.json();
  
-    const data = responseJSON.filtered?.data;
+    const data = responseJSON.data;
 
     //finding index of live strike price
     const pricePosition = data?.findIndex(

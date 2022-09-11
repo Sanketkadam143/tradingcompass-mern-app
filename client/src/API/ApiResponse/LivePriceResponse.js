@@ -10,10 +10,10 @@ const LivePriceResponse = () => {
 
   //fetch,process and stored data
   const getPrice = async () => {
-    const response =  await fetch("api/allIndices");
+    const response =  await fetch(process.env.REACT_APP_LIVEPRICE_DATA);
     const responseJSON =  await response.json();
-
-    //assign value to liveprice and store reponse in local storage for future need
+  
+    //assign value to liveprice and store response in local storage for future need
    
       setLivePrice(responseJSON);
       localStorage.setItem("prevLiveRes", JSON.stringify(responseJSON));
