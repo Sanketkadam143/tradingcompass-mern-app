@@ -14,7 +14,7 @@ const TopLossers = () => {
   const { StockData } = useStateContext();
 
   //not considering 1st object as it was nifty and its not a stock
-  const stocks = StockData.slice(1);
+  const stocks = StockData?.slice(1);
 
   //filtering and storing top lossers into new array
   let topLossers = [];
