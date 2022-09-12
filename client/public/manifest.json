@@ -1,4 +1,5 @@
 {
+  "homepage": "https://tradingcompass.herokuapp.com",
   "short_name": "Trading Compass",
   "name": "Trading Compass",
   "icons": [
@@ -19,7 +20,6 @@
     }
   ],
   "start_url": "/",
-  "scope": "/",
   "display": "standalone",
   "theme_color": "#000000",
   "background_color": "#ffffff"
