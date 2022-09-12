@@ -1,8 +1,5 @@
 import React, { useContext, createContext, useState } from 'react'
-import { liveDefaultRes } from '../API/DefaultResponse/liveDefaultRes';
-import { niftyDefaultRes } from '../API/DefaultResponse/niftyDefaultRes';
-import { bankDefaultRes } from '../API/DefaultResponse/bankDefaultRes';
-import { stockDefaultRes } from '../API/DefaultResponse/stockDefaultRes';
+
 
 
 

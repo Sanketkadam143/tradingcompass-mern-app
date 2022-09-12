@@ -14,7 +14,7 @@ const StockResponse = () => {
 
   const getstockPrice =  async () => {
     const response =  await fetch(
-      "https://trading-compass.herokuapp.com/api/stocks"
+      process.env.REACT_APP_STOCKS_DATA
     );
     const responseJSON =  await response.json();
     const data=responseJSON[0].data;
