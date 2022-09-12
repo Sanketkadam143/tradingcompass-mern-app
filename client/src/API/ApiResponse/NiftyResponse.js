@@ -6,31 +6,34 @@ import { useStateContext } from "../../Contexts/ContextProvider";
 const NiftyResponse = () => {
   //get data variable from contextprovider
 
-  const { NiftyData, setNiftyData, LivePrice } = useStateContext();
+  const { NiftyData, setNiftyData } = useStateContext();
 
-  //take roundoff live price to find the index of strike price
-  const roundoff = LivePrice[0]?.data[0]?.last % 50;
-  const niftyLivePrice = LivePrice[0]?.data[0]?.last - roundoff;
+  
 
   //fetch,process and stored data
 
   const getNiftyChain =  async () => {
-    const response =  await fetch( "https://tradingcompass.herokuapp.com/api/nifty");
+    const response =  await fetch("https://tradingcompass.herokuapp.com/api/nifty");
     const responseJSON =  await response.json();
  
-    const data = responseJSON.data;
+    const data =  responseJSON[0].data;
+
+    //take roundoff live price to find the index of strike price
+  const roundoff = responseJSON[0].underlyingValue % 50;
+  const niftyLivePrice = (responseJSON[0].underlyingValue)- roundoff;
 
     //finding index of live strike price
-    const pricePosition = data?.findIndex(
+    const pricePosition =  data?.findIndex(
       (element) => element?.strikePrice === niftyLivePrice
     );
 
-    const nifty = data?.slice(pricePosition - 20, pricePosition + 22);
+    const nifty =  data?.slice(pricePosition - 20, pricePosition + 22);
+    
    
     //assign value to niftydata and store reponse in local storage for future need
 
-    nifty !== undefined && setNiftyData(nifty);
-    nifty !== undefined && localStorage.setItem("prevNiftyRes", JSON.stringify(nifty));
+    setNiftyData(nifty);
+    localStorage.setItem("prevNiftyRes", JSON.stringify(nifty));
 
     //  nifty !== undefined && localStorage.setItem("prevNiftyRes", JSON.stringify(nifty));
 

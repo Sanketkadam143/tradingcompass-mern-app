@@ -11,10 +11,10 @@ const StateContext = createContext();
 //set all the values which will be used globally 
 export const ContextProvider = ({ children }) => {
 
-    const [NiftyData, setNiftyData] = useState(JSON.parse(localStorage.getItem('prevNiftyRes')) || niftyDefaultRes);
-    const [BankData, setBankData] = useState(JSON.parse(localStorage.getItem('prevBankRes')) || bankDefaultRes);
-    const [LivePrice, setLivePrice] = useState(JSON.parse(localStorage.getItem('prevLiveRes')) || liveDefaultRes);
-    const [StockData, setStockData] = useState(JSON.parse(localStorage.getItem('prevStockRes')) || stockDefaultRes);
+    const [NiftyData, setNiftyData] = useState(JSON.parse(localStorage.getItem('prevNiftyRes')) ||[]);
+    const [BankData, setBankData] = useState(JSON.parse(localStorage.getItem('prevBankRes'))||[]);
+    const [LivePrice, setLivePrice] = useState(JSON.parse(localStorage.getItem('prevLiveRes'))||[]);
+    const [StockData, setStockData] = useState(JSON.parse(localStorage.getItem('prevStockRes'))||[]);
     const[isMatch,setisMatch]=useState(false)
     const[result,setresult]=useState({});
     const[token,settoken]=useState({});

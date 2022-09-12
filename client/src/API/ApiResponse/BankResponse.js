@@ -6,32 +6,34 @@ import { useStateContext } from "../../Contexts/ContextProvider";
 
 const BankResponse = () => {
   //get data variable from contextprovider
-  const { BankData, setBankData, LivePrice } = useStateContext();
+  const { BankData, setBankData } = useStateContext();
 
   
-//take roundoff live price to find the index of strike price
-const roundoff=LivePrice[0]?.data[18]?.last%100
-const bankRoundOffPrice=(LivePrice[0]?.data[18]?.last)-roundoff;
+
 
   //fetch,process and stored data
   const getBankChain =  async () => {
     const response = await fetch(
-     "https://tradingcompass.herokuapp.com/api/banknifty"
+      "https://tradingcompass.herokuapp.com/api/banknifty"
     );
     const responseJSON =  await response.json();
-    const data = responseJSON.data;
+    const data = responseJSON[0].data;
 
-    
+   //take roundoff live price to find the index of strike price
+const roundoff=responseJSON[0].underlyingValue%100
+const bankRoundOffPrice=(responseJSON[0].underlyingValue)-roundoff;
+
    //finding index of live strike price
-   const pricePosition = data?.findIndex( (element) => element?.strikePrice === (bankRoundOffPrice));
+   const pricePosition =  data?.findIndex( (element) => element?.strikePrice === (bankRoundOffPrice));
  
     const bank = data?.slice((pricePosition - 20), (pricePosition + 22));
+      console.log(bankRoundOffPrice)
   
    //assign value to bankdata and store reponse in local storage for future need
    
 
-      bank !== undefined && setBankData(bank);
-      bank !== undefined && localStorage.setItem("prevBankRes", JSON.stringify(bank));
+    setBankData(bank);
+    localStorage.setItem("prevBankRes", JSON.stringify(bank));
     
 
     return BankData;
