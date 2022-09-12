@@ -1,25 +1,22 @@
 import express from "express";
-import bodyParser from "body-parser";
 const app = express();
 import cors from "cors";
 import { MongoClient } from "mongodb";
 import * as dotenv from "dotenv";
 dotenv.config();
 
-// import path from 'path';
-// import {fileURLToPath} from 'url';
+import path from 'path';
+import {fileURLToPath} from 'url';
 
-// const __filename = fileURLToPath(import.meta.url);
-// const __dirname = path.dirname(__filename);
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
-// app.use(express.static(path.join(__dirname, "client", "build")))
+app.use(express.static(path.join(__dirname, "client", "build")))
 
-// app.get("*", (req, res) => {
-//     res.sendFile(path.join(__dirname, "client", "build", "index.html"));
-// })
+app.get("*", (req, res) => {
+    res.sendFile(path.join(__dirname, "client", "build", "index.html"));
+})
 
-app.use(bodyParser.json({ limit: "30mb", extended: true }));
-app.use(bodyParser.urlencoded({ limit: "30mb", extended: true }));
 
 const PORT = process.env.PORT || 5000;
 const CONNECTION_URL = process.env.CONNECTION_URL;
