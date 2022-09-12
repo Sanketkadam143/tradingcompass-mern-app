@@ -13,7 +13,7 @@ const NiftyResponse = () => {
   //fetch,process and stored data
 
   const getNiftyChain =  async () => {
-    const response =  await fetch(process.env.REACT_APP_NIFTY_DATA);
+    const response =  await fetch("https://trading-compass.herokuapp.com/api/nifty");
     const responseJSON =  await response.json();
  
     const data =  responseJSON[0].data;

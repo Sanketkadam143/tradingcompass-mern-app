@@ -10,7 +10,7 @@ const LivePriceResponse = () => {
 
   //fetch,process and stored data
   const getPrice = async () => {
-    const response =  await fetch(process.env.REACT_APP_LIVEPRICE_DATA);
+    const response =  await fetch("https://trading-compass.herokuapp.com/api/liveprice");
     const responseJSON =  await response.json();
   
     //assign value to liveprice and store response in local storage for future need

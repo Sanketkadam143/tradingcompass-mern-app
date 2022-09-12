@@ -9,7 +9,7 @@ const BankResponse = () => {
   //fetch,process and stored data
   const getBankChain = async () => {
     const response = await fetch(
-   process.env.REACT_APP_BANKNIFTY_DATA
+      "https://trading-compass.herokuapp.com/api/banknifty"
     );
     const responseJSON = await response.json();
     const data = responseJSON[0].data;
