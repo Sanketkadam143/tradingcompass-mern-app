@@ -1,7 +1,6 @@
-
 import React from "react";
 import { Routes, Route } from "react-router-dom";
-import Home from "./Pages/Home"
+import Home from "./Pages/Home";
 import theme from "./utils/theme";
 import { ThemeProvider } from "@mui/material";
 import Navbar from "./components/Navbar/Navbar";
@@ -20,49 +19,57 @@ import PrivacyPolicy from "./Pages/PrivacyPolicy";
 import Disclaimer from "./Pages/Disclaimer";
 import About from "./Pages/About";
 import Position from "./components/Portfolio/Position";
-
-
-
-
-
-  
+import useNetworkStatus from "./Contexts/Networkstatus";
+import Offlinepage from "./Pages/Offlinepage";
 
 function App() {
-  
-  const{user}=useStateContext();
+  const { user } = useStateContext();
+  const { isOnline } = useNetworkStatus();
 
   return (
     <ThemeProvider theme={theme}>
+      <Navbar />
+      <SecNav />
 
-  
-      <NiftyResponse/>
-      <BankResponse/>
-      <LivePriceResponse/>
-      <StockResponse/>
+      <div className="App" style={{ marginTop: "10em" }}>
+        {isOnline ? (
+          <>
+            <NiftyResponse />
+            <BankResponse />
+            <LivePriceResponse />
+            <StockResponse />
 
-        <Navbar />
-        <SecNav/>
+            <Routes>
+              <Route exact path="/" element={user ? <Home /> : <Auth />} />
+              <Route exact path="/auth" element={<Auth />} />
+              <Route
+                path="/nifty50"
+                element={user ? <NiftyPage /> : <Auth />}
+              />
+              <Route
+                path="/niftybank"
+                element={user ? <BankPage /> : <Auth />}
+              />
+              <Route
+                path="/portfolio"
+                element={user ? <Position /> : <Auth />}
+              />
+              <Route
+                path="/oianalysis"
+                element={user ? <OIanalysisPage /> : <Auth />}
+              />
 
-      <div className="App" style={{marginTop:'10em'}}>
-     
-       
-    
-
-      <Routes>
-        <Route exact path="/" element= {user ? <Home/> : <Auth/>} />
-        <Route exact path="/auth" element={<Auth/>} />
-        <Route path="/nifty50" element={user ? <NiftyPage /> : <Auth/>} />
-        <Route path="/niftybank" element={user ? <BankPage /> : <Auth/>} />
-        <Route path="/portfolio" element={user ? <Position /> : <Auth/>} />
-        <Route path="/oianalysis" element={user ? <OIanalysisPage /> : <Auth/>} />
-        
-        <Route exact path="/privacypolicy" element={<PrivacyPolicy/>} />
-        <Route exact path="/disclaimer" element={<Disclaimer/>} />
-        <Route exact path="/about" element={<About/>} />
-      </Routes>
+              <Route exact path="/privacypolicy" element={<PrivacyPolicy />} />
+              <Route exact path="/disclaimer" element={<Disclaimer />} />
+              <Route exact path="/about" element={<About />} />
+            </Routes>
+          </>
+        ) : (
+          <Offlinepage />
+        )}
       </div>
       {/* <StickyFooter /> */}
-      <BottomNav/>
+      <BottomNav />
     </ThemeProvider>
   );
 }

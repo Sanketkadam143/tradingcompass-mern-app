@@ -15,12 +15,20 @@ const LivePriceResponse = () => {
   
     //assign value to liveprice and store response in local storage for future need
    
-      setLivePrice(responseJSON);
-      localStorage.setItem("prevLiveRes", JSON.stringify(responseJSON));
+    responseJSON!== undefined && setLivePrice(responseJSON);
+    responseJSON !== undefined &&  localStorage.setItem("prevLiveRes", JSON.stringify(responseJSON));
     
 
     return LivePrice;
   };
+
+     //trigger function to call api
+     useEffect(() => {
+      getPrice();
+  
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+    
 
    //trigger function to call api
   useEffect(() => {

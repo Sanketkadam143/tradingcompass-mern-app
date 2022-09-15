@@ -27,11 +27,17 @@ const BankResponse = () => {
 
     //assign value to bankdata and store reponse in local storage for future need
 
-    setBankData(bank);
-    localStorage.setItem("prevBankRes", JSON.stringify(bank));
+    bank !== undefined && setBankData(bank);
+    bank !== undefined && localStorage.setItem("prevBankRes", JSON.stringify(bank));
 
     return BankData;
   };
+     //trigger function to call api
+     useEffect(() => {
+      getBankChain();
+  
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
   //trigger function to call api
   useEffect(() => {

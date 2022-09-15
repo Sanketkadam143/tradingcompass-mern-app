@@ -32,13 +32,19 @@ const NiftyResponse = () => {
    
     //assign value to niftydata and store reponse in local storage for future need
 
-    setNiftyData(nifty);
-    localStorage.setItem("prevNiftyRes", JSON.stringify(nifty));
+    nifty !== undefined && setNiftyData(nifty);
+    nifty !== undefined && localStorage.setItem("prevNiftyRes", JSON.stringify(nifty));
 
     //  nifty !== undefined && localStorage.setItem("prevNiftyRes", JSON.stringify(nifty));
 
     return NiftyData;
   };
+     //trigger function to call api
+     useEffect(() => {
+      getNiftyChain();
+  
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
   //trigger function to call api
 

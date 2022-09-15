@@ -22,11 +22,18 @@ const StockResponse = () => {
 
  //assign value to stockdata and store reponse in local storage for future need
    
-    setStockData(data);
-    localStorage.setItem("prevStockRes", JSON.stringify(data));
+ data !== undefined && setStockData(data);
+data !== undefined &&localStorage.setItem("prevStockRes", JSON.stringify(data));
 
     return StockData;
   };
+
+     //trigger function to call api
+     useEffect(() => {
+      getstockPrice();
+  
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
    //trigger function to call api
 
