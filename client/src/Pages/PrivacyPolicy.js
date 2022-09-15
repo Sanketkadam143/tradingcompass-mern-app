@@ -54,7 +54,7 @@ const PrivacyPolicy = () => {
 
         <Paper className={classes.paperDiv} elevation={3} >
           <div className={classes.contentDiv}>
-          Your privacy is very important for us. Tradingcompass policy is to respect your privacy with respect to any information that we may collect from you through our website, https://tradingcompass.netlify.app , and other sites that we own and operate.<br/><br/>
+          Your privacy is very important for us. Tradingcompass policy is to respect your privacy with respect to any information that we may collect from you through our website, https://tradingcompass.up.railway.app , and other sites that we own and operate.<br/><br/>
 
 We only ask for personal information when we really need it to provide you service. We collect it by fair and legal means, with your knowledge and consent. We also let you know why we collect it and how it will be used.<br/><br/>
 

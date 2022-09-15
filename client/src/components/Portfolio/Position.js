@@ -68,7 +68,7 @@ const Position = () => {
     x.exitPrice === undefined && (invested += parseInt(x.margin));
     x.exitPrice === undefined && (investedProfit += parseInt(x.profit));
   });
-
+  
   return (
     <>
       <div className={classes.positionPageDiv}>
@@ -96,10 +96,10 @@ const Position = () => {
                   </Typography>
 
                   <Typography variant="subtitle2">
-                    {(
-                      ((invested + investedProfit - invested) / invested) *
+                    {invested===0 ? "0": ((
+                      ( investedProfit / invested) *
                       100
-                    ).toFixed(2)}{" "}
+                    ).toFixed(2) )}{" "}
                     %
                   </Typography>
                 </div>

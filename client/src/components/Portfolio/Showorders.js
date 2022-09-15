@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Divider} from "@mui/material";
+import { Divider } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import { Button } from "@mui/material";
 import Dialog from "@mui/material/Dialog";
@@ -27,20 +27,19 @@ const useStyles = makeStyles((theme) => {
 
     orderDiv: {
       marginBottom: "1em",
-      padding:"0.9em",
-      border:"1px solid #e0e0e0",
-      borderRadius:theme.shape.borderRadius
+      padding: "0.9em",
+      border: "1px solid #e0e0e0",
+      borderRadius: theme.shape.borderRadius,
     },
 
-    statusDiv:{
-       display:"flex",
-       justifyContent:"space-between",
-       gap:"2em",
-      
+    statusDiv: {
+      display: "flex",
+      justifyContent: "space-between",
+      gap: "2em",
     },
-    exitDiv:{
-      textAlign:"right"
-    }
+    exitDiv: {
+      textAlign: "right",
+    },
 
     // buttonDiv:{
     //     justifyContent:"center",
@@ -60,15 +59,6 @@ const Showorders = ({ orderDetails, index }) => {
 
   const confirmExit = (e) => {
     setConfirm(e.currentTarget);
-  };
-
-  const exitPosition = (event) => {
-    setAnchorEl(true);
-    setConfirm(null);
-
-    orderBook[index].exitPrice = latestPrice;
-    orderBook[index].exitTime = new Date().toString().split("G");
-    localStorage.setItem("orderBook", JSON.stringify(orderBook));
   };
 
   const handleClose = () => {
@@ -116,19 +106,34 @@ const Showorders = ({ orderDetails, index }) => {
 
   orderDetails.orderType === "optionSelling" && (profit = -profit);
 
-  orderBook[index].profit = profit;
+  orderDetails.exitPrice === undefined && (orderBook[index].profit = profit);
   localStorage.setItem("orderBook", JSON.stringify(orderBook));
+
+  const brokerage = parseInt(orderDetails.lots) * 50;
+
+  const exitPosition = (event) => {
+    setAnchorEl(true);
+    setConfirm(null);
+
+    orderBook[index].exitPrice = latestPrice;
+    orderBook[index].profit = profit - brokerage;
+    orderBook[index].exitTime = new Date().toString().split("G");
+    localStorage.setItem("orderBook", JSON.stringify(orderBook));
+  };
 
   return (
     <div className={classes.paperDiv}>
       <div className={classes.orderDiv}>
         {orderDetails.indexName} {orderDetails.strikePrice}{" "}
-        {orderDetails.optionType} {orderDetails.orderType==="optionBuying" ? "Option Buying":"Option Selling"}
+        {orderDetails.optionType}{" "}
+        {orderDetails.orderType === "optionBuying"
+          ? "Option Buying"
+          : "Option Selling"}
       </div>
       <div className={classes.statusDiv}>
         <div className={classes.entryDiv}>
           <div>Entry Time {orderDetails.orderTime[0]}</div>
-         
+
           <div>
             {orderDetails.orderType === "optionBuying"
               ? "Buy Price"
@@ -142,8 +147,7 @@ const Showorders = ({ orderDetails, index }) => {
           </div>
         </div>
         <div className={classes.exitDiv}>
-
-        {orderDetails.exitPrice !== undefined && (
+          {orderDetails.exitPrice !== undefined && (
             <div> Exit Time {orderDetails?.exitTime[0]}</div>
           )}
 
@@ -156,18 +160,22 @@ const Showorders = ({ orderDetails, index }) => {
               {orderDetails.exitPrice}
             </div>
           )}
-          
+
           <div>Current Price {latestPrice}</div>
           <div>
-          Profit{" "}
-          <span
-                style={{
-                  color: profit < 0 ? "#a84032" : "#32a852",
-                }}
-              >
-              {  profit>0 && "+" }{profit} {(( profit/orderDetails.margin)*100).toFixed(2) } %
-              </span>
-             </div>
+            P&L{" "}
+            <span
+              style={{
+                color: profit < 0 ? "#a84032" : "#32a852",
+              }}
+            >
+              {profit > 0 && "+"}
+              {orderDetails.exitPrice === undefined
+                ? profit
+                : profit - brokerage}{" "}
+              {((profit / orderDetails.margin) * 100).toFixed(2)} %
+            </span>
+          </div>
         </div>
       </div>
 
@@ -195,12 +203,17 @@ const Showorders = ({ orderDetails, index }) => {
           aria-describedby="alert-dialog-slide-description"
         >
           <DialogTitle>
-            {"Are you sure you want to exit the Position ?"}
+            Are you sure you want to exit the Position ? 
           </DialogTitle>
+          <DialogContent>
+          <DialogContentText>
+                Brokerage of ₹ {brokerage} will be debited from your P&L 
+          </DialogContentText>
+          </DialogContent>
           <DialogActions>
             <Button
-            variant="contained"
-            color="primary"
+              variant="contained"
+              color="primary"
               onClick={() => {
                 exitPosition();
               }}

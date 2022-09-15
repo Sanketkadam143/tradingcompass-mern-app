@@ -149,6 +149,7 @@ export default function PopupOrder({ name, niftyData, bankData, orderType }) {
     margin:requiredMargin,
   };
 
+
   return (
     <>
       <Button
