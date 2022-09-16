@@ -2,35 +2,38 @@ import React from "react";
 import { useEffect } from "react";
 import { useStateContext } from "../../Contexts/ContextProvider";
 
-
-
 const LivePriceResponse = () => {
   //get data variable from contextprovider
   const { LivePrice, setLivePrice } = useStateContext();
 
   //fetch,process and stored data
   const getPrice = async () => {
-    const response =  await fetch("https://trading-compass.herokuapp.com/api/liveprice");
-    const responseJSON =  await response.json();
-  
-    //assign value to liveprice and store response in local storage for future need
-   
-    responseJSON!== undefined && setLivePrice(responseJSON);
-    responseJSON !== undefined &&  localStorage.setItem("prevLiveRes", JSON.stringify(responseJSON));
-    
+    try {
+      const response = await fetch(
+        "https://trading-compass.herokuapp.com/api/liveprice"
+      );
+      const responseJSON = await response.json();
 
-    return LivePrice;
+      //assign value to liveprice and store response in local storage for future need
+
+      responseJSON[0].data.length === 71 && setLivePrice(responseJSON);
+      responseJSON[0].data.length === 71 &&
+        localStorage.setItem("prevLiveRes", JSON.stringify(responseJSON));
+
+      return LivePrice;
+    } catch (error) {
+      console.log(error);
+    }
   };
 
-     //trigger function to call api
-     useEffect(() => {
-      getPrice();
-  
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
-    
+  //trigger function to call api
+  useEffect(() => {
+    getPrice();
 
-   //trigger function to call api
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  //trigger function to call api
   useEffect(() => {
     const interval = setInterval(() => {
       const date = new Date();

@@ -31,6 +31,9 @@ function App() {
       <Navbar />
       <SecNav />
 
+      
+    
+
       <div className="App" style={{ marginTop: "10em" }}>
         {isOnline ? (
           <>

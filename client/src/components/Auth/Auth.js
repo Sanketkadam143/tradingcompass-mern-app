@@ -49,20 +49,24 @@ const Auth = () => {
 
   useEffect(() => {
     /* global google */
-    google.accounts.id.initialize({
-      client_id:
-        "730608565545-8jjn15dbk39eht1dn6m4fgm936fr02m4.apps.googleusercontent.com",
-      callback: googleSuccess,
-    });
+    try {
+      google.accounts.id.initialize({
+        client_id:
+          "730608565545-8jjn15dbk39eht1dn6m4fgm936fr02m4.apps.googleusercontent.com",
+        callback: googleSuccess,
+      });
 
-    user === false && google.accounts.id.prompt();
-    google.accounts.id.renderButton(document.getElementById("signInDiv"), {
-      theme: "outline",
-      size: "large",
-      shape: "pill",
-      logo_alignment: "center",
-      width: "100%",
-    });
+      user === false && google.accounts.id.prompt();
+      google.accounts.id.renderButton(document.getElementById("signInDiv"), {
+        theme: "outline",
+        size: "large",
+        shape: "pill",
+        logo_alignment: "center",
+        width: "100%",
+      });
+    } catch (error) {
+      console.log(error);
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

@@ -15,6 +15,7 @@ const useStyles = makeStyles(() => {
       alignItems:"center",
       gap:"1em",
       minHeight:"70vh",
+    
     },
   };
 });

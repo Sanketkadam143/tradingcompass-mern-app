@@ -8,36 +8,41 @@ const BankResponse = () => {
 
   //fetch,process and stored data
   const getBankChain = async () => {
-    const response = await fetch(
-      "https://trading-compass.herokuapp.com/api/banknifty"
-    );
-    const responseJSON = await response.json();
-    const data = responseJSON[0].data;
+    try {
+      const response = await fetch(
+        "https://trading-compass.herokuapp.com/api/banknifty"
+      );
+      const responseJSON = await response.json();
+      const data = responseJSON[0].data;
 
-    //take roundoff live price to find the index of strike price
-    const roundoff = responseJSON[0].underlyingValue % 100;
-    const bankRoundOffPrice = responseJSON[0].underlyingValue - roundoff;
+      //take roundoff live price to find the index of strike price
+      const roundoff = responseJSON[0].underlyingValue % 100;
+      const bankRoundOffPrice = responseJSON[0].underlyingValue - roundoff;
 
-    //finding index of live strike price
-    const pricePosition = data?.findIndex(
-      (element) => element?.strikePrice === bankRoundOffPrice
-    );
+      //finding index of live strike price
+      const pricePosition = data?.findIndex(
+        (element) => element?.strikePrice === bankRoundOffPrice
+      );
 
-    const bank = data?.slice(pricePosition - 20, pricePosition + 22);
+      const bank = data?.slice(pricePosition - 20, pricePosition + 22);
 
-    //assign value to bankdata and store reponse in local storage for future need
+      //assign value to bankdata and store reponse in local storage for future need
 
-    bank !== undefined && setBankData(bank);
-    bank !== undefined && localStorage.setItem("prevBankRes", JSON.stringify(bank));
+      bank.length === 42 && setBankData(bank);
+      bank.length === 42 &&
+        localStorage.setItem("prevBankRes", JSON.stringify(bank));
 
-    return BankData;
+      return BankData;
+    } catch (error) {
+      console.log(error);
+    }
   };
-     //trigger function to call api
-     useEffect(() => {
-      getBankChain();
-  
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+  //trigger function to call api
+  useEffect(() => {
+    getBankChain();
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   //trigger function to call api
   useEffect(() => {
