@@ -5,7 +5,7 @@ import { useStateContext } from "../../Contexts/ContextProvider";
 const StockResponse = () => {
   //get data variable from contextprovider
 
-  const { StockData, setStockData } = useStateContext();
+  const { StockData, setStockData,setMarketStatus} = useStateContext();
 
   //fetch,process and stored data
 
@@ -16,12 +16,15 @@ const StockResponse = () => {
       );
       const responseJSON = await response.json();
       const data = responseJSON[0].data;
-
+      setMarketStatus((responseJSON[0].marketStatus));
+      
       //assign value to stockdata and store reponse in local storage for future need
 
       data.length === 51 && setStockData(data);
       data.length === 51 &&
         localStorage.setItem("prevStockRes", JSON.stringify(data));
+
+      
 
       return StockData;
     } catch (error) {

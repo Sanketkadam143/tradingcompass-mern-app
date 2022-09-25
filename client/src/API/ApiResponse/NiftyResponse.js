@@ -15,19 +15,9 @@ const NiftyResponse = () => {
         "https://trading-compass.herokuapp.com/api/nifty"
       );
       const responseJSON = await response.json();
+      const datedata=responseJSON[0].datedata
+      const nifty = responseJSON[0].datedata[datedata.length-1].data;
 
-      const data = responseJSON[0].data;
-
-      //take roundoff live price to find the index of strike price
-      const roundoff = responseJSON[0].underlyingValue % 50;
-      const niftyLivePrice = responseJSON[0].underlyingValue - roundoff;
-
-      //finding index of live strike price
-      const pricePosition = data?.findIndex(
-        (element) => element?.strikePrice === niftyLivePrice
-      );
-
-      const nifty = data?.slice(pricePosition - 20, pricePosition + 22);
 
       //assign value to niftydata and store reponse in local storage for future need
 

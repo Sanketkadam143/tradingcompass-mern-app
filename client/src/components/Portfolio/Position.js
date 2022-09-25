@@ -1,4 +1,4 @@
-import React from "react";
+import {React,useEffect, useState} from "react";
 import { Paper, Divider, Typography } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import PopupOrder from "./PopupOrder";
@@ -53,9 +53,12 @@ const useStyles = makeStyles((theme) => {
   };
 });
 
+
+
 const Position = () => {
   const classes = useStyles();
   const { NiftyData, BankData, orderBook } = useStateContext();
+
 
   let totalProfit = 0;
   orderBook?.forEach((x) => {
@@ -68,6 +71,9 @@ const Position = () => {
     x.exitPrice === undefined && (invested += parseInt(x.margin));
     x.exitPrice === undefined && (investedProfit += parseInt(x.profit));
   });
+
+
+
   
   return (
     <>

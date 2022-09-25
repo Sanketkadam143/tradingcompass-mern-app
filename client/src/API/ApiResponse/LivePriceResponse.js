@@ -13,7 +13,7 @@ const LivePriceResponse = () => {
         "https://trading-compass.herokuapp.com/api/liveprice"
       );
       const responseJSON = await response.json();
-
+    
       //assign value to liveprice and store response in local storage for future need
 
       responseJSON[0].data.length === 71 && setLivePrice(responseJSON);

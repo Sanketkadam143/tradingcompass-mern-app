@@ -13,18 +13,8 @@ const BankResponse = () => {
         "https://trading-compass.herokuapp.com/api/banknifty"
       );
       const responseJSON = await response.json();
-      const data = responseJSON[0].data;
-
-      //take roundoff live price to find the index of strike price
-      const roundoff = responseJSON[0].underlyingValue % 100;
-      const bankRoundOffPrice = responseJSON[0].underlyingValue - roundoff;
-
-      //finding index of live strike price
-      const pricePosition = data?.findIndex(
-        (element) => element?.strikePrice === bankRoundOffPrice
-      );
-
-      const bank = data?.slice(pricePosition - 20, pricePosition + 22);
+      const datedata=responseJSON[0].datedata
+      const bank = responseJSON[0].datedata[datedata.length-1].data;
 
       //assign value to bankdata and store reponse in local storage for future need
 

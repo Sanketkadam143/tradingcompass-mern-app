@@ -12,6 +12,7 @@ export const ContextProvider = ({ children }) => {
     const [BankData, setBankData] = useState(JSON.parse(localStorage.getItem('prevBankRes'))||[]);
     const [LivePrice, setLivePrice] = useState(JSON.parse(localStorage.getItem('prevLiveRes'))||[]);
     const [StockData, setStockData] = useState(JSON.parse(localStorage.getItem('prevStockRes'))||[]);
+    const[marketStatus,setMarketStatus]=useState([])
     const[isMatch,setisMatch]=useState(false)
     const[result,setresult]=useState({});
     const[token,settoken]=useState({});
@@ -23,7 +24,7 @@ export const ContextProvider = ({ children }) => {
   
     return (
         <StateContext.Provider
-            value={{ NiftyData,setNiftyData,BankData,setBankData,LivePrice, setLivePrice,StockData,setStockData,isMatch,setisMatch,result,setresult,token,settoken ,user,setUser,orderBook,setOrderBook}}>
+            value={{ NiftyData,setNiftyData,BankData,setBankData,LivePrice, setLivePrice,StockData,setStockData,isMatch,setisMatch,result,setresult,token,settoken ,user,setUser,orderBook,setOrderBook,marketStatus,setMarketStatus}}>
   
             {children}
 

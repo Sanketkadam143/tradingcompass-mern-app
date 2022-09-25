@@ -17,19 +17,14 @@ import Slide from "@mui/material/Slide";
 import { useStateContext } from "../../Contexts/ContextProvider";
 import { makeStyles } from "@mui/styles";
 
-
 const useStyles = makeStyles((theme) => {
-  return { 
-    boxDiv:{
-      
-      padding:"0.9em",
-      border:"1px solid #e0e0e0",
-      borderRadius:theme.shape.borderRadius
-      
-  
-
-    }
-   };
+  return {
+    boxDiv: {
+      padding: "0.9em",
+      border: "1px solid #e0e0e0",
+      borderRadius: theme.shape.borderRadius,
+    },
+  };
 });
 
 const Transition = React.forwardRef(function Transition(props, ref) {
@@ -37,17 +32,19 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 });
 
 export default function PopupOrder({ name, niftyData, bankData, orderType }) {
-
   const classes = useStyles();
-  const { orderBook } = useStateContext();
+  const { orderBook, marketStatus } = useStateContext();
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [openSuccess, setOpenSuccess] = useState(false);
 
   const [pos, setPos] = useState(1);
   const [cepePos, setCepePos] = useState(3);
   const [data, setData] = useState(niftyData);
-  const [selectedStrike, setSelectedStrike] = useState(niftyData[20]?.strikePrice);
+  const [selectedStrike, setSelectedStrike] = useState(
+    niftyData[20]?.strikePrice
+  );
   const [lots, setLots] = useState(0);
+
   const [isnifty, setIsnifty] = useState(true);
   const [currentPrice, setCurrentPrice] = useState();
 
@@ -70,17 +67,16 @@ export default function PopupOrder({ name, niftyData, bankData, orderType }) {
 
   const handleChange = (event) => {
     setPos(event.target.value);
-    
 
     // data[0]?.strikePrice === niftyData[0]?.strikePrice
-    isnifty  ? setSelectedStrike(bankData[20]?.strikePrice)
+    isnifty
+      ? setSelectedStrike(bankData[20]?.strikePrice)
       : setSelectedStrike(niftyData[20]?.strikePrice);
 
     // data[0]?.strikePrice === niftyData[0]?.strikePrice
-      isnifty ? setData(bankData)
-      : setData(niftyData);
+    isnifty ? setData(bankData) : setData(niftyData);
 
-      setIsnifty(!isnifty);
+    setIsnifty(!isnifty);
   };
 
   const handleChange2 = (event) => {
@@ -114,22 +110,21 @@ export default function PopupOrder({ name, niftyData, bankData, orderType }) {
             )
           ]?.CE?.lastPrice
     );
-    
-   
-  });
- 
+  }, [data, cepePos, selectedStrike]);
 
-  // const currentPrice =
+  // let currentPrice=(
   //   cepePos === 4
   //     ? data[
-  //         data?.findIndex((element) => element?.strikePrice === selectedStrike)
+  //         data?.findIndex(
+  //           (element) => element?.strikePrice === selectedStrike
+  //         )
   //       ]?.PE?.lastPrice
   //     : data[
-  //         data?.findIndex((element) => element?.strikePrice === selectedStrike)
-  //       ]?.CE?.lastPrice;
-
-      
-        // console.log(isnifty);
+  //         data?.findIndex(
+  //           (element) => element?.strikePrice === selectedStrike
+  //         )
+  //       ]?.CE?.lastPrice
+  // );
 
   const requiredMargin =
     lots > 0
@@ -146,9 +141,10 @@ export default function PopupOrder({ name, niftyData, bankData, orderType }) {
     lots: lots,
     orderTime: new Date().toString().split("G"),
     orderType: orderType,
-    margin:requiredMargin,
+    margin: requiredMargin,
   };
-
+  // console.log(currentPrice)
+  // console.log(niftyData[20].CE.lastPrice)
 
   return (
     <>
@@ -230,9 +226,8 @@ export default function PopupOrder({ name, niftyData, bankData, orderType }) {
             </Select>
           </FormControl>
           <FormControl sx={{ m: 1, minWidth: 130 }} style={{ margin: "1em" }}>
-            
             <div className={classes.boxDiv}>
-              <Typography>	&#8377; {currentPrice}</Typography>
+              <Typography> &#8377; {currentPrice}</Typography>
             </div>
             <FormHelperText>Current Price</FormHelperText>
           </FormControl>
@@ -251,11 +246,10 @@ export default function PopupOrder({ name, niftyData, bankData, orderType }) {
                 shrink: true,
               }}
             />
-           
           </FormControl>
           <FormControl sx={{ m: 1, minWidth: 130 }} style={{ margin: "1em" }}>
             <div className={classes.boxDiv}>
-              <Typography>	&#8377; {requiredMargin.toFixed(2)}  </Typography>
+              <Typography> &#8377; {requiredMargin.toFixed(2)} </Typography>
             </div>
             <FormHelperText>Required Margin</FormHelperText>
           </FormControl>
@@ -270,10 +264,15 @@ export default function PopupOrder({ name, niftyData, bankData, orderType }) {
             variant="contained"
             color="primary"
             disableElevation
-            onClick={() => {
-              order();
-              handleClickOpen();
-            }}
+            onClick={
+              marketStatus.marketStatus === "Open"
+                ? () => {
+                    order();
+                    handleClickOpen();
+                  }
+                : handleClickOpen
+            }
+           
           >
             Click to Place Order
           </Button>
@@ -287,11 +286,11 @@ export default function PopupOrder({ name, niftyData, bankData, orderType }) {
           }}
           aria-describedby="alert-dialog-slide-description"
         >
-          <DialogTitle>{"Your Order was Successfully Placed !!!"}</DialogTitle>
+          <DialogTitle>{( marketStatus.marketStatus === "Open") ?  "Your Order was Successfully Placed !!!" :" Oops..!! Market is Closed "}</DialogTitle>
           <DialogContent>
             <DialogContentText>
-              This is a virtual option trading platform. Money will neither be
-              debited nor credited in your Bank Account
+               {( marketStatus.marketStatus === "Open") ? " This is a virtual option trading platform. Money will neither be debited nor credited in your Bank Account" : `Market will open on ${ marketStatus.tradeDate} 9:15 AM`}
+              
             </DialogContentText>
           </DialogContent>
           <DialogActions>
