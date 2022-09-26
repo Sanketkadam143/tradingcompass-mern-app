@@ -68,12 +68,10 @@ export default function PopupOrder({ name, niftyData, bankData, orderType }) {
   const handleChange = (event) => {
     setPos(event.target.value);
 
-    // data[0]?.strikePrice === niftyData[0]?.strikePrice
     isnifty
       ? setSelectedStrike(bankData[20]?.strikePrice)
       : setSelectedStrike(niftyData[20]?.strikePrice);
 
-    // data[0]?.strikePrice === niftyData[0]?.strikePrice
     isnifty ? setData(bankData) : setData(niftyData);
 
     setIsnifty(!isnifty);
@@ -272,7 +270,6 @@ export default function PopupOrder({ name, niftyData, bankData, orderType }) {
                   }
                 : handleClickOpen
             }
-           
           >
             Click to Place Order
           </Button>
@@ -286,11 +283,16 @@ export default function PopupOrder({ name, niftyData, bankData, orderType }) {
           }}
           aria-describedby="alert-dialog-slide-description"
         >
-          <DialogTitle>{( marketStatus.marketStatus === "Open") ?  "Your Order was Successfully Placed !!!" :" Oops..!! Market is Closed "}</DialogTitle>
+          <DialogTitle>
+            {marketStatus.marketStatus === "Open"
+              ? "Your Order was Successfully Placed !!!"
+              : " Oops..!! Market is Closed "}
+          </DialogTitle>
           <DialogContent>
             <DialogContentText>
-               {( marketStatus.marketStatus === "Open") ? " This is a virtual option trading platform. Money will neither be debited nor credited in your Bank Account" : `Market will open on ${ marketStatus.tradeDate} 9:15 AM`}
-              
+              {marketStatus.marketStatus === "Open"
+                ? " This is a virtual option trading platform. Money will neither be debited nor credited in your Bank Account"
+                : `Market will open on ${marketStatus.tradeDate} 9:15 AM`}
             </DialogContentText>
           </DialogContent>
           <DialogActions>
