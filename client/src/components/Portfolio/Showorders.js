@@ -40,22 +40,18 @@ const useStyles = makeStyles((theme) => {
     exitDiv: {
       textAlign: "right",
     },
-
-    // buttonDiv:{
-    //     justifyContent:"center",
-    //     alignItems:"center",
-
-    // }
   };
 });
 
 const Showorders = ({ orderDetails, index }) => {
-  const { NiftyData, BankData, orderBook } = useStateContext();
+  const { NiftyData, BankData, orderBook, LivePrice } = useStateContext();
   const classes = useStyles();
 
   const [anchorEl, setAnchorEl] = useState(false);
 
   const [confirm, setConfirm] = useState(null);
+
+  const [autoSquareoff, setAutoSquareoff] = useState(false);
 
   const confirmExit = (e) => {
     setConfirm(e.currentTarget);
@@ -117,22 +113,54 @@ const Showorders = ({ orderDetails, index }) => {
 
     orderBook[index].exitPrice = latestPrice;
     orderBook[index].profit = profit - brokerage;
-    orderBook[index].exitTime = new Date().toString().split("G");
+    orderBook[index].exitTime =
+      orderDetails.indexName === "NIFTY"
+        ? NiftyData[0]?.timestamp
+        : BankData[0]?.timestamp;
     localStorage.setItem("orderBook", JSON.stringify(orderBook));
   };
 
+  const autoexit = (event) => {
+    setAutoSquareoff(true);
+    setAnchorEl(true);
+    setConfirm(null);
+
+    orderBook[index].exitPrice = latestPrice;
+    orderBook[index].profit = profit - brokerage;
+    orderBook[index].exitTime =
+      orderDetails.indexName === "NIFTY"
+        ? NiftyData[0]?.timestamp
+        : BankData[0]?.timestamp;
+    localStorage.setItem("orderBook", JSON.stringify(orderBook));
+  };
+
+  const autoExittime = "15:30:00";
+  const resTime = LivePrice[0]?._id?.slice(12);
+  const isExpiry =
+    NiftyData[0]?.expiryDate?.slice(0, 2) === new Date().toJSON().slice(8, 10);
+
+  resTime === autoExittime &&
+    orderDetails.exitPrice === undefined &&
+    isExpiry &&
+    autoexit();
+
+  const orderName =
+    orderDetails.indexName +
+    " " +
+    orderDetails.strikePrice +
+    " " +
+    orderDetails.optionType +
+    " " +
+    (orderDetails.orderType === "optionBuying"
+      ? "Option Buying"
+      : "Option Selling");
+
   return (
     <div className={classes.paperDiv}>
-      <div className={classes.orderDiv}>
-        {orderDetails.indexName} {orderDetails.strikePrice}{" "}
-        {orderDetails.optionType}{" "}
-        {orderDetails.orderType === "optionBuying"
-          ? "Option Buying"
-          : "Option Selling"}
-      </div>
+      <div className={classes.orderDiv}>{orderName}</div>
       <div className={classes.statusDiv}>
         <div className={classes.entryDiv}>
-          <div>Entry Time {orderDetails.orderTime[0]}</div>
+          <div>Entry Time {orderDetails.orderTime}</div>
 
           <div>
             {orderDetails.orderType === "optionBuying"
@@ -148,7 +176,7 @@ const Showorders = ({ orderDetails, index }) => {
         </div>
         <div className={classes.exitDiv}>
           {orderDetails.exitPrice !== undefined && (
-            <div> Exit Time {orderDetails?.exitTime[0]}</div>
+            <div> Exit Time {orderDetails?.exitTime}</div>
           )}
 
           {orderDetails.exitPrice !== undefined && (
@@ -203,12 +231,12 @@ const Showorders = ({ orderDetails, index }) => {
           aria-describedby="alert-dialog-slide-description"
         >
           <DialogTitle>
-            Are you sure you want to exit the Position ? 
+            Are you sure you want to exit the Position ?
           </DialogTitle>
           <DialogContent>
-          <DialogContentText>
-                Brokerage of ₹ {brokerage} will be debited from your P&L 
-          </DialogContentText>
+            <DialogContentText>
+              Brokerage of ₹ {brokerage} will be debited from your P&L
+            </DialogContentText>
           </DialogContent>
           <DialogActions>
             <Button
@@ -240,12 +268,14 @@ const Showorders = ({ orderDetails, index }) => {
           aria-describedby="alert-dialog-slide-description"
         >
           <DialogTitle>
-            {"Your Position was Successfully Exited !!!"}
+            {autoSquareoff
+              ? `Your Position ${orderName} has been Auto Squared off as today was expiry`
+              : `Your Position ${orderName} was Successfully Exited !!!`}
           </DialogTitle>
           <DialogContent>
             <DialogContentText>
               This is a virtual option trading platform. Money will neither be
-              debited nor credited in your Bank Account
+              debited nor credited in your Bank Account"
             </DialogContentText>
           </DialogContent>
           <DialogActions>

@@ -46,7 +46,6 @@ export default function PopupOrder({ name, niftyData, bankData, orderType }) {
   const [lots, setLots] = useState(0);
 
   const [isnifty, setIsnifty] = useState(true);
-  const [currentPrice, setCurrentPrice] = useState();
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -93,36 +92,21 @@ export default function PopupOrder({ name, niftyData, bankData, orderType }) {
     orderBook?.unshift(orderDetails);
     localStorage.setItem("orderBook", JSON.stringify(orderBook));
   };
+
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
-    setCurrentPrice(
-      cepePos === 4
-        ? data[
-            data?.findIndex(
-              (element) => element?.strikePrice === selectedStrike
-            )
-          ]?.PE?.lastPrice
-        : data[
-            data?.findIndex(
-              (element) => element?.strikePrice === selectedStrike
-            )
-          ]?.CE?.lastPrice
-    );
-  }, [data, cepePos, selectedStrike]);
+    isnifty ? setData(niftyData) : setData(bankData);
+  }, [niftyData, bankData,isnifty]);
 
-  // let currentPrice=(
-  //   cepePos === 4
-  //     ? data[
-  //         data?.findIndex(
-  //           (element) => element?.strikePrice === selectedStrike
-  //         )
-  //       ]?.PE?.lastPrice
-  //     : data[
-  //         data?.findIndex(
-  //           (element) => element?.strikePrice === selectedStrike
-  //         )
-  //       ]?.CE?.lastPrice
-  // );
+  const currentPrice =
+    cepePos === 4
+      ? data[
+          data?.findIndex((element) => element?.strikePrice === selectedStrike)
+        ]?.PE?.lastPrice
+      : data[
+          data?.findIndex((element) => element?.strikePrice === selectedStrike)
+        ]?.CE?.lastPrice;
+
 
   const requiredMargin =
     lots > 0
@@ -137,12 +121,10 @@ export default function PopupOrder({ name, niftyData, bankData, orderType }) {
     optionType: cepePos === 3 ? "CE" : "PE",
     price: currentPrice,
     lots: lots,
-    orderTime: new Date().toString().split("G"),
+    orderTime: data[0]?.timestamp,
     orderType: orderType,
     margin: requiredMargin,
   };
-  // console.log(currentPrice)
-  // console.log(niftyData[20].CE.lastPrice)
 
   return (
     <>
