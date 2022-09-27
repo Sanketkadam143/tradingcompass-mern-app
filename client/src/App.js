@@ -22,6 +22,7 @@ import Position from "./components/Portfolio/Position";
 import useNetworkStatus from "./Contexts/Networkstatus";
 import Offlinepage from "./Pages/Offlinepage";
 
+
 function App() {
   const { user } = useStateContext();
   const { isOnline } = useNetworkStatus();

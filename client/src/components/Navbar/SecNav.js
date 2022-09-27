@@ -2,6 +2,7 @@ import React from "react";
 import { AppBar, Typography, Tabs } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import { useStateContext } from "../../Contexts/ContextProvider";
+import Marquee from "react-fast-marquee";
 
 // Custom CSS
 
@@ -12,7 +13,7 @@ const useStyles = makeStyles(() => {
       gap: "3em",
       justifyContent: "space-between",
       width: "100%",
-      padding: "0 2em",
+      padding: "0 3em",
     },
     pChange: {
       fontSize: "0.8em",
@@ -62,6 +63,7 @@ const SecNav = () => {
   //tabs are used to make scrollable effect
 
   return (
+   
     <>
       <AppBar
         sx={{
@@ -82,28 +84,32 @@ const SecNav = () => {
           scrollButtons="auto"
           aria-label="scrollable auto tabs example"
         >
-          <div className={classes.buttonContainer}>
-            {indices.map((index) => (
-              <div key={index.id}>
-                <Typography variant="subtitle2">{index?.indexname}</Typography>
+          <Marquee gradient={false} pauseOnHover speed={40}>
+            <div className={classes.buttonContainer}>
+              {indices.map((index) => (
+                <div key={index.id}>
+                  <Typography variant="subtitle2">
+                    {index?.indexname}
+                  </Typography>
 
-                <Typography>
-                  {LivePrice[0]?.data[index.id]?.last}&nbsp;
-                  <span
-                    className={classes.pChange}
-                    style={{
-                      color:
-                        LivePrice[0]?.data[index.id]?.percentChange < 0
-                          ? "#a84032"
-                          : "#32a852",
-                    }}
-                  >
-                    {LivePrice[0]?.data[index.id]?.percentChange}%
-                  </span>
-                </Typography>
-              </div>
-            ))}
-          </div>
+                  <Typography>
+                    {LivePrice[0]?.data[0][index.id]?.last}&nbsp;
+                    <span
+                      className={classes.pChange}
+                      style={{
+                        color:
+                          LivePrice[0]?.data[0][index.id]?.percentChange < 0
+                            ? "#a84032"
+                            : "#32a852",
+                      }}
+                    >
+                      {LivePrice[0]?.data[0][index.id]?.percentChange}%
+                    </span>
+                  </Typography>
+                </div>
+              ))}
+            </div>
+          </Marquee>
         </Tabs>
       </AppBar>
     </>

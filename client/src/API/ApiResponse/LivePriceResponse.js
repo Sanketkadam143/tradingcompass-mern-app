@@ -16,8 +16,8 @@ const LivePriceResponse = () => {
     
       //assign value to liveprice and store response in local storage for future need
 
-      responseJSON[0].data.length === 71 && setLivePrice(responseJSON);
-      responseJSON[0].data.length === 71 &&
+      responseJSON[0].data[0].length === 71 && setLivePrice(responseJSON);
+      responseJSON[0].data[0].length === 71 &&
         localStorage.setItem("prevLiveRes", JSON.stringify(responseJSON));
 
       return LivePrice;

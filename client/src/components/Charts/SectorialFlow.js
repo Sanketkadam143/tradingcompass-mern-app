@@ -8,8 +8,8 @@ const SectorialFlow = () => {
   //imported data and screensize from usestate
   //filter the data from 18 t0 33 and added first nifty element again
   const { LivePrice, isMatch } = useStateContext();
-  const filter = LivePrice[0]?.data;
-  const nifty = LivePrice[0]?.data[0];
+  const filter = LivePrice[0]?.data[0];
+  const nifty = LivePrice[0]?.data[0][0];
 
   const price = filter?.slice(18, 33);
   price?.push(nifty);
