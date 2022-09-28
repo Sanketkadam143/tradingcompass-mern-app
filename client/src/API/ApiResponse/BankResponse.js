@@ -13,8 +13,7 @@ const BankResponse = () => {
         "https://trading-compass.herokuapp.com/api/banknifty"
       );
       const responseJSON = await response.json();
-      const datedata = responseJSON[0].datedata;
-      const bank = responseJSON[0].datedata[datedata.length - 1].data[0];
+      const bank = responseJSON.data[0];
 
       //assign value to bankdata and store reponse in local storage for future need
 
