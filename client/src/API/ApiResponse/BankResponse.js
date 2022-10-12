@@ -12,11 +12,14 @@ const BankResponse = () => {
       const response = await fetch(
         "https://trading-compass.herokuapp.com/api/banknifty"
       );
-      const responseJSON = await response.json();
-      const bank = responseJSON.data[0];
+      
+        const responseJSON = await response.json();
+        const daydata = responseJSON[0].datedata;
+        const bank = responseJSON[0].datedata[daydata.length - 1].data[0];
+    
 
       //assign value to bankdata and store reponse in local storage for future need
-
+   
       bank.length === 42 && setBankData(bank);
       bank.length === 42 &&
         localStorage.setItem("prevBankRes", JSON.stringify(bank));

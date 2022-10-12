@@ -15,11 +15,11 @@ const StockResponse = () => {
         "https://trading-compass.herokuapp.com/api/stocks"
       );
       const responseJSON = await response.json();
-      const data = responseJSON[0].data;
+      const data = responseJSON[0].data[0];
       setMarketStatus((responseJSON[0].marketStatus));
       
       //assign value to stockdata and store reponse in local storage for future need
-
+      
       data.length === 51 && setStockData(data);
       data.length === 51 &&
         localStorage.setItem("prevStockRes", JSON.stringify(data));

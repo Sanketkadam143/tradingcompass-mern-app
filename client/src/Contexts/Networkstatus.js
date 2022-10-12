@@ -8,7 +8,7 @@ const useNetworkStatus = () => {
         mode: 'no-cors',
       })
         .then(() => !isOnline && setIsOnline(true))
-        .catch(() => isOnline && setIsOnline(false));}catch(error){}
+        .catch(() => isOnline && setIsOnline(false));}catch(error){console.log(error)}
   })
 
 

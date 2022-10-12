@@ -4,6 +4,8 @@ import { makeStyles } from "@mui/styles";
 import PopupOrder from "./PopupOrder";
 import { useStateContext } from "../../Contexts/ContextProvider";
 import Showorders from "./Showorders";
+import Alert from "@mui/material/Alert";
+import AlertTitle from "@mui/material/AlertTitle";
 
 const useStyles = makeStyles((theme) => {
   return {
@@ -53,12 +55,9 @@ const useStyles = makeStyles((theme) => {
   };
 });
 
-
-
 const Position = () => {
   const classes = useStyles();
   const { NiftyData, BankData, orderBook } = useStateContext();
-
 
   let totalProfit = 0;
   orderBook?.forEach((x) => {
@@ -71,10 +70,8 @@ const Position = () => {
     x.exitPrice === undefined && (invested += parseInt(x.margin));
     x.exitPrice === undefined && (investedProfit += parseInt(x.profit));
   });
+  const isExpiry =   NiftyData[0]?.expiryDate?.slice(0, 2) === new Date().toJSON().slice(8, 10);
 
-
-
-  
   return (
     <>
       <div className={classes.positionPageDiv}>
@@ -102,10 +99,9 @@ const Position = () => {
                   </Typography>
 
                   <Typography variant="subtitle2">
-                    {invested===0 ? "0": ((
-                      ( investedProfit / invested) *
-                      100
-                    ).toFixed(2) )}{" "}
+                    {invested === 0
+                      ? "0"
+                      : ((investedProfit / invested) * 100).toFixed(2)}{" "}
                     %
                   </Typography>
                 </div>
@@ -142,6 +138,13 @@ const Position = () => {
         </div>
 
         <Paper className={classes.positionDiv} elevation={3}>
+          {isExpiry && (
+            <Alert severity="warning">
+              <AlertTitle> Today {NiftyData[0]?.expiryDate} is expiry</AlertTitle>
+
+              <strong>Your Position will be autosquared off at 3:30 pm</strong>
+            </Alert>
+          )}
           {orderBook.map((x, index) => (
             <Showorders orderDetails={x} index={index} />
           ))}

@@ -48,7 +48,7 @@ const About = () => {
             <br />
             <br />
             Our goal is help traders providing rich data via Trading Compass. We
-            created tradin compass for the traders who want to make use of data for
+            created trading compass for the traders who want to make use of data for
             daily trading. This is a continuous effort to make it a great tool
             for everyone. 
             <br />

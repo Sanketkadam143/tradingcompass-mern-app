@@ -9,13 +9,11 @@ import { Typography } from "@mui/material";
 import FormHelperText from "@mui/material/FormHelperText";
 import TextField from "@mui/material/TextField";
 import Dialog from "@mui/material/Dialog";
-import DialogActions from "@mui/material/DialogActions";
-import DialogContent from "@mui/material/DialogContent";
-import DialogContentText from "@mui/material/DialogContentText";
-import DialogTitle from "@mui/material/DialogTitle";
 import Slide from "@mui/material/Slide";
 import { useStateContext } from "../../Contexts/ContextProvider";
 import { makeStyles } from "@mui/styles";
+import Alert from "@mui/material/Alert";
+import AlertTitle from "@mui/material/AlertTitle";
 
 const useStyles = makeStyles((theme) => {
   return {
@@ -96,7 +94,7 @@ export default function PopupOrder({ name, niftyData, bankData, orderType }) {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     isnifty ? setData(niftyData) : setData(bankData);
-  }, [niftyData, bankData,isnifty]);
+  }, [niftyData, bankData, isnifty]);
 
   const currentPrice =
     cepePos === 4
@@ -106,7 +104,6 @@ export default function PopupOrder({ name, niftyData, bankData, orderType }) {
       : data[
           data?.findIndex((element) => element?.strikePrice === selectedStrike)
         ]?.CE?.lastPrice;
-
 
   const requiredMargin =
     lots > 0
@@ -256,6 +253,8 @@ export default function PopupOrder({ name, niftyData, bankData, orderType }) {
             Click to Place Order
           </Button>
         </div>
+
+
         <Dialog
           open={openSuccess}
           TransitionComponent={Transition}
@@ -265,27 +264,17 @@ export default function PopupOrder({ name, niftyData, bankData, orderType }) {
           }}
           aria-describedby="alert-dialog-slide-description"
         >
-          <DialogTitle>
-            {marketStatus.marketStatus === "Open"
-              ? "Your Order was Successfully Placed !!!"
-              : " Oops..!! Market is Closed "}
-          </DialogTitle>
-          <DialogContent>
-            <DialogContentText>
-              {marketStatus.marketStatus === "Open"
-                ? " This is a virtual option trading platform. Money will neither be debited nor credited in your Bank Account"
-                : `Market will open on ${marketStatus.tradeDate} 9:15 AM`}
-            </DialogContentText>
-          </DialogContent>
-          <DialogActions>
-            <Button
-              onClick={() => {
-                handleClose();
-              }}
-            >
-              OK
-            </Button>
-          </DialogActions>
+          {marketStatus.marketStatus === "Open" ? (
+            <Alert  onClose={() => {handleClose()}} severity="success">
+              <AlertTitle><strong>Your Order was Successfully Placed !!!</strong></AlertTitle>
+              This is a virtual option trading platform. Money will neither be debited nor credited in your Bank Account
+            </Alert>
+          ) : (
+            <Alert onClose={() => {handleClose()}} severity="error">
+              <AlertTitle><strong>Oops..!! Market is Closed</strong></AlertTitle>
+            {  `Market will open on ${marketStatus.tradeDate} 9:15 AM`}
+            </Alert>
+          )}
         </Dialog>
       </Popover>
     </>

@@ -14,8 +14,11 @@ const NiftyResponse = () => {
       const response = await fetch(
         "https://trading-compass.herokuapp.com/api/nifty"
       );
+
       const responseJSON = await response.json();
-      const nifty = responseJSON.data[0];
+      const daydata = responseJSON[0].datedata;
+      const nifty = responseJSON[0].datedata[daydata.length - 1].data[0];
+      
 
       //assign value to niftydata and store reponse in local storage for future need
 

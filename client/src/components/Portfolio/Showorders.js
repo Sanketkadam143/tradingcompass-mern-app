@@ -3,11 +3,9 @@ import { Divider } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import { Button } from "@mui/material";
 import Dialog from "@mui/material/Dialog";
-import DialogActions from "@mui/material/DialogActions";
-import DialogContent from "@mui/material/DialogContent";
-import DialogContentText from "@mui/material/DialogContentText";
-import DialogTitle from "@mui/material/DialogTitle";
 import Slide from "@mui/material/Slide";
+import Alert from "@mui/material/Alert";
+import AlertTitle from "@mui/material/AlertTitle";
 import { useStateContext } from "../../Contexts/ContextProvider";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
@@ -230,32 +228,34 @@ const Showorders = ({ orderDetails, index }) => {
           }}
           aria-describedby="alert-dialog-slide-description"
         >
-          <DialogTitle>
-            Are you sure you want to exit the Position ?
-          </DialogTitle>
-          <DialogContent>
-            <DialogContentText>
-              Brokerage of ₹ {brokerage} will be debited from your P&L
-            </DialogContentText>
-          </DialogContent>
-          <DialogActions>
-            <Button
-              variant="contained"
-              color="primary"
-              onClick={() => {
-                exitPosition();
-              }}
-            >
-              Exit Position
-            </Button>
-            <Button
-              onClick={() => {
-                handleClose();
-              }}
-            >
-              Cancel
-            </Button>
-          </DialogActions>
+          <Alert
+            action={
+              <>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  onClick={() => {
+                    exitPosition();
+                  }}
+                >
+                  Exit
+                </Button>
+                <Button
+                  onClick={() => {
+                    handleClose();
+                  }}
+                >
+                  Cancel
+                </Button>
+              </>
+            }
+            severity="warning"
+          >
+            <AlertTitle>
+              <strong>Are you sure you want to exit the Position ?</strong>
+            </AlertTitle>
+            Brokerage of ₹ {brokerage} will be debited from your P&L
+          </Alert>
         </Dialog>
 
         <Dialog
@@ -267,26 +267,23 @@ const Showorders = ({ orderDetails, index }) => {
           }}
           aria-describedby="alert-dialog-slide-description"
         >
-          <DialogTitle>
-            {autoSquareoff
-              ? `Your Position ${orderName} has been Auto Squared off as today was expiry`
-              : `Your Position ${orderName} was Successfully Exited !!!`}
-          </DialogTitle>
-          <DialogContent>
-            <DialogContentText>
-              This is a virtual option trading platform. Money will neither be
-              debited nor credited in your Bank Account"
-            </DialogContentText>
-          </DialogContent>
-          <DialogActions>
-            <Button
-              onClick={() => {
-                handleClose();
-              }}
-            >
-              OK
-            </Button>
-          </DialogActions>
+          <Alert
+            onClose={() => {
+              handleClose();
+            }}
+            severity="success"
+          >
+            <AlertTitle>
+              <strong>
+                {" "}
+                {autoSquareoff
+                  ? `Your Position ${orderName} has been Auto Squared off as today was expiry`
+                  : `Your Position ${orderName} was Successfully Exited !!!`}
+              </strong>
+            </AlertTitle>
+            This is a virtual option trading platform. Money will neither be
+            debited nor credited in your Bank Account
+          </Alert>
         </Dialog>
       </div>
 
