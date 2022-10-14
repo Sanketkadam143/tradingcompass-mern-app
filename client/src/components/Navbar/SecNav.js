@@ -14,6 +14,7 @@ const useStyles = makeStyles(() => {
       justifyContent: "space-between",
       width: "100%",
       padding: "0 3em",
+   
     },
     pChange: {
       fontSize: "0.8em",
@@ -67,7 +68,7 @@ const SecNav = () => {
     <>
       <AppBar
         sx={{
-          py: 1,
+          py: 0.5,
           px: 0,
           mt: "auto",
           backgroundColor: (theme) =>
@@ -76,7 +77,7 @@ const SecNav = () => {
               : theme.palette.grey[800],
         }}
         color="secondary"
-        style={{ zIndex: 1249, marginTop: "4.5em" }}
+        style={{ zIndex: 1249, marginTop: "3.8em" }}
       >
         <Tabs
           value={false}

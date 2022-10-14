@@ -11,13 +11,15 @@ const TotalOIChange = ({ indices }) => {
   let PE = 0;
 
   indices?.forEach((x) => {
-    PE += x.PE?.changeinOpenInterest;
+    PE += x.PE?.OIchg;
   });
 
   let CE = 0;
   indices?.forEach((x) => {
-    CE += x.CE?.changeinOpenInterest;
+    CE += x.CE?.OIchg;
   });
+
+  
 
   const data = {
     labels: ["PE/CE Change"],
@@ -75,7 +77,7 @@ const TotalOIChange = ({ indices }) => {
 
   return (
     <div>
-      <Bar data={data} height={300} width={250} options={options} />
+      <Bar data={data} height={250} width={250} options={options} />
     </div>
   );
 };

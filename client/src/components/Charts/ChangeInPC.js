@@ -8,12 +8,12 @@ const ChangeInPC = ({ indices }) => {
   //loop through array and add all pe ce change
   let PE = 0;
   indices?.forEach((x) => {
-    PE += x.PE?.changeinOpenInterest;
+    PE += x.PE?.OIchg;
   });
 
   let CE = 0;
   indices?.forEach((x) => {
-    CE += x.CE?.changeinOpenInterest;
+    CE += x.CE?.OIchg;
   });
   return (
     <>

@@ -21,7 +21,7 @@ import About from "./Pages/About";
 import Position from "./components/Portfolio/Position";
 import useNetworkStatus from "./Contexts/Networkstatus";
 import Offlinepage from "./Pages/Offlinepage";
-
+import Selecttime from "./components/TimeperiodOI/Selecttime";
 
 function App() {
   const { user } = useStateContext();
@@ -31,9 +31,6 @@ function App() {
     <ThemeProvider theme={theme}>
       <Navbar />
       <SecNav />
-
-      
-    
 
       <div className="App" style={{ marginTop: "10em" }}>
         {isOnline ? (
@@ -62,6 +59,8 @@ function App() {
                 path="/oianalysis"
                 element={user ? <OIanalysisPage /> : <Auth />}
               />
+
+              <Route exact path="/slider" element={user ? <Selecttime />: <Auth />}/>
 
               <Route exact path="/privacypolicy" element={<PrivacyPolicy />} />
               <Route exact path="/disclaimer" element={<Disclaimer />} />

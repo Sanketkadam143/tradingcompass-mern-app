@@ -48,15 +48,17 @@ const useStyles = makeStyles(() => {
     },
 
     logo: {
-      maxWidth: 80,
+      maxWidth: 50,
+
     },
     lastupdate: {
       display: "flex",
       gap: "1em",
+      alignItems:"center"
     },
     date: {
       fontSize: "0.7em",
-      marginTop: "2em",
+      
     },
     link: {
       textDecoration: "none",
@@ -69,7 +71,7 @@ const Navbar = () => {
   //imported and set ismatch value on breakpoints
   const { LivePrice, isMatch, setisMatch, user, setUser } = useStateContext();
   const navigate = useNavigate();
-
+ 
   const classes = useStyles();
 
   const theme = useTheme();
@@ -134,7 +136,9 @@ const Navbar = () => {
                   <PopupMenu
                     name="Options"
                     menuItems={[
-                      "OI Analysis",
+                      <Link to="/slider" className={classes.link}>
+                        OI Analysis
+                      </Link>,
                       "Call Vs Put OI ",
                       "Multi-Strike OI",
                       "OI Interval wise",

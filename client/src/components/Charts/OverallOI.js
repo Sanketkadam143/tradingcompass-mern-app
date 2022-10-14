@@ -12,20 +12,20 @@ const OverallOI = ({ indices }) => {
   //received media size as is match from use state
 
   const data = {
-    // mapping label to strikeprice
-    labels: indices?.map((x) => x?.strikePrice),
+    // mapping label to stp
+    labels: indices?.map((x) => x?.stp),
     datasets: [
       {
         label: "PE OI Overall",
         //mapping pe oi
-        data: indices?.map((x) => x?.PE?.openInterest),
+        data: indices?.map((x) => x?.PE?.OI),
         backgroundColor: ["#40b0b2"],
         borderWidth: 1,
       },
       {
         label: "CE OI Overall",
         //mapping ce oi
-        data: indices?.map((x) => x?.CE?.openInterest),
+        data: indices?.map((x) => x?.CE?.OI),
         backgroundColor: ["#e76d67"],
         borderWidth: 1,
       },

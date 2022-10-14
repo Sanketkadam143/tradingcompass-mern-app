@@ -13,13 +13,13 @@ const OIchange = ({ indices }) => {
   //received media size as is match from use state
 
   const data = {
-    // mapping label to strikeprice
-    labels: indices?.map((x) => x?.strikePrice),
+    // mapping label to stp
+    labels: indices?.map((x) => x?.stp),
     datasets: [
       {
         label: "PE OI Change",
         //mapping pe oi change
-        data: indices?.map((x) => x?.PE?.changeinOpenInterest),
+        data: indices?.map((x) => x?.PE?.OIchg),
         backgroundColor: (color) => {
           let colors = color.raw > 0 ? "#40b0b2" : "#e76d67";
           return colors;
@@ -29,7 +29,7 @@ const OIchange = ({ indices }) => {
       {
         label: "CE OI Change",
         //mapping ce oi change
-        data: indices?.map((x) => x?.CE?.changeinOpenInterest),
+        data: indices?.map((x) => x?.CE?.OIchg),
         backgroundColor:(color) => {
           let colors = color.raw > 0 ? "#e76d67" :"#40b0b2" ;
           return colors;
@@ -74,7 +74,7 @@ const OIchange = ({ indices }) => {
     <div>
       <Bar
         data={data}
-        height={isMatch ? 600 : 300}
+        height={isMatch ? 600 : 400}
         width={isMatch ? 300 : 900}
         options={options}
       />

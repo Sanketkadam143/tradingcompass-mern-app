@@ -31,16 +31,15 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 
 export default function PopupOrder({ name, niftyData, bankData, orderType }) {
   const classes = useStyles();
-  const { orderBook, marketStatus } = useStateContext();
+  const { orderBook, marketStatus, niftyTimestamp, bankTimestamp } =
+    useStateContext();
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [openSuccess, setOpenSuccess] = useState(false);
 
   const [pos, setPos] = useState(1);
   const [cepePos, setCepePos] = useState(3);
   const [data, setData] = useState(niftyData);
-  const [selectedStrike, setSelectedStrike] = useState(
-    niftyData[20]?.strikePrice
-  );
+  const [selectedStrike, setSelectedStrike] = useState(niftyData[20]?.stp);
   const [lots, setLots] = useState(0);
 
   const [isnifty, setIsnifty] = useState(true);
@@ -66,8 +65,8 @@ export default function PopupOrder({ name, niftyData, bankData, orderType }) {
     setPos(event.target.value);
 
     isnifty
-      ? setSelectedStrike(bankData[20]?.strikePrice)
-      : setSelectedStrike(niftyData[20]?.strikePrice);
+      ? setSelectedStrike(bankData[20]?.stp)
+      : setSelectedStrike(niftyData[20]?.stp);
 
     isnifty ? setData(bankData) : setData(niftyData);
 
@@ -98,12 +97,10 @@ export default function PopupOrder({ name, niftyData, bankData, orderType }) {
 
   const currentPrice =
     cepePos === 4
-      ? data[
-          data?.findIndex((element) => element?.strikePrice === selectedStrike)
-        ]?.PE?.lastPrice
-      : data[
-          data?.findIndex((element) => element?.strikePrice === selectedStrike)
-        ]?.CE?.lastPrice;
+      ? data[data?.findIndex((element) => element?.stp === selectedStrike)]?.PE
+          ?.LTP
+      : data[data?.findIndex((element) => element?.stp === selectedStrike)]?.CE
+          ?.LTP;
 
   const requiredMargin =
     lots > 0
@@ -114,11 +111,11 @@ export default function PopupOrder({ name, niftyData, bankData, orderType }) {
 
   const orderDetails = {
     indexName: isnifty ? "NIFTY" : "BANKNIFTY",
-    strikePrice: selectedStrike,
+    stp: selectedStrike,
     optionType: cepePos === 3 ? "CE" : "PE",
     price: currentPrice,
     lots: lots,
-    orderTime: data[0]?.timestamp,
+    orderTime: isnifty ? niftyTimestamp : bankTimestamp,
     orderType: orderType,
     margin: requiredMargin,
   };
@@ -167,17 +164,17 @@ export default function PopupOrder({ name, niftyData, bankData, orderType }) {
             </Select>
           </FormControl>
           <FormControl sx={{ m: 1, minWidth: 130 }} style={{ margin: "1em" }}>
-            <InputLabel id="strikePrice">Strike-Price</InputLabel>
+            <InputLabel id="stp">Strike-Price</InputLabel>
             <Select
-              labelId="strikePrice"
+              labelId="stp"
               id="strike"
               value={selectedStrike}
               label="Select Strike"
               onChange={handleChange2}
             >
               {data?.map((x) => (
-                <MenuItem key={x?.strikePrice} value={x?.strikePrice}>
-                  {x?.strikePrice}
+                <MenuItem key={x?.stp} value={x?.stp}>
+                  {x?.stp}
                 </MenuItem>
               ))}
             </Select>
@@ -254,7 +251,6 @@ export default function PopupOrder({ name, niftyData, bankData, orderType }) {
           </Button>
         </div>
 
-
         <Dialog
           open={openSuccess}
           TransitionComponent={Transition}
@@ -265,14 +261,29 @@ export default function PopupOrder({ name, niftyData, bankData, orderType }) {
           aria-describedby="alert-dialog-slide-description"
         >
           {marketStatus.marketStatus === "Open" ? (
-            <Alert  onClose={() => {handleClose()}} severity="success">
-              <AlertTitle><strong>Your Order was Successfully Placed !!!</strong></AlertTitle>
-              This is a virtual option trading platform. Money will neither be debited nor credited in your Bank Account
+            <Alert
+              onClose={() => {
+                handleClose();
+              }}
+              severity="success"
+            >
+              <AlertTitle>
+                <strong>Your Order was Successfully Placed !!!</strong>
+              </AlertTitle>
+              This is a virtual option trading platform. Money will neither be
+              debited nor credited in your Bank Account
             </Alert>
           ) : (
-            <Alert onClose={() => {handleClose()}} severity="error">
-              <AlertTitle><strong>Oops..!! Market is Closed</strong></AlertTitle>
-            {  `Market will open on ${marketStatus.tradeDate} 9:15 AM`}
+            <Alert
+              onClose={() => {
+                handleClose();
+              }}
+              severity="error"
+            >
+              <AlertTitle>
+                <strong>Oops..!! Market is Closed</strong>
+              </AlertTitle>
+              {`Market will open on ${marketStatus.tradeDate} 9:15 AM`}
             </Alert>
           )}
         </Dialog>

@@ -2,9 +2,10 @@ import React from "react";
 import { useEffect } from "react";
 import { useStateContext } from "../../Contexts/ContextProvider";
 
+
 const BankResponse = () => {
   //get data variable from contextprovider
-  const { BankData, setBankData } = useStateContext();
+  const { BankData, setBankData,setBankDaydata ,setBankTimestamp} = useStateContext();
 
   //fetch,process and stored data
   const getBankChain = async () => {
@@ -14,10 +15,11 @@ const BankResponse = () => {
       );
       
         const responseJSON = await response.json();
+        setBankDaydata(responseJSON);
         const daydata = responseJSON[0].datedata;
-        const bank = responseJSON[0].datedata[daydata.length - 1].data[0];
+        const bank = responseJSON[0].datedata[daydata.length - 1].data;
     
-
+        setBankTimestamp(responseJSON[0]?.datedata[daydata.length - 1]?.timestamp)
       //assign value to bankdata and store reponse in local storage for future need
    
       bank.length === 42 && setBankData(bank);

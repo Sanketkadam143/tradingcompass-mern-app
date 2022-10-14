@@ -42,7 +42,8 @@ const useStyles = makeStyles((theme) => {
 });
 
 const Showorders = ({ orderDetails, index }) => {
-  const { NiftyData, BankData, orderBook, LivePrice } = useStateContext();
+  const { NiftyData, BankData, orderBook, LivePrice, niftyDaydata,niftyTimestamp,bankTimestamp } =
+    useStateContext();
   const classes = useStyles();
 
   const [anchorEl, setAnchorEl] = useState(false);
@@ -64,26 +65,18 @@ const Showorders = ({ orderDetails, index }) => {
     orderDetails.indexName === "NIFTY"
       ? orderDetails.optionType === "CE"
         ? NiftyData[
-            NiftyData?.findIndex(
-              (element) => element?.strikePrice === orderDetails.strikePrice
-            )
-          ]?.CE?.lastPrice
+            NiftyData?.findIndex((element) => element?.stp === orderDetails.stp)
+          ]?.CE?.LTP
         : NiftyData[
-            NiftyData?.findIndex(
-              (element) => element?.strikePrice === orderDetails.strikePrice
-            )
-          ]?.PE?.lastPrice
+            NiftyData?.findIndex((element) => element?.stp === orderDetails.stp)
+          ]?.PE?.LTP
       : orderDetails.optionType === "CE"
       ? BankData[
-          BankData?.findIndex(
-            (element) => element?.strikePrice === orderDetails.strikePrice
-          )
-        ]?.CE?.lastPrice
+          BankData?.findIndex((element) => element?.stp === orderDetails.stp)
+        ]?.CE?.LTP
       : BankData[
-          BankData?.findIndex(
-            (element) => element?.strikePrice === orderDetails.strikePrice
-          )
-        ]?.PE?.lastPrice;
+          BankData?.findIndex((element) => element?.stp === orderDetails.stp)
+        ]?.PE?.LTP;
 
   let profit =
     orderDetails.exitPrice !== undefined
@@ -113,8 +106,8 @@ const Showorders = ({ orderDetails, index }) => {
     orderBook[index].profit = profit - brokerage;
     orderBook[index].exitTime =
       orderDetails.indexName === "NIFTY"
-        ? NiftyData[0]?.timestamp
-        : BankData[0]?.timestamp;
+        ? niftyTimestamp
+        : bankTimestamp;
     localStorage.setItem("orderBook", JSON.stringify(orderBook));
   };
 
@@ -127,25 +120,26 @@ const Showorders = ({ orderDetails, index }) => {
     orderBook[index].profit = profit - brokerage;
     orderBook[index].exitTime =
       orderDetails.indexName === "NIFTY"
-        ? NiftyData[0]?.timestamp
-        : BankData[0]?.timestamp;
+        ? niftyTimestamp
+        : bankTimestamp;
     localStorage.setItem("orderBook", JSON.stringify(orderBook));
   };
 
   const autoExittime = "15:30:00";
   const resTime = LivePrice[0]?._id?.slice(12);
   const isExpiry =
-    NiftyData[0]?.expiryDate?.slice(0, 2) === new Date().toJSON().slice(8, 10);
+    niftyDaydata[0]?.expiryDate?.slice(0, 2) ===
+    new Date().toJSON().slice(8, 10);
 
   resTime === autoExittime &&
     orderDetails.exitPrice === undefined &&
     isExpiry &&
     autoexit();
-
+   
   const orderName =
     orderDetails.indexName +
     " " +
-    orderDetails.strikePrice +
+    orderDetails.stp +
     " " +
     orderDetails.optionType +
     " " +

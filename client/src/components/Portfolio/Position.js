@@ -57,7 +57,7 @@ const useStyles = makeStyles((theme) => {
 
 const Position = () => {
   const classes = useStyles();
-  const { NiftyData, BankData, orderBook } = useStateContext();
+  const { NiftyData, BankData, orderBook,niftyDaydata } = useStateContext();
 
   let totalProfit = 0;
   orderBook?.forEach((x) => {
@@ -70,8 +70,10 @@ const Position = () => {
     x.exitPrice === undefined && (invested += parseInt(x.margin));
     x.exitPrice === undefined && (investedProfit += parseInt(x.profit));
   });
-  const isExpiry =   NiftyData[0]?.expiryDate?.slice(0, 2) === new Date().toJSON().slice(8, 10);
-
+  const expiryDate=niftyDaydata[0]?.expiryDate;
+  const isExpiry =   expiryDate?.slice(0, 2) === new Date().toJSON().slice(8, 10);
+ 
+  console.log(niftyDaydata)
   return (
     <>
       <div className={classes.positionPageDiv}>
@@ -140,7 +142,7 @@ const Position = () => {
         <Paper className={classes.positionDiv} elevation={3}>
           {isExpiry && (
             <Alert severity="warning">
-              <AlertTitle> Today {NiftyData[0]?.expiryDate} is expiry</AlertTitle>
+              <AlertTitle> Today {expiryDate} is expiry</AlertTitle>
 
               <strong>Your Position will be autosquared off at 3:30 pm</strong>
             </Alert>
