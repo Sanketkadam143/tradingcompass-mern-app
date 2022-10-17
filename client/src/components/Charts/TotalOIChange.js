@@ -77,7 +77,7 @@ const TotalOIChange = ({ indices }) => {
 
   return (
     <div>
-      <Bar data={data} height={250} width={250} options={options} />
+      <Bar data={data} height={335} width={250} options={options} />
     </div>
   );
 };

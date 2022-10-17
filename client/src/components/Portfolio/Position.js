@@ -73,7 +73,7 @@ const Position = () => {
   const expiryDate=niftyDaydata[0]?.expiryDate;
   const isExpiry =   expiryDate?.slice(0, 2) === new Date().toJSON().slice(8, 10);
  
-  console.log(niftyDaydata)
+  
   return (
     <>
       <div className={classes.positionPageDiv}>

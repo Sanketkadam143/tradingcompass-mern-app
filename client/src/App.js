@@ -60,7 +60,7 @@ function App() {
                 element={user ? <OIanalysisPage /> : <Auth />}
               />
 
-              <Route exact path="/slider" element={user ? <Selecttime />: <Auth />}/>
+              <Route exact path="/oi-intervalwise" element={user ? <Selecttime />: <Auth />}/>
 
               <Route exact path="/privacypolicy" element={<PrivacyPolicy />} />
               <Route exact path="/disclaimer" element={<Disclaimer />} />

@@ -1,8 +1,9 @@
-import React, { useState } from "react";
+import React, {  useState } from "react";
 import MultiRangeSlider from "multi-range-slider-react";
 import { useStateContext } from "../../Contexts/ContextProvider";
 import Comparedata from "./Comparedata";
 import { makeStyles } from "@mui/styles";
+
 
 const labels = [
   "9:15",
@@ -55,12 +56,18 @@ const Selecttime = () => {
 
   const { niftyDaydata, bankDaydata } = useStateContext();
   const curTime = new Date();
-  const timeMax = 390;
+  const timeMax =390;
   const curMin =
-    ((curTime.getHours() % 24) - 9) * 60 + (curTime.getMinutes() - 15);
+    ((curTime.getHours() % 24) - 9) * 60 + (curTime.getMinutes() );
+ 
   const [minTimeCaption, set_minTimeCaption] = useState("");
   const [maxTimeCaption, set_maxTimeCaption] = useState("");
+  const[initialhand,setInitialhand]=useState(0);
+
+
   const handleTimeChange = (e) => {
+   
+    setInitialhand(e.minValue)
     let h = Math.floor(e.minValue / 60 + 9);
     let m = e.minValue % 60;
     let minH = h.toString().padStart(2, "0");
@@ -74,11 +81,18 @@ const Selecttime = () => {
     set_maxTimeCaption(maxH + ":" + maxM);
   };
 
+
+
   let firsttime = minTimeCaption.split(":");
   let minTime = firsttime[0] + firsttime[1];
 
   let secondtime = maxTimeCaption.split(":");
   let maxTime = secondtime[0] + secondtime[1];
+
+  
+
+ var minV=0;
+ initialhand>curMin && (minV=curMin-15)
 
   return (
     <div className={classes.grpdiv}>
@@ -88,12 +102,13 @@ const Selecttime = () => {
             labels={labels}
             min={15}
             max={timeMax}
-            minValue={0}
+            minValue={minV}
             maxValue={curMin}
             step={5}
             minCaption={minTimeCaption}
             maxCaption={maxTimeCaption}
             onInput={handleTimeChange}
+            ruler={false}
           />
         </div>
 

@@ -35,7 +35,9 @@ const DrawerComponent = () => {
           <PopupMenu
             name="Options"
             menuItems={[
-              "OI Analysis",
+              <Link to="/oi-intervalwise" className={classes.link}>
+                OI Analysis
+              </Link>,
               "Call Vs Put  OI",
               "Multi-Strike OI",
               "OI Interval wise",
@@ -69,7 +71,6 @@ const DrawerComponent = () => {
                 className={classes.link}
                 href="mailto: sanketanilkadam@gmail.com"
               >
-                
                 Email
               </a>,
               <a

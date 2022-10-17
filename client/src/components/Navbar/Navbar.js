@@ -136,7 +136,7 @@ const Navbar = () => {
                   <PopupMenu
                     name="Options"
                     menuItems={[
-                      <Link to="/slider" className={classes.link}>
+                      <Link to="/oi-intervalwise" className={classes.link}>
                         OI Analysis
                       </Link>,
                       "Call Vs Put OI ",

@@ -4,6 +4,7 @@ import Meter from "../Charts/Meter";
 import TotalOIChange from "../Charts/TotalOIChange";
 import { Paper, Typography } from "@mui/material";
 import { makeStyles } from "@mui/styles";
+import Volume from "../Charts/Volume";
 
 const useStyles = makeStyles((theme) => {
   return {
@@ -18,6 +19,10 @@ const useStyles = makeStyles((theme) => {
       padding: "1em",
       border: "1px solid #808080",
       borderRadius: theme.shape.borderRadius,
+      display:"flex",
+      flexDirection: "column",
+      gap:"3em"
+
     },
     maindiv: {
       padding: "2em",
@@ -37,6 +42,8 @@ const useStyles = makeStyles((theme) => {
 const Comparedata = ({ minTime, maxTime, indexData, name }) => {
   const classes = useStyles();
   const comparedData = [];
+  var price 
+  var indexPricechange
 
   try {
     let data = indexData?.[0]?.datedata;
@@ -70,26 +77,29 @@ const Comparedata = ({ minTime, maxTime, indexData, name }) => {
     let minIndex = timearr?.indexOf(closestmin);
     let maxIndex = timearr?.indexOf(closestmax);
 
+    price = indexData[0]?.datedata[minIndex]?.indexLTP;
+
     const firstData = indexData?.[0]?.datedata?.[minIndex];
     const secondData = indexData?.[0]?.datedata?.[maxIndex];
 
-    const indexPricechange = (
+     indexPricechange = (
       secondData?.indexLTP - firstData?.indexLTP
     ).toFixed(2);
-
+  
     const addData = (x, secIndex) => {
       const intervalData = {
         stp: secondData?.data[secIndex]?.stp,
-        pchng: indexPricechange,
         CE: {
           LTP: secondData?.data[secIndex]?.CE?.LTP - x?.CE?.LTP,
           OI: secondData?.data[secIndex]?.CE?.OI - x?.CE?.OI,
           OIchg: secondData?.data[secIndex]?.CE?.OIchg - x?.CE?.OIchg,
+          V:secondData?.data[secIndex]?.CE?.V - x?.CE?.V,
         },
         PE: {
           LTP: secondData?.data[secIndex]?.PE?.LTP - x?.PE?.LTP,
           OI: secondData?.data[secIndex]?.PE?.OI - x?.PE?.OI,
           OIchg: secondData?.data[secIndex]?.PE?.OIchg - x?.PE?.OIchg,
+          V:secondData?.data[secIndex]?.PE?.V - x?.PE?.V,
         },
       };
 
@@ -103,16 +113,25 @@ const Comparedata = ({ minTime, maxTime, indexData, name }) => {
 
       secIndex !== -1 && addData(x, secIndex);
     });
+   
   } catch (error) {
     console.log(error);
   }
-
+ 
+  const perchng = ((indexPricechange/ price) * 100).toFixed(2);
   return (
     <>
       <div className={classes.niftypageDiv}>
         <Paper elevation={3} className={classes.maindiv}>
-          <Typography variant="h6">{name}</Typography>
-          <Typography variant="body">Time interval data</Typography>
+          <Typography variant="h6">{name} </Typography>
+          <span
+            style={{
+              color: perchng < 0 ? "#a84032" : "#32a852",
+              fontSize: "1em",
+            }}
+          >
+            {indexPricechange} {perchng}%
+          </span>
 
           <div className={classes.paperDiv}>
             <div className={classes.groupdiv}>
@@ -121,6 +140,7 @@ const Comparedata = ({ minTime, maxTime, indexData, name }) => {
             </div>
             <div className={classes.groupdiv}>
               <OIchange indices={comparedData} />
+              <Volume  indices={comparedData} />
             </div>
           </div>
         </Paper>

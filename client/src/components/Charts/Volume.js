@@ -1,39 +1,32 @@
 import React from "react";
-import { Bar } from "react-chartjs-2";
+import { Bar} from "react-chartjs-2";
 import { useStateContext } from "../../Contexts/ContextProvider";
 import { Chart, registerables } from "chart.js";
 
 Chart.register(...registerables);
 
-const OIchange = ({ indices }) => {
+const Volume = ({ indices }) => {
   //reveived pass on data  as indices
 
   const { isMatch } = useStateContext();
-
   //received media size as is match from use state
-
+  
   const data = {
     // mapping label to stp
     labels: indices?.map((x) => x?.stp),
     datasets: [
       {
-        label: "PE OI Change",
-        //mapping pe oi change
-        data: indices?.map((x) => x?.PE?.OIchg),
-        backgroundColor: (color) => {
-          let colors = color.raw > 0 ? "#40b0b2" : "#e76d67";
-          return colors;
-        },
+        label: "PE Volume",
+        //mapping pe oi
+        data: indices?.map((x) => x?.PE?.V),
+        backgroundColor: ["#40b0b2"],
         borderWidth: 1,
       },
       {
-        label: "CE OI Change",
-        //mapping ce oi change
-        data: indices?.map((x) => x?.CE?.OIchg),
-        backgroundColor:(color) => {
-          let colors = color.raw > 0 ? "#e76d67" :"#40b0b2" ;
-          return colors;
-        },
+        label: "CE Volume",
+        //mapping ce oi
+        data: indices?.map((x) => x?.CE?.V),
+        backgroundColor: ["#e76d67"],
         borderWidth: 1,
       },
     ],
@@ -69,7 +62,6 @@ const OIchange = ({ indices }) => {
     },
   };
   //specified height and width for 2 media screen
-
   return (
     <div>
       <Bar
@@ -82,4 +74,4 @@ const OIchange = ({ indices }) => {
   );
 };
 
-export default OIchange;
+export default Volume;
