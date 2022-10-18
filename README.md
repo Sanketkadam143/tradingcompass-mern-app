@@ -12,6 +12,8 @@ Details on this website is compiled for the convenience of site visitors and is 
 
 [![portfoliosample.jpg](https://i.postimg.cc/dVGVFJnt/portfoliosample.jpg)](https://postimg.cc/685XLJDD)
 
+[![screencapture-tradingcompass-in-oi-intervalwise-2022-10-17-19-25-30.png](https://i.postimg.cc/Xvc0VGYC/screencapture-tradingcompass-in-oi-intervalwise-2022-10-17-19-25-30.png)](https://postimg.cc/jW51cjNx)
+
 [![homepagesample.jpg](https://i.postimg.cc/D0277Gj2/homepagesample.jpg)](https://postimg.cc/34bsBkQ6)
 
 [![sectorialsample.jpg](https://i.postimg.cc/prnJX9p6/sectorialsample.jpg)](https://postimg.cc/rRMrfwG1)

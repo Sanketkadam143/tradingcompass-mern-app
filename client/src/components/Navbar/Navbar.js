@@ -48,7 +48,8 @@ const useStyles = makeStyles(() => {
     },
 
     logo: {
-      maxWidth: 50,
+    
+     height:57
 
     },
     lastupdate: {
@@ -139,7 +140,9 @@ const Navbar = () => {
                       <Link to="/oi-intervalwise" className={classes.link}>
                         OI Analysis
                       </Link>,
-                      "Call Vs Put OI ",
+                       <Link to="/callvsput" className={classes.link}>
+                      Call vs Put OI
+                     </Link>,
                       "Multi-Strike OI",
                       "OI Interval wise",
                     ]}

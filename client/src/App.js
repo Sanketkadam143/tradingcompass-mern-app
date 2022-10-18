@@ -22,6 +22,7 @@ import Position from "./components/Portfolio/Position";
 import useNetworkStatus from "./Contexts/Networkstatus";
 import Offlinepage from "./Pages/Offlinepage";
 import Selecttime from "./components/TimeperiodOI/Selecttime";
+import CallvsPutpage from "./Pages/CallvsPutpage";
 
 function App() {
   const { user } = useStateContext();
@@ -61,6 +62,8 @@ function App() {
               />
 
               <Route exact path="/oi-intervalwise" element={user ? <Selecttime />: <Auth />}/>
+              <Route exact path="/callvsput" element={user ?  <CallvsPutpage/>: <Auth />}/>
+
 
               <Route exact path="/privacypolicy" element={<PrivacyPolicy />} />
               <Route exact path="/disclaimer" element={<Disclaimer />} />

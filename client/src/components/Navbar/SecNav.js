@@ -14,7 +14,6 @@ const useStyles = makeStyles(() => {
       justifyContent: "space-between",
       width: "100%",
       padding: "0 3em",
-   
     },
     pChange: {
       fontSize: "0.8em",
@@ -64,7 +63,6 @@ const SecNav = () => {
   //tabs are used to make scrollable effect
 
   return (
-   
     <>
       <AppBar
         sx={{
