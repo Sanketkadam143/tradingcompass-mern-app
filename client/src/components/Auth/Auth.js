@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
 import {
   Avatar,
   Button,
@@ -15,33 +16,32 @@ import useStyles from "./Styles";
 import Input from "./Input";
 import jwt_decode from "jwt-decode";
 import { useStateContext } from "../../Contexts/ContextProvider";
+import { signin,signup } from "../../actions/auth";
 
-// const initialState = { firstName: '', lastName: '', email: '', password: '', confirmPassword: '' };
+
+const initialState = { firstName: '', lastName: '', email: '', password: '', confirmPassword: '' };
 
 const Auth = () => {
   const classes = useStyles();
   const [showPassword, setShowPassword] = useState(false);
   const [isSignUp, setIsSignUp] = useState(false);
-
+  const [formData,setFormData]=useState(initialState);
   const [checked, setChecked] = useState(false);
 
-  const { user, setUser } = useStateContext();
-  // const dispatch = useDispatch();
+  const { user } = useStateContext();
+  const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  JSON.parse(localStorage.getItem("token")) != null
-    ? setUser(true)
-    : setUser(false);
 
   const googleSuccess = async (res) => {
-    setUser(true);
-    const actualRes = jwt_decode(res.credential);
-    const id = res?.credential;
-    localStorage.setItem("token", JSON.stringify(id));
-    localStorage.setItem("profile", JSON.stringify(actualRes));
 
+    const actualRes = jwt_decode(res.credential);
+    const token = res?.credential;
+   
     try {
+      dispatch({type:'AUTH',data:{actualRes,token}});
       navigate("/");
+      
     } catch (error) {
       console.log(error);
     }
@@ -49,6 +49,7 @@ const Auth = () => {
 
   useEffect(() => {
     /* global google */
+   
     try {
       google.accounts.id.initialize({
         client_id:
@@ -56,7 +57,7 @@ const Auth = () => {
         callback: googleSuccess,
       });
 
-      user === false && google.accounts.id.prompt();
+      user === null && google.accounts.id.prompt();
       google.accounts.id.renderButton(document.getElementById("signInDiv"), {
         theme: "outline",
         size: "large",
@@ -71,19 +72,19 @@ const Auth = () => {
   }, []);
 
   const handleSubmit = (e) => {
-    // e.preventDefault()
-    // if (isSignUp) {
-    //     dispatch(signup(formData, navigate))
-    // } else {
-    //     dispatch(signin(formData, navigate))
-    // }
+    e.preventDefault();
+    if (isSignUp) {
+        dispatch(signup(formData, navigate))
+    } else {
+        dispatch(signin(formData, navigate))
+    }
   };
 
   const handleChange = (e) => {
-    // setFormData({
-    //     ...formData,
-    //     [e.target.name]: e.target.value
-    // })
+    setFormData({
+        ...formData,
+        [e.target.name]: e.target.value
+    })
   };
 
   const handleCheck = (event) => {
@@ -204,24 +205,6 @@ const Auth = () => {
           </Grid>
         </form>
       </Paper>
-      {/* <Paper elevation={3}>
-        <div style={{ margin: "2em" }}>
-          Install below Extension for functioning of this App.
-          <br />
-          <Button
-            type="submit"
-            fullWidth
-            variant="contained"
-            color="primary"
-            className={classes.submitbut}
-            style={{ margin: "1em" }}
-            disableElevation
-            href="https://chrome.google.com/webstore/detail/cors-unblock/lfhmikememgdcahcdlaciloancbhjino?hl=en"
-          >
-           Click to Install
-          </Button>
-        </div>
-      </Paper> */}
     </Container>
   );
 };

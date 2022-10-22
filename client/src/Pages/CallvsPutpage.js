@@ -21,11 +21,12 @@ const useStyles = makeStyles((theme) => {
       alignItems: "center",
       flexWrap: "wrap",
       gap: "3em",
-      minWidth: "1000px",
-      [theme.breakpoints.down("lg")]: {
+      minWidth: "850px",
+      [theme.breakpoints.down("md")]: {
         gap: "0",
         minWidth: "80%",
         margin: "2em",
+        padding:"0.5em",
       },
     },
   };

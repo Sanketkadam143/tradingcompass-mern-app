@@ -1,5 +1,6 @@
-import React from "react";
+import React ,{useEffect}from "react";
 import { Routes, Route } from "react-router-dom";
+import { useDispatch } from "react-redux";
 import Home from "./Pages/Home";
 import theme from "./utils/theme";
 import { ThemeProvider } from "@mui/material";
@@ -23,10 +24,17 @@ import useNetworkStatus from "./Contexts/Networkstatus";
 import Offlinepage from "./Pages/Offlinepage";
 import Selecttime from "./components/TimeperiodOI/Selecttime";
 import CallvsPutpage from "./Pages/CallvsPutpage";
+import {getOrders} from './actions/order'
 
 function App() {
+  const dispatch=useDispatch();
   const { user } = useStateContext();
   const { isOnline } = useNetworkStatus();
+
+  useEffect(()=>{
+    dispatch(getOrders());
+  },[dispatch])
+
 
   return (
     <ThemeProvider theme={theme}>

@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
 import { Divider } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import { Button } from "@mui/material";
@@ -6,7 +7,10 @@ import Dialog from "@mui/material/Dialog";
 import Slide from "@mui/material/Slide";
 import Alert from "@mui/material/Alert";
 import AlertTitle from "@mui/material/AlertTitle";
+import DeleteIcon from "@mui/icons-material/Delete";
 import { useStateContext } from "../../Contexts/ContextProvider";
+import { updateOrder, deleteOrder } from "../../actions/order";
+import Calculateprofit from "./Calculateprofit";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -21,6 +25,7 @@ const useStyles = makeStyles((theme) => {
       justifyContent: "center",
       alignItems: "center",
       flexWrap: "wrap",
+      position: "relative",
     },
 
     orderDiv: {
@@ -38,19 +43,41 @@ const useStyles = makeStyles((theme) => {
     exitDiv: {
       textAlign: "right",
     },
+    deleteIcon: {
+      position: "absolute",
+      top: "0px",
+      right: "0px",
+    },
   };
 });
 
 const Showorders = ({ orderDetails, index }) => {
-  const { NiftyData, BankData, orderBook, LivePrice, niftyDaydata,niftyTimestamp,bankTimestamp } =
+  const dispatch = useDispatch();
+  const { LivePrice, niftyDaydata, niftyTimestamp, bankTimestamp } =
     useStateContext();
   const classes = useStyles();
+
+  let { latestPrice, profit } = Calculateprofit(orderDetails);
 
   const [anchorEl, setAnchorEl] = useState(false);
 
   const [confirm, setConfirm] = useState(null);
 
   const [autoSquareoff, setAutoSquareoff] = useState(false);
+
+  const [isSold, setIsSold] = useState();
+
+  useEffect(() => {
+    setIsSold(orderDetails.sellPrice !== undefined);
+  }, [orderDetails]);
+
+  const [exitDetails, setExitDetails] = useState({
+    sellPrice: "",
+    profit: "",
+    exitTime: "",
+  });
+
+  const currentId = orderDetails._id;
 
   const confirmExit = (e) => {
     setConfirm(e.currentTarget);
@@ -61,68 +88,43 @@ const Showorders = ({ orderDetails, index }) => {
     setConfirm(null);
   };
 
-  let latestPrice =
-    orderDetails.indexName === "NIFTY"
-      ? orderDetails.optionType === "CE"
-        ? NiftyData[
-            NiftyData?.findIndex((element) => element?.stp === orderDetails.stp)
-          ]?.CE?.LTP
-        : NiftyData[
-            NiftyData?.findIndex((element) => element?.stp === orderDetails.stp)
-          ]?.PE?.LTP
-      : orderDetails.optionType === "CE"
-      ? BankData[
-          BankData?.findIndex((element) => element?.stp === orderDetails.stp)
-        ]?.CE?.LTP
-      : BankData[
-          BankData?.findIndex((element) => element?.stp === orderDetails.stp)
-        ]?.PE?.LTP;
-
-  let profit =
-    orderDetails.exitPrice !== undefined
-      ? (
-          (orderDetails.exitPrice - orderDetails.price) *
-          (orderDetails.indexName === "NIFTY" ? 50 : 25) *
-          orderDetails.lots
-        ).toFixed(2)
-      : (
-          (latestPrice - orderDetails.price) *
-          (orderDetails.indexName === "NIFTY" ? 50 : 25) *
-          orderDetails.lots
-        ).toFixed(2);
-
   orderDetails.orderType === "optionSelling" && (profit = -profit);
-
-  orderDetails.exitPrice === undefined && (orderBook[index].profit = profit);
-  localStorage.setItem("orderBook", JSON.stringify(orderBook));
 
   const brokerage = parseInt(orderDetails.lots) * 50;
 
+  useEffect(() => {
+    setExitDetails({
+      sellPrice: latestPrice,
+      profit: profit,
+      exitTime:
+        orderDetails.indexName === "NIFTY" ? niftyTimestamp : bankTimestamp,
+    });
+  }, [
+    orderDetails,
+    latestPrice,
+    profit,
+    brokerage,
+    bankTimestamp,
+    niftyTimestamp,
+  ]);
+
   const exitPosition = (event) => {
+    dispatch(updateOrder(currentId, exitDetails));
     setAnchorEl(true);
     setConfirm(null);
-
-    orderBook[index].exitPrice = latestPrice;
-    orderBook[index].profit = profit - brokerage;
-    orderBook[index].exitTime =
-      orderDetails.indexName === "NIFTY"
-        ? niftyTimestamp
-        : bankTimestamp;
-    localStorage.setItem("orderBook", JSON.stringify(orderBook));
+    setIsSold(true);
   };
 
   const autoexit = (event) => {
+    dispatch(updateOrder(currentId, exitDetails));
     setAutoSquareoff(true);
     setAnchorEl(true);
     setConfirm(null);
+  };
 
-    orderBook[index].exitPrice = latestPrice;
-    orderBook[index].profit = profit - brokerage;
-    orderBook[index].exitTime =
-      orderDetails.indexName === "NIFTY"
-        ? niftyTimestamp
-        : bankTimestamp;
-    localStorage.setItem("orderBook", JSON.stringify(orderBook));
+  const removeOrder = (event) => {
+    dispatch(deleteOrder(currentId));
+    setIsSold(false);
   };
 
   const autoExittime = "15:30:00";
@@ -131,11 +133,8 @@ const Showorders = ({ orderDetails, index }) => {
     niftyDaydata[0]?.expiryDate?.slice(0, 2) ===
     new Date().toJSON().slice(8, 10);
 
-  resTime === autoExittime &&
-    orderDetails.exitPrice === undefined &&
-    isExpiry &&
-    autoexit();
-   
+  resTime === autoExittime && !isSold && isExpiry && autoexit();
+
   const orderName =
     orderDetails.indexName +
     " " +
@@ -149,16 +148,27 @@ const Showorders = ({ orderDetails, index }) => {
 
   return (
     <div className={classes.paperDiv}>
+      {isSold && (
+        <span className={classes.deleteIcon}>
+          <Button
+            onClick={() => {
+              removeOrder();
+            }}
+          >
+            <DeleteIcon />
+          </Button>
+        </span>
+      )}
       <div className={classes.orderDiv}>{orderName}</div>
       <div className={classes.statusDiv}>
         <div className={classes.entryDiv}>
-          <div>Entry Time {orderDetails.orderTime}</div>
+          <div>Entry Time {orderDetails.entryTime}</div>
 
           <div>
             {orderDetails.orderType === "optionBuying"
               ? "Buy Price"
               : "Sell Price"}{" "}
-            {orderDetails.price}
+            {orderDetails.buyPrice}
           </div>
 
           <div>
@@ -167,17 +177,15 @@ const Showorders = ({ orderDetails, index }) => {
           </div>
         </div>
         <div className={classes.exitDiv}>
-          {orderDetails.exitPrice !== undefined && (
-            <div> Exit Time {orderDetails?.exitTime}</div>
-          )}
+          {isSold && <div> Exit Time {orderDetails?.exitTime}</div>}
 
-          {orderDetails.exitPrice !== undefined && (
+          {isSold && (
             <div>
               {" "}
               {orderDetails.orderType === "optionBuying"
                 ? "Sell Price"
                 : "Buy Price"}{" "}
-              {orderDetails.exitPrice}
+              {orderDetails.sellPrice}
             </div>
           )}
 
@@ -190,9 +198,7 @@ const Showorders = ({ orderDetails, index }) => {
               }}
             >
               {profit > 0 && "+"}
-              {orderDetails.exitPrice === undefined
-                ? profit
-                : profit - brokerage}{" "}
+              {!isSold ? profit : profit}{" "}
               {((profit / orderDetails.margin) * 100).toFixed(2)} %
             </span>
           </div>
@@ -208,9 +214,9 @@ const Showorders = ({ orderDetails, index }) => {
           style={{ margin: "1em" }}
           disableElevation
           onClick={confirmExit}
-          disabled={orderDetails.exitPrice !== undefined}
+          disabled={isSold}
         >
-          {orderDetails.exitPrice !== undefined ? "Closed" : "Exit"}
+          {isSold ? "Closed" : "Exit"}
         </Button>
 
         <Dialog

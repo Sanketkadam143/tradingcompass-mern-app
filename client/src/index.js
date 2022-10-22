@@ -4,15 +4,24 @@ import './index.css';
 import App from './App';
 import { BrowserRouter } from 'react-router-dom';
 import { ContextProvider } from './Contexts/ContextProvider';
+import { Provider } from 'react-redux';
+import{createStore,applyMiddleware,compose} from 'redux';
+import thunk from 'redux-thunk';
+import reducers from "./reducers";
+
+const store=createStore(reducers,compose(applyMiddleware(thunk)))
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
-  <BrowserRouter>
+  <Provider store={store}>
+     <BrowserRouter>
     <ContextProvider>
       
       <App />
     </ContextProvider>
   </BrowserRouter>
+  </Provider>
+ 
 );
 
 // If you want to start measuring performance in your app, pass a function

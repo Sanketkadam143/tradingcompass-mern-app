@@ -14,10 +14,9 @@ export const ContextProvider = ({ children }) => {
     const [StockData, setStockData] = useState(JSON.parse(localStorage.getItem('prevStockRes'))||[]);
     const[marketStatus,setMarketStatus]=useState([])
     const[isMatch,setisMatch]=useState(false)
-    const[result,setresult]=useState({});
-    const[token,settoken]=useState({});
-    const[user,setUser]=useState()
-    const[orderBook,setOrderBook]=useState( JSON.parse(localStorage.getItem('orderBook')) !== null ? JSON.parse(localStorage.getItem('orderBook')): [])
+    const [user,setUser]= useState(JSON.parse(localStorage.getItem('profile')));
+    
+  
 
     const[niftyDaydata,setNiftyDaydata]=useState([]);
     const[bankDaydata,setBankDaydata]=useState([]);
@@ -28,7 +27,7 @@ export const ContextProvider = ({ children }) => {
   
     return (
         <StateContext.Provider
-            value={{ NiftyData,setNiftyData,BankData,setBankData,LivePrice, setLivePrice,StockData,setStockData,isMatch,setisMatch,result,setresult,token,settoken ,user,setUser,orderBook,setOrderBook,marketStatus,setMarketStatus,niftyDaydata,setNiftyDaydata,bankDaydata,setBankDaydata,niftyTimestamp,setNiftyTimestamp,bankTimestamp,setBankTimestamp}}>
+            value={{ NiftyData,setNiftyData,BankData,setBankData,LivePrice, setLivePrice,StockData,setStockData,isMatch,setisMatch,user,setUser,marketStatus,setMarketStatus,niftyDaydata,setNiftyDaydata,bankDaydata,setBankDaydata,niftyTimestamp,setNiftyTimestamp,bankTimestamp,setBankTimestamp}}>
   
             {children}
 

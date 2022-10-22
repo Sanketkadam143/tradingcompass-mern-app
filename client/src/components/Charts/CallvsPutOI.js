@@ -1,9 +1,10 @@
 import React from "react";
-
-
+import { useStateContext } from "../../Contexts/ContextProvider";
 import { Line } from "react-chartjs-2";
 
 const  CallvsPutOI=({indices,name})=> {
+
+  const { isMatch } = useStateContext();
   
 
     let dayData = indices[0]?.datedata;
@@ -76,8 +77,8 @@ const data = {
     <div >
         <span>{name} Call vs Put OI</span>
       <Line data={data} 
-      width={1000}
-      height={500}
+      width={isMatch? 380:800}
+      height={isMatch? 200:400}
       options={options}/>
     </div>
   );

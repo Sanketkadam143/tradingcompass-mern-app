@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
 import Popover from "@mui/material/Popover";
 import Button from "@mui/material/Button";
 import InputLabel from "@mui/material/InputLabel";
@@ -14,6 +15,7 @@ import { useStateContext } from "../../Contexts/ContextProvider";
 import { makeStyles } from "@mui/styles";
 import Alert from "@mui/material/Alert";
 import AlertTitle from "@mui/material/AlertTitle";
+import { placeOrder } from "../../actions/order";
 
 const useStyles = makeStyles((theme) => {
   return {
@@ -30,8 +32,9 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 });
 
 export default function PopupOrder({ name, niftyData, bankData, orderType }) {
+  const dispatch = useDispatch();
   const classes = useStyles();
-  const { orderBook, marketStatus, niftyTimestamp, bankTimestamp } =
+  const { marketStatus, niftyTimestamp, bankTimestamp } =
     useStateContext();
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [openSuccess, setOpenSuccess] = useState(false);
@@ -41,6 +44,17 @@ export default function PopupOrder({ name, niftyData, bankData, orderType }) {
   const [data, setData] = useState(niftyData);
   const [selectedStrike, setSelectedStrike] = useState(niftyData[20]?.stp);
   const [lots, setLots] = useState(0);
+
+  const [orderDetails, setOrderDetails] = useState({
+    indexName: "",
+    stp: "",
+    optionType: "",
+    buyPrice: "",
+    lots: "",
+    entryTime: "",
+    orderType: "",
+    margin: "",
+  });
 
   const [isnifty, setIsnifty] = useState(true);
 
@@ -86,8 +100,7 @@ export default function PopupOrder({ name, niftyData, bankData, orderType }) {
   };
 
   const order = (event) => {
-    orderBook?.unshift(orderDetails);
-    localStorage.setItem("orderBook", JSON.stringify(orderBook));
+    dispatch(placeOrder(orderDetails));
   };
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -109,16 +122,28 @@ export default function PopupOrder({ name, niftyData, bankData, orderType }) {
         : currentPrice * lots * 25
       : 0;
 
-  const orderDetails = {
-    indexName: isnifty ? "NIFTY" : "BANKNIFTY",
-    stp: selectedStrike,
-    optionType: cepePos === 3 ? "CE" : "PE",
-    price: currentPrice,
-    lots: lots,
-    orderTime: isnifty ? niftyTimestamp : bankTimestamp,
-    orderType: orderType,
-    margin: requiredMargin,
-  };
+  useEffect(() => {
+    setOrderDetails({
+      indexName: isnifty ? "NIFTY" : "BANKNIFTY",
+      stp: selectedStrike,
+      optionType: cepePos === 3 ? "CE" : "PE",
+      buyPrice: currentPrice,
+      lots: lots,
+      entryTime: isnifty ? niftyTimestamp : bankTimestamp,
+      orderType: orderType,
+      margin: requiredMargin,
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [
+    requiredMargin,
+    isnifty,
+    selectedStrike,
+    cepePos,
+    currentPrice,
+    lots,
+    niftyTimestamp,
+    bankTimestamp,
+  ]);
 
   return (
     <>
@@ -239,7 +264,7 @@ export default function PopupOrder({ name, niftyData, bankData, orderType }) {
             color="primary"
             disableElevation
             onClick={
-              marketStatus.marketStatus === "Open"
+              marketStatus.marketStatus === "Closed"
                 ? () => {
                     order();
                     handleClickOpen();

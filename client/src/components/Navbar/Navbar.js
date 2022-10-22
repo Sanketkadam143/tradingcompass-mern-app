@@ -1,4 +1,6 @@
-import React from "react";
+import React, { useEffect} from "react";
+import { useDispatch } from "react-redux";
+import { useLocation } from "react-router-dom";
 import {
   AppBar,
   Toolbar,
@@ -70,9 +72,11 @@ const useStyles = makeStyles(() => {
 
 const Navbar = () => {
   //imported and set ismatch value on breakpoints
-  const { LivePrice, isMatch, setisMatch, user, setUser } = useStateContext();
+  const { LivePrice, isMatch, setisMatch,user,setUser} = useStateContext();
+
   const navigate = useNavigate();
- 
+  const dispatch = useDispatch();
+  const location = useLocation();
   const classes = useStyles();
 
   const theme = useTheme();
@@ -92,14 +96,25 @@ const Navbar = () => {
     setAnchorElUser(null);
   };
 
+
+  const profile = user?.actualRes;
+
+ useEffect(()=>{
+    // const token=user?.token;
+
+    //JWT
+   setUser(JSON.parse(localStorage.getItem('profile')))
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+ },[location])
+
   const logout = () => {
+    dispatch({type:'LOGOUT'});
+    setUser(null);
     navigate("/auth");
-    setUser(false);
-    localStorage.removeItem("token");
-    localStorage.removeItem("profile");
+    
   };
 
-  const profile = JSON.parse(localStorage.getItem("profile"));
 
   return (
     <>

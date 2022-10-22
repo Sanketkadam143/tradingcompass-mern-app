@@ -1,4 +1,5 @@
 import React from "react";
+import { useSelector } from "react-redux";
 import { Paper, Divider, Typography } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import PopupOrder from "./PopupOrder";
@@ -6,6 +7,7 @@ import { useStateContext } from "../../Contexts/ContextProvider";
 import Showorders from "./Showorders";
 import Alert from "@mui/material/Alert";
 import AlertTitle from "@mui/material/AlertTitle";
+import Calculateprofit from "./Calculateprofit";
 
 const useStyles = makeStyles((theme) => {
   return {
@@ -57,23 +59,29 @@ const useStyles = makeStyles((theme) => {
 
 const Position = () => {
   const classes = useStyles();
-  const { NiftyData, BankData, orderBook,niftyDaydata } = useStateContext();
+  const { NiftyData, BankData, niftyDaydata } = useStateContext();
+  const orderBook = useSelector((state) => state.order);
+
+  
 
   let totalProfit = 0;
   orderBook?.forEach((x) => {
-    totalProfit += parseInt(x.profit);
+    let { profit } = Calculateprofit(x);
+    totalProfit += parseInt(profit);
   });
 
-  let invested = 0,
-    investedProfit = 0;
+  let invested = 0;
+  let investedProfit = 0;
   orderBook?.forEach((x) => {
-    x.exitPrice === undefined && (invested += parseInt(x.margin));
-    x.exitPrice === undefined && (investedProfit += parseInt(x.profit));
+    if (x.sellPrice === undefined) {
+      invested += parseInt(x.margin);
+      let { profit } = Calculateprofit(x);
+      investedProfit += parseInt(profit);
+    }
   });
-  const expiryDate=niftyDaydata[0]?.expiryDate;
-  const isExpiry =   expiryDate?.slice(0, 2) === new Date().toJSON().slice(8, 10);
- 
-  
+  const expiryDate = niftyDaydata[0]?.expiryDate;
+  const isExpiry = expiryDate?.slice(0, 2) === new Date().toJSON().slice(8, 10);
+
   return (
     <>
       <div className={classes.positionPageDiv}>
