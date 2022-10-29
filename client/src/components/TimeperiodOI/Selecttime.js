@@ -33,6 +33,8 @@ const labels = [
   "03:30",
 ];
 
+const mobileLabels=["09:15","10:48","12:22","01:57","03:30"];
+
 const useStyles = makeStyles((theme) => {
   return {
     sliderDiv: {
@@ -54,7 +56,7 @@ const useStyles = makeStyles((theme) => {
 
 const Selecttime = () => {
   const classes = useStyles();
-  const { niftyDaydata, bankDaydata } = useStateContext();
+  const { niftyDaydata, bankDaydata ,isMatch } = useStateContext();
   const [minTimeCaption, set_minTimeCaption] = useState("");
   const [maxTimeCaption, set_maxTimeCaption] = useState("");
   const [initialhand, setInitialhand] = useState(0);
@@ -98,7 +100,7 @@ const Selecttime = () => {
       <div>
         <div className={classes.sliderDiv}>
           <MultiRangeSlider
-            labels={labels}
+            labels={isMatch ? mobileLabels:labels}
             min={timeMin}
             max={timeMax}
             minValue={minV}

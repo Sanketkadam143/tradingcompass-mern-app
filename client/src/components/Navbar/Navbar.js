@@ -1,6 +1,7 @@
 import React, { useEffect} from "react";
 import { useDispatch } from "react-redux";
 import { useLocation } from "react-router-dom";
+import  decode  from "jwt-decode";
 import {
   AppBar,
   Toolbar,
@@ -19,6 +20,7 @@ import DrawerComponent from "./DrawerComponent";
 import PopupMenu from "./PopupMenu";
 import { useStateContext } from "../../Contexts/ContextProvider";
 import { Link, useNavigate } from "react-router-dom";
+import { CLIENT_MSG ,LOGOUT} from "../../constants/actionTypes";
 
 
 // Custom CSS
@@ -96,11 +98,14 @@ const Navbar = () => {
     setAnchorElUser(null);
   };
 
-
-  const profile = user?.actualRes;
-
  useEffect(()=>{
-    // const token=user?.token;
+    const token=user?.token;
+
+    if (token) {
+      const decodedToken = decode(token);
+
+      if(decodedToken.exp * 1000 < new Date().getTime())  logout();
+    }
 
     //JWT
    setUser(JSON.parse(localStorage.getItem('profile')))
@@ -109,7 +114,14 @@ const Navbar = () => {
  },[location])
 
   const logout = () => {
-    dispatch({type:'LOGOUT'});
+    dispatch({type:LOGOUT});
+    dispatch({
+      type: CLIENT_MSG,
+      message: {
+        info: "You are Successfully Logged out",
+        status: 200,
+      },
+    });
     setUser(null);
     navigate("/auth");
     
@@ -221,9 +233,9 @@ const Navbar = () => {
                   <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
                     <Avatar
                       className={classes.purple}
-                      alt={profile?.name}
-                      src={profile?.picture}
-                    ></Avatar>
+                      alt={user?.result?.name}
+                      src={user?.result?.picture}
+                    >{user?.result?.name?.charAt(0)}</Avatar>
                   </IconButton>
                 </Tooltip>
                 <Menu
@@ -243,7 +255,7 @@ const Navbar = () => {
                   onClose={handleCloseUserMenu}
                 >
                   <MenuItem onClick={handleCloseUserMenu}>
-                    <Typography>{profile?.name} </Typography>
+                    <Typography>{user?.result?.name} </Typography>
                   </MenuItem>
                   <MenuItem onClick={handleCloseUserMenu}>
                     <Typography onClick={logout} textalign="center">

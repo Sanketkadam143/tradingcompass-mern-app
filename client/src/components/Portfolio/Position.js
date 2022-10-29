@@ -1,4 +1,4 @@
-import React from "react";
+import { React } from "react";
 import { useSelector } from "react-redux";
 import { Paper, Divider, Typography } from "@mui/material";
 import { makeStyles } from "@mui/styles";
@@ -61,8 +61,6 @@ const Position = () => {
   const classes = useStyles();
   const { NiftyData, BankData, niftyDaydata } = useStateContext();
   const orderBook = useSelector((state) => state.order);
-
-  
 
   let totalProfit = 0;
   orderBook?.forEach((x) => {

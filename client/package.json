@@ -21,6 +21,7 @@
     "multi-range-slider-react": "^2.0.2",
     "node": "^18.7.0",
     "node-fetch": "^3.2.10",
+    "notistack": "^2.0.8",
     "npm": "^8.5.0",
     "react": "^18.2.0",
     "react-chartjs-2": "^4.3.1",

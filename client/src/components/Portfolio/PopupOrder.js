@@ -9,13 +9,10 @@ import Select from "@mui/material/Select";
 import { Typography } from "@mui/material";
 import FormHelperText from "@mui/material/FormHelperText";
 import TextField from "@mui/material/TextField";
-import Dialog from "@mui/material/Dialog";
-import Slide from "@mui/material/Slide";
 import { useStateContext } from "../../Contexts/ContextProvider";
 import { makeStyles } from "@mui/styles";
-import Alert from "@mui/material/Alert";
-import AlertTitle from "@mui/material/AlertTitle";
 import { placeOrder } from "../../actions/order";
+import { CLIENT_MSG } from "../../constants/actionTypes";
 
 const useStyles = makeStyles((theme) => {
   return {
@@ -27,18 +24,11 @@ const useStyles = makeStyles((theme) => {
   };
 });
 
-const Transition = React.forwardRef(function Transition(props, ref) {
-  return <Slide direction="up" ref={ref} {...props} />;
-});
-
 export default function PopupOrder({ name, niftyData, bankData, orderType }) {
   const dispatch = useDispatch();
   const classes = useStyles();
-  const { marketStatus, niftyTimestamp, bankTimestamp } =
-    useStateContext();
+  const { marketStatus, niftyTimestamp, bankTimestamp } = useStateContext();
   const [anchorEl, setAnchorEl] = React.useState(null);
-  const [openSuccess, setOpenSuccess] = useState(false);
-
   const [pos, setPos] = useState(1);
   const [cepePos, setCepePos] = useState(3);
   const [data, setData] = useState(niftyData);
@@ -64,12 +54,7 @@ export default function PopupOrder({ name, niftyData, bankData, orderType }) {
 
   const handleClose = () => {
     setAnchorEl(null);
-    setOpenSuccess(false);
     setLots(0);
-  };
-
-  const handleClickOpen = () => {
-    setOpenSuccess(true);
   };
 
   const open = Boolean(anchorEl);
@@ -100,7 +85,18 @@ export default function PopupOrder({ name, niftyData, bankData, orderType }) {
   };
 
   const order = (event) => {
-    dispatch(placeOrder(orderDetails));
+    marketStatus.marketStatus === "Closed"
+      ? dispatch(placeOrder(orderDetails))
+      : dispatch({
+          type: CLIENT_MSG,
+          message: {
+            info: `Market will open on ${marketStatus.tradeDate} 9:15 AM`,
+            status: 400,
+          },
+        });
+
+    setLots(0);
+    setAnchorEl(null);
   };
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -263,55 +259,11 @@ export default function PopupOrder({ name, niftyData, bankData, orderType }) {
             variant="contained"
             color="primary"
             disableElevation
-            onClick={
-              marketStatus.marketStatus === "Closed"
-                ? () => {
-                    order();
-                    handleClickOpen();
-                  }
-                : handleClickOpen
-            }
+            onClick={order}
           >
             Click to Place Order
           </Button>
         </div>
-
-        <Dialog
-          open={openSuccess}
-          TransitionComponent={Transition}
-          keepMounted
-          onClose={() => {
-            handleClose();
-          }}
-          aria-describedby="alert-dialog-slide-description"
-        >
-          {marketStatus.marketStatus === "Open" ? (
-            <Alert
-              onClose={() => {
-                handleClose();
-              }}
-              severity="success"
-            >
-              <AlertTitle>
-                <strong>Your Order was Successfully Placed !!!</strong>
-              </AlertTitle>
-              This is a virtual option trading platform. Money will neither be
-              debited nor credited in your Bank Account
-            </Alert>
-          ) : (
-            <Alert
-              onClose={() => {
-                handleClose();
-              }}
-              severity="error"
-            >
-              <AlertTitle>
-                <strong>Oops..!! Market is Closed</strong>
-              </AlertTitle>
-              {`Market will open on ${marketStatus.tradeDate} 9:15 AM`}
-            </Alert>
-          )}
-        </Dialog>
       </Popover>
     </>
   );

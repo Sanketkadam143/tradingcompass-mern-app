@@ -11,6 +11,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import { useStateContext } from "../../Contexts/ContextProvider";
 import { updateOrder, deleteOrder } from "../../actions/order";
 import Calculateprofit from "./Calculateprofit";
+import { CLIENT_MSG } from "../../constants/actionTypes";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -59,13 +60,9 @@ const Showorders = ({ orderDetails, index }) => {
 
   let { latestPrice, profit } = Calculateprofit(orderDetails);
 
-  const [anchorEl, setAnchorEl] = useState(false);
-
   const [confirm, setConfirm] = useState(null);
 
-  const [autoSquareoff, setAutoSquareoff] = useState(false);
-
-  const [isSold, setIsSold] = useState();
+  const [isSold, setIsSold] = useState(orderDetails.sellPrice !== undefined);
 
   useEffect(() => {
     setIsSold(orderDetails.sellPrice !== undefined);
@@ -84,7 +81,6 @@ const Showorders = ({ orderDetails, index }) => {
   };
 
   const handleClose = () => {
-    setAnchorEl(false);
     setConfirm(null);
   };
 
@@ -110,21 +106,20 @@ const Showorders = ({ orderDetails, index }) => {
 
   const exitPosition = (event) => {
     dispatch(updateOrder(currentId, exitDetails));
-    setAnchorEl(true);
     setConfirm(null);
-    setIsSold(true);
   };
 
   const autoexit = (event) => {
     dispatch(updateOrder(currentId, exitDetails));
-    setAutoSquareoff(true);
-    setAnchorEl(true);
-    setConfirm(null);
+    dispatch({
+      type: CLIENT_MSG,
+      message: { info: "Your Position had been Auto-Squared off", status: 200 },
+    });
+    setIsSold(true);
   };
 
   const removeOrder = (event) => {
     dispatch(deleteOrder(currentId));
-    setIsSold(false);
   };
 
   const autoExittime = "15:30:00";
@@ -255,34 +250,6 @@ const Showorders = ({ orderDetails, index }) => {
               <strong>Are you sure you want to exit the Position ?</strong>
             </AlertTitle>
             Brokerage of ₹ {brokerage} will be debited from your P&L
-          </Alert>
-        </Dialog>
-
-        <Dialog
-          open={anchorEl}
-          TransitionComponent={Transition}
-          keepMounted
-          onClose={() => {
-            handleClose();
-          }}
-          aria-describedby="alert-dialog-slide-description"
-        >
-          <Alert
-            onClose={() => {
-              handleClose();
-            }}
-            severity="success"
-          >
-            <AlertTitle>
-              <strong>
-                {" "}
-                {autoSquareoff
-                  ? `Your Position ${orderName} has been Auto Squared off as today was expiry`
-                  : `Your Position ${orderName} was Successfully Exited !!!`}
-              </strong>
-            </AlertTitle>
-            This is a virtual option trading platform. Money will neither be
-            debited nor credited in your Bank Account
           </Alert>
         </Dialog>
       </div>
