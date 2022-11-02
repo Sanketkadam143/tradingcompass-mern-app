@@ -1,6 +1,8 @@
 import axios from "axios";
 
-const API = axios.create({baseURL:'https://trading-compass.up.railway.app/'});
+const API = axios.create({baseURL: process.env.REACT_APP_API});
+
+// const API = axios.create({baseURL:'http://localhost:5000/'});
 
 API.interceptors.request.use((req) => {
     if (localStorage.getItem('profile')) {
@@ -21,3 +23,5 @@ export const signIn = (formData)=>API.post('/users/signin',formData);
 export const signUp = (formData)=>API.post('/users/signup',formData);
 
 export const googleSignIn = (token)=>API.post('/users/googlesignin',token);
+
+export const resetPassword = (formData)=>API.post('/users/resetpassword',formData);

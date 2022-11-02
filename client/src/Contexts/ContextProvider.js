@@ -1,15 +1,18 @@
 import React, { useContext, createContext, useState } from 'react'
+import { useMediaQuery } from '@mui/material';
+import { useTheme } from "@mui/material/styles";
 const StateContext = createContext();
 
 //set all the values which will be used globally 
 export const ContextProvider = ({ children }) => {
+    const theme = useTheme();
 
     const [NiftyData, setNiftyData] = useState(JSON.parse(localStorage.getItem('prevNiftyRes')) ||[]);
     const [BankData, setBankData] = useState(JSON.parse(localStorage.getItem('prevBankRes'))||[]);
     const [LivePrice, setLivePrice] = useState(JSON.parse(localStorage.getItem('prevLiveRes'))||[]);
     const [StockData, setStockData] = useState(JSON.parse(localStorage.getItem('prevStockRes'))||[]);
     const[marketStatus,setMarketStatus]=useState([])
-    const[isMatch,setisMatch]=useState(false)
+    const[isMatch,setisMatch]=useState(useMediaQuery(theme.breakpoints.down("md")));
     const [user,setUser]= useState(JSON.parse(localStorage.getItem('profile')));
     const[niftyDaydata,setNiftyDaydata]=useState([]);
     const[bankDaydata,setBankDaydata]=useState([]);

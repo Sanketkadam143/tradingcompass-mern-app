@@ -21,6 +21,9 @@ export default makeStyles((theme) => ({
     width: '100%', // Fix IE 11 issue.
     marginTop: theme.spacing(4),
   },
+  timer:{
+  marginLeft:"90%",
+  },
   submitbut: {
     margin: theme.spacing(3, 0, 2),
   },

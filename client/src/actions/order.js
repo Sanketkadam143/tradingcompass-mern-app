@@ -10,7 +10,7 @@ export const getOrders = () => async (dispatch) => {
     dispatch({
       type: CLIENT_MSG,
       message: {
-        info: error.response.data?.message,
+        info: error.response?.data?.message,
         status: error.response.status,
       },
     });

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import Countdown from "react-countdown";
 
 import {
   Avatar,
@@ -12,6 +13,7 @@ import {
   Checkbox,
 } from "@mui/material";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
+import CircularProgress from "@mui/material/CircularProgress";
 import { Link, useNavigate } from "react-router-dom";
 import useStyles from "./Styles";
 import Input from "./Input";
@@ -24,6 +26,7 @@ const initialState = {
   email: "",
   password: "",
   confirmPassword: "",
+  otp: "",
 };
 
 const Auth = () => {
@@ -32,11 +35,14 @@ const Auth = () => {
   const [isSignUp, setIsSignUp] = useState(false);
   const [formData, setFormData] = useState(initialState);
   const [checked, setChecked] = useState(false);
-
+  const [isclick, setIsclick] = useState(false);
+  const [isotp, setIsotp] = useState(false);
+  const [timer, setTimer] = useState();
   const { user } = useStateContext();
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  
+  const message = useSelector((state) => state.auth.message?.info);
+
   const googleSuccess = async (res) => {
     const token = res;
     try {
@@ -51,8 +57,7 @@ const Auth = () => {
 
     try {
       google.accounts.id.initialize({
-        client_id:
-          "730608565545-8jjn15dbk39eht1dn6m4fgm936fr02m4.apps.googleusercontent.com",
+        client_id: process.env.REACT_APP_GOOGLE_CLIENT_ID,
         callback: googleSuccess,
       });
 
@@ -72,10 +77,11 @@ const Auth = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    setIsclick(true);
     if (isSignUp) {
-      dispatch(signup(formData, navigate));
+      setTimeout(() => dispatch(signup(formData, navigate)), 500);
     } else {
-      dispatch(signin(formData, navigate));
+      setTimeout(() => dispatch(signin(formData, navigate)), 500);
     }
   };
 
@@ -90,11 +96,40 @@ const Auth = () => {
     setChecked(!checked);
   };
 
-  const switchMode = () => setIsSignUp((isSignUp) => !isSignUp);
+  const switchMode = () => {
+    setIsSignUp((isSignUp) => !isSignUp);
+    setIsotp(false);
+  };
 
   const handleShowPassword = () =>
     setShowPassword((prevShowPassword) => !prevShowPassword);
 
+  const otpSent = () => {
+    setIsotp(true);
+    setTimer(Date.now() + 120000);
+  };
+
+  useEffect(() => {
+    setIsclick(false);
+    message === "OTP Sent on registered Email" && otpSent();
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [message]);
+
+  const renderer = ({ hours, minutes, seconds, completed }) => {
+    if (completed) {
+      setIsotp(false);
+      setFormData({
+        ...formData,
+        otp: "",
+      });
+    }
+    return (
+      <span className={classes.timer}>
+        {minutes}:{seconds}
+      </span>
+    );
+  };
 
   return (
     <>
@@ -118,6 +153,7 @@ const Auth = () => {
                     name="firstName"
                     label="First Name"
                     handleChange={handleChange}
+                    disabled={isotp}
                     autoFocus
                     half
                   />
@@ -125,6 +161,7 @@ const Auth = () => {
                     name="lastName"
                     label="Last Name"
                     handleChange={handleChange}
+                    disabled={isotp}
                     half
                   />
                 </>
@@ -133,12 +170,14 @@ const Auth = () => {
                 name="email"
                 label="Email Address"
                 handleChange={handleChange}
+                disabled={isotp}
                 type="email"
               />
               <Input
                 name="password"
                 label="Password"
                 handleChange={handleChange}
+                disabled={isotp}
                 type={showPassword ? "text" : "password"}
                 handleShowPassword={handleShowPassword}
               />
@@ -147,7 +186,30 @@ const Auth = () => {
                   name="confirmPassword"
                   label="Repeat Password"
                   handleChange={handleChange}
+                  disabled={isotp}
                   type="password"
+                />
+              )}
+
+              {isotp && isSignUp && (
+                <Input
+                  name="otp"
+                  label="Enter OTP"
+                  handleChange={handleChange}
+                  type="text"
+                  inputmode="numeric"
+                  autocomplete="one-time-code"
+                  pattern="\d{6}"
+                  required
+                />
+              )}
+
+              {isotp && (
+                <Countdown
+                  date={timer}
+                  intervalDelay={0}
+                  precision={3}
+                  renderer={renderer}
                 />
               )}
             </Grid>
@@ -179,11 +241,34 @@ const Auth = () => {
               color="primary"
               className={classes.submitbut}
               style={{ marginTop: "1em" }}
-              disabled={!checked && isSignUp}
+              disabled={(!checked && isSignUp) || isclick}
               disableElevation
             >
-              {isSignUp ? "Sign Up" : "Sign In"}
+              {isclick ? (
+                <CircularProgress />
+              ) : isSignUp ? (
+                isotp ? (
+                  "Sign Up "
+                ) : (
+                  "Send OTP"
+                )
+              ) : (
+                "Sign In"
+              )}
             </Button>
+
+            {!isSignUp && (
+              <Grid container justifyContent="flex-end">
+                <Grid item>
+                  <Button
+                    disableElevation
+                    onClick={() => navigate("/forget-password")}
+                  >
+                    Forget Password?
+                  </Button>
+                </Grid>
+              </Grid>
+            )}
 
             {/* Google login Button */}
 

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Divider } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import { Button } from "@mui/material";
@@ -8,6 +8,7 @@ import Slide from "@mui/material/Slide";
 import Alert from "@mui/material/Alert";
 import AlertTitle from "@mui/material/AlertTitle";
 import DeleteIcon from "@mui/icons-material/Delete";
+import CircularProgress from "@mui/material/CircularProgress";
 import { useStateContext } from "../../Contexts/ContextProvider";
 import { updateOrder, deleteOrder } from "../../actions/order";
 import Calculateprofit from "./Calculateprofit";
@@ -46,22 +47,32 @@ const useStyles = makeStyles((theme) => {
     },
     deleteIcon: {
       position: "absolute",
-      top: "0px",
-      right: "0px",
+      top: "0%",
+      right: "10%",
+      [theme.breakpoints.down("sm")]: {
+        top: "-1.7em",
+        right: "-2em",
+      },
     },
   };
 });
 
 const Showorders = ({ orderDetails, index }) => {
   const dispatch = useDispatch();
-  const { LivePrice, niftyDaydata, niftyTimestamp, bankTimestamp } =
-    useStateContext();
+  const {
+    LivePrice,
+    niftyDaydata,
+    niftyTimestamp,
+    bankTimestamp,
+    marketStatus,
+  } = useStateContext();
   const classes = useStyles();
+  const message = useSelector((state) => state.auth.message?.info);
 
   let { latestPrice, profit } = Calculateprofit(orderDetails);
 
   const [confirm, setConfirm] = useState(null);
-
+  const [isclick, setIsclick] = useState(false);
   const [isSold, setIsSold] = useState(orderDetails.sellPrice !== undefined);
 
   useEffect(() => {
@@ -74,14 +85,32 @@ const Showorders = ({ orderDetails, index }) => {
     exitTime: "",
   });
 
+  useEffect(() => {
+    setIsclick(false);
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [message]);
+
   const currentId = orderDetails._id;
 
   const confirmExit = (e) => {
-    setConfirm(e.currentTarget);
+    if (marketStatus.marketStatus === "Open") {
+      setConfirm(e.currentTarget);
+      setIsclick(true);
+    } else {
+      dispatch({
+        type: CLIENT_MSG,
+        message: {
+          info: `Market will open on ${marketStatus.tradeDate} 9:15 AM`,
+          status: 400,
+        },
+      });
+    }
   };
 
   const handleClose = () => {
     setConfirm(null);
+    setIsclick(false);
   };
 
   orderDetails.orderType === "optionSelling" && (profit = -profit);
@@ -209,9 +238,10 @@ const Showorders = ({ orderDetails, index }) => {
           style={{ margin: "1em" }}
           disableElevation
           onClick={confirmExit}
-          disabled={isSold}
+          disabled={isSold || isclick}
         >
-          {isSold ? "Closed" : "Exit"}
+          {!isclick && (isSold ? "Closed" : "Exit")}
+          {isclick && <CircularProgress />}
         </Button>
 
         <Dialog

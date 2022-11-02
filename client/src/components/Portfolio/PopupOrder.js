@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import Popover from "@mui/material/Popover";
 import Button from "@mui/material/Button";
 import InputLabel from "@mui/material/InputLabel";
+import CircularProgress from "@mui/material/CircularProgress";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
@@ -26,6 +27,7 @@ const useStyles = makeStyles((theme) => {
 
 export default function PopupOrder({ name, niftyData, bankData, orderType }) {
   const dispatch = useDispatch();
+  const message = useSelector((state) => state.auth.message?.info);
   const classes = useStyles();
   const { marketStatus, niftyTimestamp, bankTimestamp } = useStateContext();
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -34,6 +36,7 @@ export default function PopupOrder({ name, niftyData, bankData, orderType }) {
   const [data, setData] = useState(niftyData);
   const [selectedStrike, setSelectedStrike] = useState(niftyData[20]?.stp);
   const [lots, setLots] = useState(0);
+  const [isclick, setIsclick] = useState(false);
 
   const [orderDetails, setOrderDetails] = useState({
     indexName: "",
@@ -56,9 +59,6 @@ export default function PopupOrder({ name, niftyData, bankData, orderType }) {
     setAnchorEl(null);
     setLots(0);
   };
-
-  const open = Boolean(anchorEl);
-  const id = open ? "simple-popover" : undefined;
 
   const handleChange = (event) => {
     setPos(event.target.value);
@@ -85,18 +85,19 @@ export default function PopupOrder({ name, niftyData, bankData, orderType }) {
   };
 
   const order = (event) => {
-    marketStatus.marketStatus === "Closed"
-      ? dispatch(placeOrder(orderDetails))
-      : dispatch({
-          type: CLIENT_MSG,
-          message: {
-            info: `Market will open on ${marketStatus.tradeDate} 9:15 AM`,
-            status: 400,
-          },
-        });
+    if (marketStatus.marketStatus === "Open") {
+      setTimeout(() => dispatch(placeOrder(orderDetails)), 500);
 
-    setLots(0);
-    setAnchorEl(null);
+      setIsclick(true);
+    } else {
+      dispatch({
+        type: CLIENT_MSG,
+        message: {
+          info: `Market will open on ${marketStatus.tradeDate} 9:15 AM`,
+          status: 400,
+        },
+      });
+    }
   };
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -141,10 +142,17 @@ export default function PopupOrder({ name, niftyData, bankData, orderType }) {
     bankTimestamp,
   ]);
 
+  useEffect(() => {
+    setIsclick(false);
+    setAnchorEl(null);
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [message]);
+
   return (
     <>
       <Button
-        aria-describedby={id}
+        aria-describedby={"simple-popover"}
         type="submit"
         fullWidth
         variant="contained"
@@ -156,8 +164,8 @@ export default function PopupOrder({ name, niftyData, bankData, orderType }) {
         {name}
       </Button>
       <Popover
-        id={id}
-        open={open}
+        id={"simple-popover"}
+        open={anchorEl}
         anchorEl={anchorEl}
         onClose={handleClose}
         style={{ marginBottom: "200px" }}
@@ -252,8 +260,8 @@ export default function PopupOrder({ name, niftyData, bankData, orderType }) {
 
         <div style={{ padding: "1em" }}>
           <Button
-            aria-describedby={id}
-            disabled={lots <= 0}
+            aria-describedby={"simple-popover"}
+            disabled={lots <= 0 || isclick}
             fullWidth
             type="submit"
             variant="contained"
@@ -261,7 +269,7 @@ export default function PopupOrder({ name, niftyData, bankData, orderType }) {
             disableElevation
             onClick={order}
           >
-            Click to Place Order
+            {isclick ? <CircularProgress /> : "Click to Place Order"}
           </Button>
         </div>
       </Popover>

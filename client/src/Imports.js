@@ -23,8 +23,10 @@ import useNetworkStatus from "./Contexts/Networkstatus";
 import Offlinepage from "./Pages/Offlinepage";
 import Selecttime from "./components/TimeperiodOI/Selecttime";
 import CallvsPutpage from "./Pages/CallvsPutpage";
+import ResetPass from "./components/Auth/ResetPass";
 import {getOrders} from './actions/order'
 import { CLIENT_MSG } from "./constants/actionTypes";
+
 
 
 const Imports=()=>{
@@ -90,7 +92,7 @@ const Imports=()=>{
               <Route exact path="/oi-intervalwise" element={user ? <Selecttime />: <Auth />}/>
               <Route exact path="/callvsput" element={user ?  <CallvsPutpage/>: <Auth />}/>
 
-
+              <Route exact path="/forget-password" element={<ResetPass />} />
               <Route exact path="/privacypolicy" element={<PrivacyPolicy />} />
               <Route exact path="/disclaimer" element={<Disclaimer />} />
               <Route exact path="/about" element={<About />} />
