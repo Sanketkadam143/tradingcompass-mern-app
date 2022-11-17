@@ -18,10 +18,11 @@ export const ContextProvider = ({ children }) => {
     const[bankDaydata,setBankDaydata]=useState([]);
    const [niftyTimestamp,setNiftyTimestamp]=useState(null);
    const [bankTimestamp,setBankTimestamp]=useState(null);
+   const [stockTimestamp,setStockTimestamp]=useState(null);
 
     return (
         <StateContext.Provider
-            value={{ NiftyData,setNiftyData,BankData,setBankData,LivePrice, setLivePrice,StockData,setStockData,isMatch,setisMatch,user,setUser,marketStatus,setMarketStatus,niftyDaydata,setNiftyDaydata,bankDaydata,setBankDaydata,niftyTimestamp,setNiftyTimestamp,bankTimestamp,setBankTimestamp}}>
+            value={{ NiftyData,setNiftyData,BankData,setBankData,LivePrice, setLivePrice,StockData,setStockData,isMatch,setisMatch,user,setUser,marketStatus,setMarketStatus,niftyDaydata,setNiftyDaydata,bankDaydata,setBankDaydata,niftyTimestamp,setNiftyTimestamp,bankTimestamp,setBankTimestamp,stockTimestamp,setStockTimestamp}}>
   
             {children}
 

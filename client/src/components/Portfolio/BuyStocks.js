@@ -25,23 +25,18 @@ const useStyles = makeStyles((theme) => {
   };
 });
 
-export default function PopupOrder({ name, niftyData, bankData, orderType }) {
+export default function BuyStocks({ name, stockData, orderType }) {
   const dispatch = useDispatch();
   const message = useSelector((state) => state.auth.message?.info);
   const classes = useStyles();
-  const { marketStatus, niftyTimestamp, bankTimestamp } = useStateContext();
+  const { marketStatus, stockTimestamp } = useStateContext();
   const [anchorEl, setAnchorEl] = React.useState(null);
-  const [pos, setPos] = useState(1);
-  const [cepePos, setCepePos] = useState(3);
-  const [data, setData] = useState(niftyData);
-  const [selectedStrike, setSelectedStrike] = useState(niftyData[20]?.stp);
-  const [lots, setLots] = useState(0);
+  const [selectedStock, setSelectedStock] = useState();
+  const [quantity, setQuantity] = useState(0);
   const [isclick, setIsclick] = useState(false);
 
   const [orderDetails, setOrderDetails] = useState({
     symbol: "",
-    stp: "",
-    optionType: "",
     buyPrice: "",
     lots: "",
     entryTime: "",
@@ -49,7 +44,8 @@ export default function PopupOrder({ name, niftyData, bankData, orderType }) {
     margin: "",
   });
 
-  const [isnifty, setIsnifty] = useState(true);
+  const filterData = stockData.slice(1);
+  const data =filterData?.sort((a, b) => a.symbol.localeCompare(b.symbol));
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -57,31 +53,15 @@ export default function PopupOrder({ name, niftyData, bankData, orderType }) {
 
   const handleClose = () => {
     setAnchorEl(null);
-    setLots(0);
-  };
-
-  const handleChange = (event) => {
-    setPos(event.target.value);
-
-    isnifty
-      ? setSelectedStrike(bankData[20]?.stp)
-      : setSelectedStrike(niftyData[20]?.stp);
-
-    isnifty ? setData(bankData) : setData(niftyData);
-
-    setIsnifty(!isnifty);
+    setQuantity(0);
   };
 
   const handleChange2 = (event) => {
-    setSelectedStrike(event.target.value);
-  };
-
-  const handleChange3 = (event) => {
-    setCepePos(event.target.value);
+    setSelectedStock(event.target.value);
   };
 
   const enableButton = (event) => {
-    setLots(event.target.value);
+    setQuantity(event.target.value);
   };
 
   const order = (event) => {
@@ -99,48 +79,22 @@ export default function PopupOrder({ name, niftyData, bankData, orderType }) {
       });
     }
   };
-
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  useEffect(() => {
-    isnifty ? setData(niftyData) : setData(bankData);
-  }, [niftyData, bankData, isnifty]);
-
   const currentPrice =
-    cepePos === 4
-      ? data[data?.findIndex((element) => element?.stp === selectedStrike)]?.PE
-          ?.LTP
-      : data[data?.findIndex((element) => element?.stp === selectedStrike)]?.CE
-          ?.LTP;
+    data[data?.findIndex((element) => element?.symbol === selectedStock)]?.last;
 
-  const requiredMargin =
-    lots > 0
-      ? isnifty
-        ? (currentPrice * lots * 50).toFixed(2)
-        : (currentPrice * lots * 25).toFixed(2)
-      : 0;
+  const requiredMargin = quantity > 0 ? (currentPrice * quantity).toFixed(2) : 0;
 
   useEffect(() => {
     setOrderDetails({
-      symbol : isnifty ? "NIFTY" : "BANKNIFTY",
-      stp: selectedStrike,
-      optionType: cepePos === 3 ? "CE" : "PE",
+      symbol: selectedStock,
       buyPrice: currentPrice,
-      lots: lots,
-      entryTime: isnifty ? niftyTimestamp : bankTimestamp,
+      lots: quantity,
+      entryTime: stockTimestamp,
       orderType: orderType,
       margin: requiredMargin,
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [
-    requiredMargin,
-    isnifty,
-    selectedStrike,
-    cepePos,
-    currentPrice,
-    lots,
-    niftyTimestamp,
-    bankTimestamp,
-  ]);
+  }, [requiredMargin, currentPrice, quantity]);
 
   useEffect(() => {
     setIsclick(false);
@@ -180,59 +134,27 @@ export default function PopupOrder({ name, niftyData, bankData, orderType }) {
       >
         <div>
           <FormControl sx={{ m: 1, minWidth: 130 }} style={{ margin: "1em" }}>
-            <InputLabel id="index">Select Index</InputLabel>
+            <InputLabel id="stocks">Stocks</InputLabel>
             <Select
-              labelId="index"
-              id="selectindex"
-              value={pos}
-              label="Select Index"
-              onChange={handleChange}
-            >
-              <MenuItem value={1}>NIFTY</MenuItem>
-              <MenuItem value={2}>BANKNIFTY</MenuItem>
-            </Select>
-          </FormControl>
-          <FormControl sx={{ m: 1, minWidth: 130 }} style={{ margin: "1em" }}>
-            <InputLabel id="stp">Strike-Price</InputLabel>
-            <Select
-              labelId="stp"
-              id="strike"
-              value={selectedStrike}
-              label="Select Strike"
+              labelId="stocks"
+              id="stock"
+              value={selectedStock}
+              label="Select Stock"
               onChange={handleChange2}
               MenuProps={{
                 style: {
-                   maxHeight: 275,
-                      },
-                }}
+                  maxHeight: 190,
+                },
+              }}
             >
               {data?.map((x) => (
-                <MenuItem key={x?.stp} value={x?.stp}>
-                  {x?.stp}
+                <MenuItem key={x?.symbol} value={x?.symbol}>
+                  {x?.symbol}
                 </MenuItem>
               ))}
             </Select>
           </FormControl>
-        </div>
 
-        <div>
-          <FormControl sx={{ m: 1, minWidth: 130 }} style={{ margin: "1em" }}>
-            <InputLabel id="cepe">Select Option</InputLabel>
-            <Select
-              labelId="cepe"
-              id="selectcepe"
-              value={cepePos}
-              label="Select CE PE"
-              onChange={handleChange3}
-            >
-              <MenuItem value={3} name="CE">
-                CE
-              </MenuItem>
-              <MenuItem value={4} name="PE">
-                PE
-              </MenuItem>
-            </Select>
-          </FormControl>
           <FormControl sx={{ m: 1, minWidth: 130 }} style={{ margin: "1em" }}>
             <div className={classes.boxDiv}>
               <Typography> &#8377; {currentPrice}</Typography>
@@ -246,9 +168,9 @@ export default function PopupOrder({ name, niftyData, bankData, orderType }) {
             <TextField
               id="outlined-number"
               onChange={enableButton}
-              label={isnifty ? " Lots Size 50 " : " Lots Size 25 "}
+              label={"Quantity"}
               type="number"
-              placeholder="No of Lots"
+              placeholder="No of Shares"
               inputProps={{ inputMode: "numeric", pattern: "[0-9]*" }}
               InputLabelProps={{
                 shrink: true,
@@ -266,7 +188,7 @@ export default function PopupOrder({ name, niftyData, bankData, orderType }) {
         <div style={{ padding: "1em" }}>
           <Button
             aria-describedby={"simple-popover"}
-            disabled={lots <= 0 || isclick}
+            disabled={quantity <= 0 || isclick}
             fullWidth
             type="submit"
             variant="contained"

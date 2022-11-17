@@ -112,7 +112,7 @@ const ResetPass = () => {
                 label="Email Address"
                 handleChange={handleChange}
                 type="email"
-                disabled={isotp}
+                disabled={isotp || isotpVerified}
               />
 
               {isotp && !isotpVerified && (

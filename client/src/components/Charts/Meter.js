@@ -4,13 +4,12 @@ import { makeStyles } from "@mui/styles";
 
 const useStyles = makeStyles((theme) => {
   return {
-   meterdiv:{
-    width:'300px',
-    height:'200px',
-    overflow:'hidden',
-    
-   },
-  }
+    meterdiv: {
+      width: "300px",
+      height: "200px",
+      overflow: "hidden",
+    },
+  };
 });
 
 const Meter = ({ indices, name }) => {
@@ -28,16 +27,21 @@ const Meter = ({ indices, name }) => {
     CE += x.CE?.OIchg;
   });
 
-  
-
   //set needle value
 
   let needlevalue = 0;
 
   //condition to find the % difference between ce and pe. -sign is given for positioning it on bearish side
-  PE > CE
-    ? (needlevalue = 100 - (CE / PE) * 100)
-    : (needlevalue = -(100 - (PE / CE) * 100));
+
+  if (PE < 0 && CE < 0) {
+    CE > PE
+      ? (needlevalue = -(100 - (CE / PE) * 100))
+      : (needlevalue = (100 - (PE / CE) * 100));
+  } else {
+    PE > CE
+      ? (needlevalue = 100 - (CE / PE) * 100)
+      : (needlevalue = -(100 - (PE / CE) * 100));
+  }
 
   //fixed needle value at certain point
   needlevalue = needlevalue > 100 ? 100 : needlevalue;

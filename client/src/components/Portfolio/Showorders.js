@@ -57,7 +57,7 @@ const useStyles = makeStyles((theme) => {
   };
 });
 
-const Showorders = ({ orderDetails, index }) => {
+const Showorders = ({ orderDetails, index, type }) => {
   const dispatch = useDispatch();
   const {
     LivePrice,
@@ -65,6 +65,7 @@ const Showorders = ({ orderDetails, index }) => {
     niftyTimestamp,
     bankTimestamp,
     marketStatus,
+    stockTimestamp,
   } = useStateContext();
   const classes = useStyles();
   const message = useSelector((state) => state.auth.message?.info);
@@ -115,14 +116,18 @@ const Showorders = ({ orderDetails, index }) => {
 
   orderDetails.orderType === "optionSelling" && (profit = -profit);
 
-  const brokerage = parseInt(orderDetails.lots) * 50;
+  const brokerage = parseInt(orderDetails.lots) * (orderDetails.orderType === "stockBuying" ? 5 : 50);
 
   useEffect(() => {
     setExitDetails({
       sellPrice: latestPrice,
       profit: profit,
       exitTime:
-        orderDetails.indexName === "NIFTY" ? niftyTimestamp : bankTimestamp,
+        orderDetails.orderType === "stockBuying"
+          ? stockTimestamp
+          : orderDetails.symbol === "NIFTY"
+          ? niftyTimestamp
+          : bankTimestamp,
     });
   }, [
     orderDetails,
@@ -131,6 +136,7 @@ const Showorders = ({ orderDetails, index }) => {
     brokerage,
     bankTimestamp,
     niftyTimestamp,
+    stockTimestamp,
   ]);
 
   const exitPosition = (event) => {
@@ -157,18 +163,24 @@ const Showorders = ({ orderDetails, index }) => {
     niftyDaydata[0]?.expiryDate?.slice(0, 2) ===
     new Date().toJSON().slice(8, 10);
 
-  resTime === autoExittime && !isSold && isExpiry && autoexit();
+  resTime === autoExittime &&
+    !isSold &&
+    isExpiry &&
+    type === "options" &&
+    autoexit();
 
-  const orderName =
-    orderDetails.indexName +
-    " " +
-    orderDetails.stp +
-    " " +
-    orderDetails.optionType +
-    " " +
-    (orderDetails.orderType === "optionBuying"
-      ? "Option Buying"
-      : "Option Selling");
+  var orderName =
+    type === "options"
+      ? orderDetails.symbol +
+        " " +
+        orderDetails?.stp +
+        " " +
+        orderDetails?.optionType +
+        " " +
+        (orderDetails.orderType === "optionBuying"
+          ? "Option Buying"
+          : "Option Selling")
+      : orderDetails.symbol;
 
   return (
     <div className={classes.paperDiv}>
@@ -189,15 +201,16 @@ const Showorders = ({ orderDetails, index }) => {
           <div>Entry Time {orderDetails.entryTime}</div>
 
           <div>
-            {orderDetails.orderType === "optionBuying"
-              ? "Buy Price"
-              : "Sell Price"}{" "}
+            {orderDetails.orderType === "optionSelling"
+              ? "Sell Price"
+              : "Buy Price"}{" "}
             {orderDetails.buyPrice}
           </div>
 
           <div>
             Quantity {orderDetails.lots}
-            {orderDetails.indexName === "NIFTY" ? " X 50" : " X 25"}{" "}
+            {type === "options" &&
+              (orderDetails.symbol === "NIFTY" ? " X 50" : " X 25")}{" "}
           </div>
         </div>
         <div className={classes.exitDiv}>
@@ -206,9 +219,9 @@ const Showorders = ({ orderDetails, index }) => {
           {isSold && (
             <div>
               {" "}
-              {orderDetails.orderType === "optionBuying"
-                ? "Sell Price"
-                : "Buy Price"}{" "}
+              {orderDetails.orderType === "optionSelling"
+                ? "Buy Price"
+                : "Sell Price"}{" "}
               {orderDetails.sellPrice}
             </div>
           )}

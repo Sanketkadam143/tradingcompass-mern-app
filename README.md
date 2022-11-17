@@ -8,6 +8,14 @@ For any support or feedback, feel free to contact us
 
 Details on this website is compiled for the convenience of site visitors and is furnished without responsibility for accuracy and is accepted by the site visitor on the condition that transmission or omissions shall not be made the basis for any claim, demand or cause for action. The information and data was obtained from sources believed to be reliable, but accuracy is not guaranteed.
 
+# SignUp Form validation 
+
+[![screencapture-tradingcompass-in-auth-2022-11-03-19-43-42.png](https://i.postimg.cc/y8BzK6hG/screencapture-tradingcompass-in-auth-2022-11-03-19-43-42.png)](https://postimg.cc/F7P6g4Bb)
+
+# OTP Validation
+
+[![screencapture-tradingcompass-in-otpauth-2022-11-03-19-46-48.png](https://i.postimg.cc/R0L7YdS8/screencapture-tradingcompass-in-otpauth-2022-11-03-19-46-48.png)](https://postimg.cc/jWCnwzJQ)
+
 # features provided by trading compass
 
 [![portfoliosample.jpg](https://i.postimg.cc/dVGVFJnt/portfoliosample.jpg)](https://postimg.cc/685XLJDD)
