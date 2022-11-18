@@ -2,16 +2,14 @@ import React from "react";
 import { useStateContext } from "../../Contexts/ContextProvider";
 import { Line } from "react-chartjs-2";
 
-const  CallvsPutOI=({indices,name})=> {
+const  CallvsPutOI=({indexData,name})=> {
 
   const { isMatch } = useStateContext();
   
-
-    let dayData = indices[0]?.datedata;
     let timearr = [];
 
-    for (let i = 0; i < dayData?.length; i++) {
-      let chopptime = dayData[i].timestamp.slice(12, 17);
+    for (let i = 0; i < indexData?.length; i++) {
+      let chopptime = indexData[i]?.timestamp.slice(12, 17);
       timearr.push(chopptime);
     }
 
@@ -21,7 +19,7 @@ const data = {
     datasets: [
       {
         label: "CE OI",
-        data:indices[0]?.datedata?.map((x)=>x?.totCEchg),
+        data:indexData?.map((x)=>x?.totCEchg),
         fill: false,
         borderColor: ["#e76d67"],
         backgroundColor:  ["#e76d67"],
@@ -32,7 +30,7 @@ const data = {
       },
       {
         label: "PE OI",
-        data: indices[0]?.datedata?.map((x)=>x?.totPEchg),
+        data:indexData?.map((x)=>x?.totPEchg),
         fill: false,
         borderColor: ["#40b0b2"],
         backgroundColor:   ["#40b0b2"],
@@ -78,7 +76,7 @@ const data = {
         <span>{name} Call vs Put OI</span>
       <Line data={data} 
       width={isMatch? 380:800}
-      height={isMatch? 200:400}
+      height={isMatch? 200:300}
       options={options}/>
     </div>
   );

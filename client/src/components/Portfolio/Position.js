@@ -107,7 +107,7 @@ const Position = () => {
         font-weight: normal; font-family: NHaasUnicaPro; margin: 0 20px 15px; `}
         styleProps={{
           barColor: "transparent",
-          selectedHeaderTextColor: "#1890ff",
+          selectedHeaderTextColor: "#081452",
           headerTextColor: "#fffff",
           activeInkBarColor: "#1890ff",
           inkBarColor: "hsla(0,0%,100%,.45)",

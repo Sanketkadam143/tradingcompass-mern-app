@@ -43,7 +43,7 @@ const useStyles = makeStyles((theme) => {
   };
 });
 
-const Home = () => {
+const SectorialFlow = () => {
   const classes = useStyles();
 
   const { NiftyData, BankData } = useStateContext();
@@ -55,6 +55,7 @@ const Home = () => {
           <Meter indices={NiftyData} name="Nifty50" />
           <Meter indices={BankData} name="Bank Nifty" />
         </Paper>
+        <SectorialPage />
         <div className={classes.tableContainer}>
           <div className={classes.container}>
             <TopGainers />
@@ -64,9 +65,9 @@ const Home = () => {
           </div>
         </div>
       </div>
-      <SectorialPage />
+     
     </div>
   );
 };
 
-export default Home;
+export default SectorialFlow ;

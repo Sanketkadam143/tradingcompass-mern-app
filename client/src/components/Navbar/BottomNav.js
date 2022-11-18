@@ -45,14 +45,14 @@ const BottomNav = () => {
         onClick={() => navigate("/")}
       />
       <BottomNavigationAction
-        label="Nifty 50"
+        label="Index"
         icon={<CandlestickChartRoundedIcon />}
-        onClick={() => navigate("/nifty50")}
+        onClick={() => navigate("/indexOI")}
       />
       <BottomNavigationAction
-        label="Bank Nifty"
+        label="Sectors"
         icon={<AccountBalanceRoundedIcon />}
-        onClick={() => navigate("/niftybank")}
+        onClick={() => navigate("/sectorialflow")}
       />
       <BottomNavigationAction
         label="Portfolio"

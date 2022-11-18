@@ -1,7 +1,7 @@
 import React ,{useEffect}from "react";
 import { Routes, Route } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import Home from "./Pages/Home";
+import SectorialFlow  from "./Pages/SectorialFlow";
 import { useSnackbar } from 'notistack';
 import Navbar from "./components/Navbar/Navbar";
 import SecNav from "./components/Navbar/SecNav";
@@ -9,9 +9,7 @@ import NiftyResponse from "./API/ApiResponse/NiftyResponse";
 import BankResponse from "./API/ApiResponse/BankResponse";
 import LivePriceResponse from "./API/ApiResponse/LivePriceResponse";
 import BottomNav from "./components/Navbar/BottomNav";
-import NiftyPage from "./Pages/NiftyPage";
-import BankPage from "./Pages/BankPage";
-import OIanalysisPage from "./Pages/OIanalysisPage";
+import IndexOI from "./Pages/IndexOI";
 import StockResponse from "./API/ApiResponse/StockResponse";
 import Auth from "./components/Auth/Auth";
 import { useStateContext } from "./Contexts/ContextProvider";
@@ -70,26 +68,22 @@ const Imports=()=>{
             <StockResponse />
 
             <Routes>
-              <Route exact path="/" element={user ? <Home /> : <Auth />} />
+              <Route exact path="/" element={user ?<Selecttime /> : <Auth />} />
               <Route exact path="/auth" element={<Auth />} />
               <Route
-                path="/nifty50"
-                element={user ? <NiftyPage /> : <Auth />}
+                path="/indexOI"
+                element={user ? <IndexOI /> : <Auth />}
               />
               <Route
-                path="/niftybank"
-                element={user ? <BankPage /> : <Auth />}
+                path="/sectorialflow"
+                element={user ?  <SectorialFlow  /> : <Auth />}
               />
               <Route
                 path="/portfolio"
                 element={user ? <Position /> : <Auth />}
               />
-              <Route
-                path="/oianalysis"
-                element={user ? <OIanalysisPage /> : <Auth />}
-              />
 
-              <Route exact path="/oi-intervalwise" element={user ? <Selecttime />: <Auth />}/>
+              <Route exact path="/oi-intervalwise" element={user ?  <SectorialFlow />: <Auth />}/>
               <Route exact path="/callvsput" element={user ?  <CallvsPutpage/>: <Auth />}/>
 
               <Route exact path="/forget-password" element={<ResetPass />} />

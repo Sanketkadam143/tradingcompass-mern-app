@@ -35,15 +35,15 @@ const useStyles = makeStyles((theme) => {
 const CallvsPutpage = () => {
   const classes = useStyles();
   const { niftyDaydata, bankDaydata } = useStateContext();
-
+ 
   return (
     <div className={classes.callvsputdiv}>
       <Paper elevation={3} className={classes.paperDiv}>
-        <CallvsPutOI indices={niftyDaydata} name="Nifty" />
+        <CallvsPutOI indexData={niftyDaydata[0]?.datedata} name="Nifty" />
       </Paper>
 
       <Paper elevation={3} className={classes.paperDiv}>
-        <CallvsPutOI indices={bankDaydata} name="Banknifty" />
+        <CallvsPutOI indexData={bankDaydata[0]?.datedata} name="Banknifty" />
       </Paper>
     </div>
   );
