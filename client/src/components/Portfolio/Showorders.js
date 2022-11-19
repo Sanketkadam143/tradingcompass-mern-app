@@ -254,7 +254,7 @@ const Showorders = ({ orderDetails, index, type }) => {
           disabled={isSold || isclick}
         >
           {!isclick && (isSold ? "Closed" : "Exit")}
-          {isclick && <CircularProgress />}
+          {isclick && <CircularProgress size={24}/>}
         </Button>
 
         <Dialog

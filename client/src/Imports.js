@@ -1,44 +1,38 @@
-import React ,{useEffect}from "react";
+import React, { useEffect, lazy, Suspense } from "react";
 import { Routes, Route } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import SectorialFlow  from "./Pages/SectorialFlow";
-import { useSnackbar } from 'notistack';
+import { useSnackbar } from "notistack";
 import Navbar from "./components/Navbar/Navbar";
 import SecNav from "./components/Navbar/SecNav";
+import BottomNav from "./components/Navbar/BottomNav";
 import NiftyResponse from "./API/ApiResponse/NiftyResponse";
 import BankResponse from "./API/ApiResponse/BankResponse";
 import LivePriceResponse from "./API/ApiResponse/LivePriceResponse";
-import BottomNav from "./components/Navbar/BottomNav";
-import IndexOI from "./Pages/IndexOI";
 import StockResponse from "./API/ApiResponse/StockResponse";
-import Auth from "./components/Auth/Auth";
 import { useStateContext } from "./Contexts/ContextProvider";
-import PrivacyPolicy from "./Pages/PrivacyPolicy";
-import Disclaimer from "./Pages/Disclaimer";
-import About from "./Pages/About";
-import Position from "./components/Portfolio/Position";
 import useNetworkStatus from "./Contexts/Networkstatus";
 import Offlinepage from "./Pages/Offlinepage";
-import Selecttime from "./components/TimeperiodOI/Selecttime";
-import CallvsPutpage from "./Pages/CallvsPutpage";
-import ResetPass from "./components/Auth/ResetPass";
-import {getOrders} from './actions/order'
 import { CLIENT_MSG } from "./constants/actionTypes";
+import CircularProgress from "@mui/material/CircularProgress";
 
+const Selecttime = lazy(() => import("./components/TimeperiodOI/Selecttime"));
+const Auth = lazy(() => import("./components/Auth/Auth"));
+const IndexOI = lazy(() => import("./Pages/IndexOI"));
+const SectorialFlow = lazy(() => import("./Pages/SectorialFlow"));
+const Position = lazy(() => import("./components/Portfolio/Position"));
+const CallvsPutpage = lazy(() => import("./Pages/CallvsPutpage"));
+const ResetPass = lazy(() => import("./components/Auth/ResetPass"));
+const PrivacyPolicy = lazy(() => import("./Pages/PrivacyPolicy"));
+const Disclaimer = lazy(() => import("./Pages/Disclaimer"));
+const About = lazy(() => import("./Pages/About"));
 
-
-const Imports=()=>{
-  const dispatch=useDispatch();
+const Imports = () => {
+  const dispatch = useDispatch();
   const { user } = useStateContext();
   const { isOnline } = useNetworkStatus();
   const message = useSelector((state) => state.auth.message?.info);
   const status = useSelector((state) => state.auth.message?.status);
-  const  {enqueueSnackbar}  = useSnackbar();
-
-  useEffect(()=>{
-   user && dispatch(getOrders());
-  },[dispatch,user])
-
+  const { enqueueSnackbar } = useSnackbar();
 
   useEffect(() => {
     (status === 404 || status === 400 || status === 500) &&
@@ -53,9 +47,8 @@ const Imports=()=>{
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [message]);
 
-
   return (
-  <>
+    <>
       <Navbar />
       <SecNav />
 
@@ -66,39 +59,69 @@ const Imports=()=>{
             <BankResponse />
             <LivePriceResponse />
             <StockResponse />
+            <Suspense
+              fallback={
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    height: "50vh",
+                  }}
+                >
+                  <CircularProgress size={60} />
+                </div>
+              }
+            >
+              <Routes>
+                <Route
+                  exact
+                  path="/"
+                  element={user ? <Selecttime /> : <Auth />}
+                />
+                <Route exact path="/auth" element={<Auth />} />
+                <Route
+                  path="/indexOI"
+                  element={user ? <IndexOI /> : <Auth />}
+                />
+                <Route
+                  path="/sectorialflow"
+                  element={user ? <SectorialFlow /> : <Auth />}
+                />
+                <Route
+                  path="/portfolio"
+                  element={user ? <Position /> : <Auth />}
+                />
 
-            <Routes>
-              <Route exact path="/" element={user ?<Selecttime /> : <Auth />} />
-              <Route exact path="/auth" element={<Auth />} />
-              <Route
-                path="/indexOI"
-                element={user ? <IndexOI /> : <Auth />}
-              />
-              <Route
-                path="/sectorialflow"
-                element={user ?  <SectorialFlow  /> : <Auth />}
-              />
-              <Route
-                path="/portfolio"
-                element={user ? <Position /> : <Auth />}
-              />
+                <Route
+                  exact
+                  path="/oi-intervalwise"
+                  element={user ? <SectorialFlow /> : <Auth />}
+                />
+                <Route
+                  exact
+                  path="/callvsput"
+                  element={user ? <CallvsPutpage /> : <Auth />}
+                />
 
-              <Route exact path="/oi-intervalwise" element={user ?  <SectorialFlow />: <Auth />}/>
-              <Route exact path="/callvsput" element={user ?  <CallvsPutpage/>: <Auth />}/>
-
-              <Route exact path="/forget-password" element={<ResetPass />} />
-              <Route exact path="/privacypolicy" element={<PrivacyPolicy />} />
-              <Route exact path="/disclaimer" element={<Disclaimer />} />
-              <Route exact path="/about" element={<About />} />
-            </Routes>
+                <Route exact path="/forget-password" element={<ResetPass />} />
+                <Route
+                  exact
+                  path="/privacypolicy"
+                  element={<PrivacyPolicy />}
+                />
+                <Route exact path="/disclaimer" element={<Disclaimer />} />
+                <Route exact path="/about" element={<About />} />
+              </Routes>
+            </Suspense>
           </>
         ) : (
           <Offlinepage />
         )}
       </div>
       <BottomNav />
-      </>
+    </>
   );
-}
+};
 
 export default Imports;

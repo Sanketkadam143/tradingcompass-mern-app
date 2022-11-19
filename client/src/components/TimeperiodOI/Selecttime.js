@@ -3,6 +3,8 @@ import MultiRangeSlider from "multi-range-slider-react";
 import { useStateContext } from "../../Contexts/ContextProvider";
 import Comparedata from "./Comparedata";
 import { makeStyles } from "@mui/styles";
+import { Paper } from "@mui/material";
+
 
 const labels = [
   "9:15",
@@ -50,6 +52,7 @@ const useStyles = makeStyles((theme) => {
     },
     grpdiv: {
       marginTop: "15em",
+      width:"100%",
     },
   };
 });
@@ -97,23 +100,28 @@ const Selecttime = () => {
 
   return (
     <div className={classes.grpdiv}>
-      <div>
+     
         <div className={classes.sliderDiv}>
-          <MultiRangeSlider
-            labels={isMatch ? mobileLabels:labels}
-            min={timeMin}
-            max={timeMax}
-            minValue={minV}
-            maxValue={maxV}
-            step={5}
-            minCaption={minTimeCaption}
-            maxCaption={maxTimeCaption}
-            onInput={handleTimeChange}
-            ruler={false}
-          />
+          <Paper style={{padding:"0.5em"}}>
+            <MultiRangeSlider
+              labels={isMatch ? mobileLabels:labels}
+              min={timeMin}
+              max={timeMax}
+              minValue={minV}
+              maxValue={maxV}
+              step={5}
+              minCaption={minTimeCaption}
+              maxCaption={maxTimeCaption}
+              onInput={handleTimeChange}
+              ruler={false}
+              style={{boxShadow:"none",border:"none"}}
+              barInnerColor="#ffffff"
+              
+            />
+          </Paper>
         </div>
 
-        <div>
+        
           <Comparedata
             minTime={minTime}
             maxTime={maxTime}
@@ -126,8 +134,8 @@ const Selecttime = () => {
             indexData={bankDaydata}
             name="Bank Nifty"
           />
-        </div>
-      </div>
+       
+    
     </div>
   );
 };

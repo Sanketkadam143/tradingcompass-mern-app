@@ -245,7 +245,7 @@ const Auth = () => {
               disableElevation
             >
               {isclick ? (
-                <CircularProgress />
+                <CircularProgress size={24}/>
               ) : isSignUp ? (
                 isotp ? (
                   "Sign Up "

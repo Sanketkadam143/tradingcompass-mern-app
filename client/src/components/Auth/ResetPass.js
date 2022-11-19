@@ -170,7 +170,7 @@ const ResetPass = () => {
                 !isclick &&
                 (isotp ? "Verfiy Otp" : "Send Otp")}
               {isotpVerified && !isclick && "Reset Password"}
-              {isclick && <CircularProgress />}
+              {isclick && <CircularProgress size={24}/>}
             </Button>
           </form>
         </Paper>

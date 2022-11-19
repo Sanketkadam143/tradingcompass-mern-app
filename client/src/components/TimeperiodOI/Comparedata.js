@@ -2,7 +2,7 @@ import React from "react";
 import OIchange from "../Charts/OIchange";
 import Meter from "../Charts/Meter";
 import TotalOIChange from "../Charts/TotalOIChange";
-import { Paper, Typography } from "@mui/material";
+import { Typography } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import Volume from "../Charts/Volume";
 import CallvsPutOI from "../Charts/CallvsPutOI";
@@ -24,9 +24,6 @@ const useStyles = makeStyles((theme) => {
       flexDirection: "column",
       gap: "3em",
     },
-    maindiv: {
-      padding: "2em",
-    },
     paperDiv: {
       display: "flex",
       gap: "2em",
@@ -42,8 +39,8 @@ const useStyles = makeStyles((theme) => {
 const Comparedata = ({ minTime, maxTime, indexData, name }) => {
   const classes = useStyles();
   const comparedData = [];
-  var price=1;
-  var indexPricechange=0;
+  var price = 1;
+  var indexPricechange = 0;
 
   try {
     let data = indexData?.[0]?.datedata;
@@ -78,15 +75,14 @@ const Comparedata = ({ minTime, maxTime, indexData, name }) => {
     let maxIndex = timearr?.indexOf(closestmax);
 
     var oicomparison = [];
-    for (let index = minIndex+1; index <= maxIndex; index++) {
+    for (let index = minIndex + 1; index <= maxIndex; index++) {
       oicomparison.push({
         timestamp: data[index].timestamp,
         totPEchg: data[index].totPEchg - data[minIndex].totPEchg,
         totCEchg: data[index].totCEchg - data[minIndex].totCEchg,
       });
     }
-    
-    
+
     price = indexData[0]?.datedata[minIndex]?.indexLTP;
 
     const firstData = data[minIndex];
@@ -129,30 +125,28 @@ const Comparedata = ({ minTime, maxTime, indexData, name }) => {
   return (
     <>
       <div className={classes.niftypageDiv}>
-        <Paper elevation={3} className={classes.maindiv}>
-          <Typography variant="h6">{name} </Typography>
-          <span
-            style={{
-              color: perchng < 0 ? "#a84032" : "#32a852",
-              fontSize: "1em",
-            }}
-          >
-            {indexPricechange} {perchng}%
-          </span>
-
-          <div className={classes.paperDiv}>
-            <div className={classes.groupdiv}>
-              <Meter indices={comparedData} name={name} />
-              <TotalOIChange indices={comparedData} />
+        <div className={classes.paperDiv}>
+          <div className={classes.groupdiv}>
+            <div>
+              <Typography variant="h6">{name} </Typography>
+              <span
+                style={{
+                  color: perchng < 0 ? "#a84032" : "#32a852",
+                  fontSize: "1em",
+                }}
+              >
+                {indexPricechange} {perchng}%
+              </span>
             </div>
-            <div className={classes.groupdiv}>
-              <OIchange indices={comparedData} />
-              <CallvsPutOI indexData={oicomparison}/>
-              <Volume indices={comparedData} />
-            
-            </div>
+            <Meter indices={comparedData} name={name} />
+            <TotalOIChange indices={comparedData} />
           </div>
-        </Paper>
+          <div className={classes.groupdiv}>
+            <OIchange indices={comparedData} />
+            <CallvsPutOI indexData={oicomparison} />
+            <Volume indices={comparedData} />
+          </div>
+        </div>
       </div>
     </>
   );

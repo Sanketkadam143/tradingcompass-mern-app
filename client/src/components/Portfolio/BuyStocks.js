@@ -196,7 +196,7 @@ export default function BuyStocks({ name, stockData, orderType }) {
             disableElevation
             onClick={order}
           >
-            {isclick ? <CircularProgress /> : "Click to Place Order"}
+            {isclick ? <CircularProgress size={24}/> : "Click to Place Order"}
           </Button>
         </div>
       </Popover>

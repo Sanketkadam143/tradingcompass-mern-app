@@ -49,7 +49,7 @@ const NiftyResponse = () => {
       if (date.getMinutes() % 1 === 0) {
         getNiftyChain();
       }
-    }, 20000);
+    }, 60000);
 
     return () => clearInterval(interval);
 

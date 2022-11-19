@@ -45,7 +45,7 @@ const BankResponse = () => {
       if (date.getMinutes() % 1 === 0) {
         getBankChain();
       }
-    }, 20000);
+    }, 60000);
 
     return () => clearInterval(interval);
 

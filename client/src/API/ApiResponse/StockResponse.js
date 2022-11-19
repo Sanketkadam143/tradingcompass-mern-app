@@ -47,7 +47,7 @@ const StockResponse = () => {
       if (date.getMinutes() % 1 === 0) {
         getstockPrice();
       }
-    }, 20000);
+    }, 60000);
 
     return () => clearInterval(interval);
 

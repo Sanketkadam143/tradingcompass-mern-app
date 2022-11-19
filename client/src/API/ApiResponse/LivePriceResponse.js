@@ -40,7 +40,7 @@ const LivePriceResponse = () => {
       if (date.getMinutes() % 1 === 0) {
         getPrice();
       }
-    }, 20000);
+    }, 60000);
 
     return () => clearInterval(interval);
 

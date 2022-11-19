@@ -1,5 +1,5 @@
-import { React, useState } from "react";
-import { useSelector } from "react-redux";
+import { React, useState,useEffect} from "react";
+import { useSelector,useDispatch} from "react-redux";
 import { Paper, Divider, Typography } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import PopupOrder from "./PopupOrder";
@@ -10,6 +10,7 @@ import AlertTitle from "@mui/material/AlertTitle";
 import Calculateprofit from "./Calculateprofit";
 import BuyStocks from "./BuyStocks";
 import { Tabs, Tab } from "@tarragon/swipeable-tabs";
+import { getOrders } from "../../actions/order";
 
 const useStyles = makeStyles((theme) => {
   return {
@@ -64,6 +65,8 @@ const useStyles = makeStyles((theme) => {
 
 const Position = () => {
   const classes = useStyles();
+  const dispatch = useDispatch();
+  const { user } = useStateContext();
   const [selectedTab, setSelectedTab] = useState("POSITION");
   const changeTab = (e) => {
     setSelectedTab(e.label);
@@ -97,6 +100,11 @@ const Position = () => {
   const optionBook = orderBook.filter(
     (x) => x?.symbol === "NIFTY" || x?.symbol === "BANKNIFTY"
   );
+
+  useEffect(() => {
+    user && dispatch(getOrders());
+    // eslint-disable-next-line 
+  }, []);
 
   return (
     <div className={classes.mainDiv}>
