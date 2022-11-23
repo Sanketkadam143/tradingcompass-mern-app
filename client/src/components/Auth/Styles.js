@@ -21,6 +21,12 @@ export default makeStyles((theme) => ({
     width: '100%', // Fix IE 11 issue.
     marginTop: theme.spacing(4),
   },
+  name:{
+   fontWeight:"bold",
+   fontSize:"1em",
+   fontFamily:"sans-serif",
+   color:"#081452"
+  },
   timer:{
   marginLeft:"90%",
   },

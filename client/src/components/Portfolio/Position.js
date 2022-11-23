@@ -1,6 +1,6 @@
-import { React, useState,useEffect} from "react";
-import { useSelector,useDispatch} from "react-redux";
-import { Paper, Divider, Typography } from "@mui/material";
+import { React, useState, useEffect, useRef } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { Paper, Divider, Typography, IconButton } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import PopupOrder from "./PopupOrder";
 import { useStateContext } from "../../Contexts/ContextProvider";
@@ -11,14 +11,17 @@ import Calculateprofit from "./Calculateprofit";
 import BuyStocks from "./BuyStocks";
 import { Tabs, Tab } from "@tarragon/swipeable-tabs";
 import { getOrders } from "../../actions/order";
+import Fab from "@mui/material/Fab";
+import NavigationIcon from "@mui/icons-material/Navigation";
 
 const useStyles = makeStyles((theme) => {
   return {
-    mainDiv:{
-     marginTop:"-2em",
+    mainDiv: {
+      marginTop: "-2em",
     },
     positionPageDiv: {
       margin: "1em",
+      marginTop: "-0.5em",
       marginBottom: "5em",
       display: "flex",
       flexDirection: "column",
@@ -55,21 +58,42 @@ const useStyles = makeStyles((theme) => {
       justifyContent: "center",
       alignItems: "center",
       flexWrap: "wrap",
-      // maxWidth: "50%",
     },
     positionDiv: {
       minWidth: "80%",
+    },
+    tabDiv: {
+      height: "65vh",
+      overflow: "auto",
+      scrollBehavior: "smooth",
     },
   };
 });
 
 const Position = () => {
   const classes = useStyles();
+  const ref = useRef();
   const dispatch = useDispatch();
   const { user } = useStateContext();
-  const [selectedTab, setSelectedTab] = useState("POSITION");
+  const [selectedTab, setSelectedTab] = useState("POSITIONS");
+  const [pos, setPos] = useState(false);
+
   const changeTab = (e) => {
     setSelectedTab(e.label);
+    handleTop();
+  };
+  const handleTop = () => {
+    ref.current.scrollTop = 0;
+    setPos(false);
+  };
+
+  const handleScroll = () => {
+    console.log("sa");
+    if (ref.current.scrollTop > 50) {
+      if (!pos) setPos(true);
+    } else {
+      if (pos) setPos(false);
+    }
   };
 
   const { NiftyData, BankData, StockData, niftyDaydata } = useStateContext();
@@ -103,8 +127,14 @@ const Position = () => {
 
   useEffect(() => {
     user && dispatch(getOrders());
-    // eslint-disable-next-line 
+    // eslint-disable-next-line
   }, []);
+
+  useEffect(() => {
+    const temp = ref.current;
+    temp.addEventListener("scroll", handleScroll);
+    return () => temp.removeEventListener("scroll", handleScroll);
+  });
 
   return (
     <div className={classes.mainDiv}>
@@ -124,106 +154,113 @@ const Position = () => {
         }}
       >
         <Tab label="HOLDINGS" key={0}>
-          <div className={classes.positionPageDiv}>
-            <div className={classes.orderDiv}>
-              <Paper className={classes.paperDiv} elevation={3}>
-                <div className={classes.investedDiv}>
-                  <div>
-                    <div>Invested</div>
+          <div className={classes.tabDiv} ref={ref}>
+            <div className={classes.positionPageDiv}>
+              <div className={classes.orderDiv}>
+                <Paper className={classes.paperDiv} elevation={3}>
+                  <div className={classes.investedDiv}>
                     <div>
-                      <Typography variant="h5">{invested}</Typography>
+                      <div>Invested</div>
+                      <div>
+                        <Typography variant="h5">{invested}</Typography>
+                      </div>
+                    </div>
+                    <div>
+                      <div>Current</div>
+                      <div
+                        style={{
+                          color:
+                            invested + investedProfit < invested
+                              ? "#a84032"
+                              : "#32a852",
+                        }}
+                      >
+                        <Typography variant="h5">
+                          {invested + investedProfit}
+                        </Typography>
+                        <Typography variant="subtitle2">
+                          {invested === 0
+                            ? "0"
+                            : ((investedProfit / invested) * 100).toFixed(
+                                2
+                              )}{" "}
+                          %
+                        </Typography>
+                      </div>
                     </div>
                   </div>
-                  <div>
-                    <div>Current</div>
-                    <div
+                  <Divider style={{ width: "90%", margin: "1em" }} />
+                  <div className={classes.pnlDiv}>
+                    <span>Total P&L </span>
+                    <span
                       style={{
-                        color:
-                          invested + investedProfit < invested
-                            ? "#a84032"
-                            : "#32a852",
+                        color: totalProfit < 0 ? "#a84032" : "#32a852",
                       }}
                     >
-                      <Typography variant="h5">
-                        {invested + investedProfit}
-                      </Typography>
-                      <Typography variant="subtitle2">
-                        {invested === 0
-                          ? "0"
-                          : ((investedProfit / invested) * 100).toFixed(2)}{" "}
-                        %
-                      </Typography>
-                    </div>
+                      {totalProfit > 0 && "+"}
+                      {totalProfit}
+                    </span>
                   </div>
-                </div>
-                <Divider style={{ width: "90%", margin: "1em" }} />
-                <div className={classes.pnlDiv}>
-                  <span>Total P&L </span>
-                  <span
-                    style={{
-                      color: totalProfit < 0 ? "#a84032" : "#32a852",
-                    }}
-                  >
-                    {totalProfit > 0 && "+"}
-                    {totalProfit}
-                  </span>
-                </div>
+                </Paper>
+              </div>
+              <Paper className={classes.positionDiv} elevation={3}>
+                {stockBook.map((x, index) => (
+                  <Showorders orderDetails={x} index={index} type="stocks" />
+                ))}
               </Paper>
             </div>
-            <Paper className={classes.positionDiv} elevation={3}>
-              {stockBook.map((x, index) => (
-                <Showorders orderDetails={x} index={index} type="stocks" />
-              ))}
-            </Paper>
           </div>
         </Tab>
-        <Tab label="POSITION" key={1}>
-          <div className={classes.positionPageDiv}>
-            <div className={classes.orderDiv}>
-              <Paper className={classes.paperDiv} elevation={3}>
-                <div className={classes.investedDiv}>
-                  <div>
-                    <div>Invested</div>
+        <Tab label="POSITIONS" key={1}>
+          <div className={classes.tabDiv} ref={ref}>
+            <div className={classes.positionPageDiv}>
+              <div className={classes.orderDiv}>
+                <Paper className={classes.paperDiv} elevation={3}>
+                  <div className={classes.investedDiv}>
                     <div>
-                      <Typography variant="h5">{invested}</Typography>
+                      <div>Invested</div>
+                      <div>
+                        <Typography variant="h5">{invested}</Typography>
+                      </div>
+                    </div>
+                    <div>
+                      <div>Current</div>
+                      <div
+                        style={{
+                          color:
+                            invested + investedProfit < invested
+                              ? "#a84032"
+                              : "#32a852",
+                        }}
+                      >
+                        <Typography variant="h5">
+                          {invested + investedProfit}
+                        </Typography>
+                        <Typography variant="subtitle2">
+                          {invested === 0
+                            ? "0"
+                            : ((investedProfit / invested) * 100).toFixed(
+                                2
+                              )}{" "}
+                          %
+                        </Typography>
+                      </div>
                     </div>
                   </div>
-                  <div>
-                    <div>Current</div>
-                    <div
+                  <Divider style={{ width: "90%", margin: "1em" }} />
+                  <div className={classes.pnlDiv}>
+                    <span>Total P&L </span>
+                    <span
                       style={{
-                        color:
-                          invested + investedProfit < invested
-                            ? "#a84032"
-                            : "#32a852",
+                        color: totalProfit < 0 ? "#a84032" : "#32a852",
                       }}
                     >
-                      <Typography variant="h5">
-                        {invested + investedProfit}
-                      </Typography>
-                      <Typography variant="subtitle2">
-                        {invested === 0
-                          ? "0"
-                          : ((investedProfit / invested) * 100).toFixed(2)}{" "}
-                        %
-                      </Typography>
-                    </div>
+                      {totalProfit > 0 && "+"}
+                      {totalProfit}
+                    </span>
                   </div>
-                </div>
-                <Divider style={{ width: "90%", margin: "1em" }} />
-                <div className={classes.pnlDiv}>
-                  <span>Total P&L </span>
-                  <span
-                    style={{
-                      color: totalProfit < 0 ? "#a84032" : "#32a852",
-                    }}
-                  >
-                    {totalProfit > 0 && "+"}
-                    {totalProfit}
-                  </span>
-                </div>
-              </Paper>
-              {
+                </Paper>
+
                 <Paper className={classes.paperDiv} elevation={3}>
                   <BuyStocks
                     name="Buy Stocks"
@@ -243,24 +280,40 @@ const Position = () => {
                     orderType="optionSelling"
                   />
                 </Paper>
-              }
+              </div>
+              <Paper className={classes.positionDiv} elevation={3}>
+                {isExpiry && (
+                  <Alert severity="warning">
+                    <AlertTitle> Today {expiryDate} is expiry</AlertTitle>
+                    <strong>
+                      Your Position will be autosquared off at 3:30 pm
+                    </strong>
+                  </Alert>
+                )}
+                {optionBook.map((x, index) => (
+                  <Showorders orderDetails={x} index={index} type="options" />
+                ))}
+              </Paper>
             </div>
-            <Paper className={classes.positionDiv} elevation={3}>
-              {isExpiry && (
-                <Alert severity="warning">
-                  <AlertTitle> Today {expiryDate} is expiry</AlertTitle>
-                  <strong>
-                    Your Position will be autosquared off at 3:30 pm
-                  </strong>
-                </Alert>
-              )}
-              {optionBook.map((x, index) => (
-                <Showorders orderDetails={x} index={index} type="options" />
-              ))}
-            </Paper>
           </div>
         </Tab>
       </Tabs>
+
+      <IconButton
+        style={{
+          position: "fixed",
+          bottom: 50,
+          right: 30,
+          display: pos ? "block" : "none",
+          zIndex: 1300,
+        }}
+        onClick={handleTop}
+      >
+        <Fab variant="extended">
+          <NavigationIcon sx={{ mr: 1 }} />
+          Top
+        </Fab>
+      </IconButton>
     </div>
   );
 };

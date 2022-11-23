@@ -8,7 +8,6 @@ import {
   Button,
   Paper,
   Grid,
-  Typography,
   Container,
 } from "@mui/material";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
@@ -40,9 +39,7 @@ const ResetPass = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     setIsclick(true);
-    setTimeout(() =>dispatch(resetPassword(formData, navigate)), 500);
-    
-   
+    setTimeout(() => dispatch(resetPassword(formData, navigate)), 500);
   };
 
   const handleChange = (e) => {
@@ -104,7 +101,13 @@ const ResetPass = () => {
           <Avatar className={classes.avatar}>
             <LockOutlinedIcon />
           </Avatar>
-          <Typography varient="h5">Reset Password</Typography>
+          <span className={classes.name}>Reset Password</span>
+          {!isotpVerified && (
+            <span style={{ color: "#081452" }}>
+              {" "}
+              Enter your registered Email
+            </span>
+          )}
           <form className={classes.form} onSubmit={handleSubmit}>
             <Grid container spacing={2}>
               <Input
@@ -170,7 +173,16 @@ const ResetPass = () => {
                 !isclick &&
                 (isotp ? "Verfiy Otp" : "Send Otp")}
               {isotpVerified && !isclick && "Reset Password"}
-              {isclick && <CircularProgress size={24}/>}
+              {isclick && <CircularProgress size={24} />}
+            </Button>
+            <Button
+              fullWidth
+              className={classes.submitbut}
+              style={{ marginTop: "1em", marginBottom: "1em" }}
+              onClick={() => navigate("/auth")}
+              disableElevation
+            >
+              Cancel
             </Button>
           </form>
         </Paper>

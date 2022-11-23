@@ -23,6 +23,8 @@ const HtmlTooltip = styled(({ className, isMatch, ...props }) => (
     maxWidth: 220,
     fontSize: theme.typography.pxToRem(12),
     border: "1px solid #dadde9",
+    borderRadius:"8px",
+    boxShadow:"rgb(0 0 0 / 28%) 0px 0px 13px 0px"
   },
 }));
 
@@ -45,7 +47,8 @@ const PopupMenu = ({ name, menuItems }) => {
         <Button
           endIcon={<KeyboardArrowDown />}
           fullWidth
-          color={isMatch ? `primary` : `secondary`}
+         
+          style={{fontSize:"1em",textTransform: 'none',color:"black"}}
         >
           {name}
         </Button>

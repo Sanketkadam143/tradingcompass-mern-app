@@ -61,28 +61,30 @@ const IndexOI = () => {
         }}
       >
         <Tab label="NIFTY OI" key={0}>
-          <Paper elevation={3} className={classes.paperDiv}>
-            <TotalOIChange indices={NiftyData} />
-          </Paper>
-          <Paper elevation={3} className={classes.paperDiv}>
-            <OIchange indices={NiftyData} />
-          </Paper>
-
-          <Paper elevation={3} className={classes.paperDiv}>
-            <OverallOI indices={NiftyData} />
-          </Paper>
+          <div style={{height:"60vh"}}>
+            <Paper elevation={3} className={classes.paperDiv}>
+              <TotalOIChange indices={NiftyData} />
+            </Paper>
+            <Paper elevation={3} className={classes.paperDiv}>
+              <OIchange indices={NiftyData} />
+            </Paper>
+            <Paper elevation={3} className={classes.paperDiv}>
+              <OverallOI indices={NiftyData} />
+            </Paper>
+          </div>
         </Tab>
         <Tab label="BANKNIFTY OI" key={1}>
-          <Paper elevation={3} className={classes.paperDiv}>
-            <TotalOIChange indices={BankData} />
-          </Paper>
-          <Paper elevation={3} className={classes.paperDiv}>
-            <OIchange indices={BankData} />
-          </Paper>
-
-          <Paper elevation={3} className={classes.paperDiv}>
-            <OverallOI indices={BankData} />
-          </Paper>
+          <div style={{height:"60vh"}}>
+            <Paper elevation={3} className={classes.paperDiv}>
+              <TotalOIChange indices={BankData} />
+            </Paper>
+            <Paper elevation={3} className={classes.paperDiv}>
+              <OIchange indices={BankData} />
+            </Paper>
+            <Paper elevation={3} className={classes.paperDiv}>
+              <OverallOI indices={BankData} />
+            </Paper>
+          </div>
         </Tab>
       </Tabs>
     </div>

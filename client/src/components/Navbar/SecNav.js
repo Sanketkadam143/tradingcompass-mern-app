@@ -1,5 +1,5 @@
 import React from "react";
-import { AppBar, Typography, Tabs } from "@mui/material";
+import { AppBar, Typography, Tabs, Divider } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import { useStateContext } from "../../Contexts/ContextProvider";
 import Marquee from "react-fast-marquee";
@@ -75,7 +75,7 @@ const SecNav = () => {
               : theme.palette.grey[800],
         }}
         color="secondary"
-        style={{ zIndex: 1249, marginTop: "3.8em" }}
+        style={{ zIndex: 1249, marginTop: "3.8em" ,backgroundColor:"#ffffff",boxShadow:"none"}}
       >
         <Tabs
           value={false}
@@ -87,11 +87,11 @@ const SecNav = () => {
             <div className={classes.buttonContainer}>
               {indices.map((index) => (
                 <div key={index.id}>
-                  <Typography variant="subtitle2">
+                  <Typography variant="subtitle2" color={"black"}>
                     {index?.indexname}
                   </Typography>
 
-                  <Typography>
+                  <Typography color={"black"}>
                     {LivePrice[0]?.data[0][index.id]?.last}&nbsp;
                     <span
                       className={classes.pChange}
@@ -110,7 +110,9 @@ const SecNav = () => {
             </div>
           </Marquee>
         </Tabs>
+        <Divider/>
       </AppBar>
+     
     </>
   );
 };

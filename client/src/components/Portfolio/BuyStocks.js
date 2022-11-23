@@ -31,7 +31,7 @@ export default function BuyStocks({ name, stockData, orderType }) {
   const classes = useStyles();
   const { marketStatus, stockTimestamp } = useStateContext();
   const [anchorEl, setAnchorEl] = React.useState(null);
-  const [selectedStock, setSelectedStock] = useState();
+  const [selectedStock, setSelectedStock] = useState("ADANIENT");
   const [quantity, setQuantity] = useState(0);
   const [isclick, setIsclick] = useState(false);
 

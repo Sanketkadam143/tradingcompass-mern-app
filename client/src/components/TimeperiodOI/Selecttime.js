@@ -3,7 +3,7 @@ import MultiRangeSlider from "multi-range-slider-react";
 import { useStateContext } from "../../Contexts/ContextProvider";
 import Comparedata from "./Comparedata";
 import { makeStyles } from "@mui/styles";
-import { Paper } from "@mui/material";
+
 
 
 const labels = [
@@ -41,13 +41,14 @@ const useStyles = makeStyles((theme) => {
   return {
     sliderDiv: {
   
-      marginTop: "-9em",
+      marginTop: "-7.9em",
       position: "fixed",
       width: "95%",
-      backgroundColor: "#fff",
-      paddingTop: "3em",
+      backgroundColor: "#ffff",
+      paddingTop: "0em",
       marginRight:"3%",
       marginLeft:"3%",
+      zIndex:"1250",
       
     },
     grpdiv: {
@@ -102,7 +103,7 @@ const Selecttime = () => {
     <div className={classes.grpdiv}>
      
         <div className={classes.sliderDiv}>
-          <Paper style={{padding:"0.5em"}}>
+          
             <MultiRangeSlider
               labels={isMatch ? mobileLabels:labels}
               min={timeMin}
@@ -118,7 +119,7 @@ const Selecttime = () => {
               barInnerColor="#ffffff"
               
             />
-          </Paper>
+        
         </div>
 
         

@@ -142,9 +142,9 @@ const Auth = () => {
           <Avatar className={classes.avatar}>
             <LockOutlinedIcon />
           </Avatar>
-          <Typography varient="h5">
-            {isSignUp ? "Sign Up" : "Sign In"}
-          </Typography>
+          <span className={classes.name} >
+            {isSignUp ? "Sign Up" : "Login Account"}
+          </span>
           <form className={classes.form} onSubmit={handleSubmit}>
             <Grid container spacing={2}>
               {isSignUp && (
@@ -227,7 +227,12 @@ const Auth = () => {
                   label={
                     <Typography>
                       I have read and agree to{" "}
-                      <Link to="/privacypolicy">Privacy Policy</Link>
+                      <Link
+                        to="/privacypolicy"
+                        style={{ textDecoration: "none" ,color:"#007ee5" }}
+                      >
+                        Privacy Policy
+                      </Link>
                     </Typography>
                   }
                 />
@@ -245,7 +250,7 @@ const Auth = () => {
               disableElevation
             >
               {isclick ? (
-                <CircularProgress size={24}/>
+                <CircularProgress size={24} />
               ) : isSignUp ? (
                 isotp ? (
                   "Sign Up "
@@ -253,7 +258,7 @@ const Auth = () => {
                   "Send OTP"
                 )
               ) : (
-                "Sign In"
+                "Login to Account"
               )}
             </Button>
 

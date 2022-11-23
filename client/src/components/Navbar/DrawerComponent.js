@@ -95,12 +95,12 @@ const DrawerComponent = () => {
       <IconButton onClick={() => setOpenDrawer(!openDrawer)}>
         {openDrawer ? (
           <ClearRoundedIcon
-            color="secondary"
+            color="primary"
             sx={{ fontSize: 40 }}
           ></ClearRoundedIcon>
         ) : (
           <MenuRoundedIcon
-            color="secondary"
+            color="primary"
             sx={{ fontSize: 40 }}
           ></MenuRoundedIcon>
         )}
