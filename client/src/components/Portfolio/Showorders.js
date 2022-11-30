@@ -60,7 +60,6 @@ const useStyles = makeStyles((theme) => {
 const Showorders = ({ orderDetails, index, type }) => {
   const dispatch = useDispatch();
   const {
-    LivePrice,
     niftyDaydata,
     niftyTimestamp,
     bankTimestamp,
@@ -116,7 +115,9 @@ const Showorders = ({ orderDetails, index, type }) => {
 
   orderDetails.orderType === "optionSelling" && (profit = -profit);
 
-  const brokerage = parseInt(orderDetails.lots) * (orderDetails.orderType === "stockBuying" ? 5 : 50);
+  const brokerage =
+    parseInt(orderDetails.lots) *
+    (orderDetails.orderType === "stockBuying" ? 5 : 50);
 
   useEffect(() => {
     setExitDetails({
@@ -148,7 +149,10 @@ const Showorders = ({ orderDetails, index, type }) => {
     dispatch(updateOrder(currentId, exitDetails));
     dispatch({
       type: CLIENT_MSG,
-      message: { info: "Your Position had been Auto-Squared off", status: 200 },
+      message: {
+        info: "Your Positions had been Auto-Squared off",
+        status: 200,
+      },
     });
     setIsSold(true);
   };
@@ -158,16 +162,20 @@ const Showorders = ({ orderDetails, index, type }) => {
   };
 
   const autoExittime = "15:30:00";
-  const resTime = LivePrice[0]?._id?.slice(12);
+  const resTime = niftyTimestamp?.slice(12);
   const isExpiry =
     niftyDaydata[0]?.expiryDate?.slice(0, 2) ===
-    new Date().toJSON().slice(8, 10);
+    niftyDaydata[0]?._id?.slice(8, 10);
 
-  resTime === autoExittime &&
-    !isSold &&
-    isExpiry &&
-    type === "options" &&
-    autoexit();
+  useEffect(() => {
+    resTime === autoExittime &&
+      !isSold &&
+      isExpiry &&
+      type === "options" &&
+      autoexit();
+
+    // eslint-disable-next-line
+  }, []);
 
   var orderName =
     type === "options"
@@ -254,7 +262,7 @@ const Showorders = ({ orderDetails, index, type }) => {
           disabled={isSold || isclick}
         >
           {!isclick && (isSold ? "Closed" : "Exit")}
-          {isclick && <CircularProgress size={24}/>}
+          {isclick && <CircularProgress size={24} />}
         </Button>
 
         <Dialog

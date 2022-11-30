@@ -1,4 +1,4 @@
-import React, { useEffect, lazy, Suspense } from "react";
+import React, { useEffect, lazy, Suspense, useState } from "react";
 import { Routes, Route } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { useSnackbar } from "notistack";
@@ -33,6 +33,7 @@ const Imports = () => {
   const message = useSelector((state) => state.auth.message?.info);
   const status = useSelector((state) => state.auth.message?.status);
   const { enqueueSnackbar } = useSnackbar();
+  const [offlineCheck, setofflineCheck] = useState(false);
 
   useEffect(() => {
     (status === 404 || status === 400 || status === 500) &&
@@ -42,10 +43,18 @@ const Imports = () => {
 
     status === 0 && enqueueSnackbar("Network Error", { variant: "error" });
 
+    !isOnline && enqueueSnackbar("You are Offline", { variant: "error" });
+
+    !isOnline && setofflineCheck(true);
+    if (offlineCheck && isOnline) {
+      enqueueSnackbar("Back Online", { variant: "success" });
+      setofflineCheck(false);
+    }
+
     dispatch({ type: CLIENT_MSG, message: { info: null, status: null } });
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [message]);
+  }, [message, isOnline]);
 
   return (
     <>

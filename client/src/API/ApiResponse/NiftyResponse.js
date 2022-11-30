@@ -5,29 +5,28 @@ import { useStateContext } from "../../Contexts/ContextProvider";
 const NiftyResponse = () => {
   //get data variable from contextprovider
 
-  const { NiftyData, setNiftyData ,setNiftyDaydata,setNiftyTimestamp} = useStateContext();
+  const { NiftyData, setNiftyData, setNiftyDaydata, setNiftyTimestamp } =
+    useStateContext();
 
   //fetch,process and stored data
 
   const getNiftyChain = async () => {
     try {
-      const response = await fetch(
-       process.env.REACT_APP_NIFTY_DATA
-      );
+      const response = await fetch(process.env.REACT_APP_NIFTY_DATA);
 
       const responseJSON = await response.json();
-      setNiftyDaydata( responseJSON)
+      setNiftyDaydata(responseJSON);
       const daydata = responseJSON[0].datedata;
       const nifty = responseJSON[0].datedata[daydata.length - 1].data;
-      
-      setNiftyTimestamp(responseJSON[0]?.datedata[daydata.length - 1]?.timestamp)
+
+      setNiftyTimestamp(
+        responseJSON[0]?.datedata[daydata.length - 1]?.timestamp
+      );
 
       //assign value to niftydata and store reponse in local storage for future need
 
-      nifty.length === 42 && setNiftyData(nifty);
-      nifty.length === 42 &&
-        localStorage.setItem("prevNiftyRes", JSON.stringify(nifty));
-
+      setNiftyData(nifty);
+      localStorage.setItem("prevNiftyRes", JSON.stringify(nifty));
 
       return NiftyData;
     } catch (error) {

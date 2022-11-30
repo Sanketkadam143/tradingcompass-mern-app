@@ -77,6 +77,7 @@ const Position = () => {
   const { user } = useStateContext();
   const [selectedTab, setSelectedTab] = useState("POSITIONS");
   const [pos, setPos] = useState(false);
+  const [isExpiry, setIsExpiry] = useState(false);
 
   const changeTab = (e) => {
     setSelectedTab(e.label);
@@ -88,7 +89,6 @@ const Position = () => {
   };
 
   const handleScroll = () => {
-    console.log("sa");
     if (ref.current.scrollTop > 50) {
       if (!pos) setPos(true);
     } else {
@@ -115,7 +115,6 @@ const Position = () => {
     }
   });
   const expiryDate = niftyDaydata[0]?.expiryDate;
-  const isExpiry = expiryDate?.slice(0, 2) === new Date().toJSON().slice(8, 10);
 
   const stockBook = orderBook.filter(
     (x) => x?.symbol !== "NIFTY" && x?.symbol !== "BANKNIFTY"
@@ -127,6 +126,12 @@ const Position = () => {
 
   useEffect(() => {
     user && dispatch(getOrders());
+    setIsExpiry(
+      niftyDaydata.length === 0
+        ? false
+        : niftyDaydata[0]?.expiryDate?.slice(0, 2) ===
+            niftyDaydata[0]?._id?.slice(8, 10)
+    );
     // eslint-disable-next-line
   }, []);
 

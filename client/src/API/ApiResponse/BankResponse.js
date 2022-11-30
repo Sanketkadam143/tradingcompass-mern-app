@@ -2,29 +2,28 @@ import React from "react";
 import { useEffect } from "react";
 import { useStateContext } from "../../Contexts/ContextProvider";
 
-
 const BankResponse = () => {
   //get data variable from contextprovider
-  const { BankData, setBankData,setBankDaydata ,setBankTimestamp} = useStateContext();
+  const { BankData, setBankData, setBankDaydata, setBankTimestamp } =
+    useStateContext();
 
   //fetch,process and stored data
   const getBankChain = async () => {
     try {
-      const response = await fetch(
-        process.env.REACT_APP_BANKNIFTY_DATA
+      const response = await fetch(process.env.REACT_APP_BANKNIFTY_DATA);
+
+      const responseJSON = await response.json();
+      setBankDaydata(responseJSON);
+      const daydata = responseJSON[0].datedata;
+      const bank = responseJSON[0].datedata[daydata.length - 1].data;
+
+      setBankTimestamp(
+        responseJSON[0]?.datedata[daydata.length - 1]?.timestamp
       );
-      
-        const responseJSON = await response.json();
-        setBankDaydata(responseJSON);
-        const daydata = responseJSON[0].datedata;
-        const bank = responseJSON[0].datedata[daydata.length - 1].data;
-    
-        setBankTimestamp(responseJSON[0]?.datedata[daydata.length - 1]?.timestamp)
       //assign value to bankdata and store reponse in local storage for future need
-   
-      bank.length === 42 && setBankData(bank);
-      bank.length === 42 &&
-        localStorage.setItem("prevBankRes", JSON.stringify(bank));
+
+      setBankData(bank);
+      localStorage.setItem("prevBankRes", JSON.stringify(bank));
 
       return BankData;
     } catch (error) {
