@@ -94,7 +94,7 @@ const useStyles = makeStyles((theme) => {
 
 const Navbar = () => {
   //imported and set ismatch value on breakpoints
-  const { LivePrice, isMatch, setisMatch, user, setUser } = useStateContext();
+  const {isMatch, setisMatch, user, setUser ,indexTimestamp} = useStateContext();
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -173,7 +173,7 @@ const Navbar = () => {
                     <p className={classes.update}>
                       Last Updated on
                       <br />
-                      {LivePrice[0]?._id}
+                      {indexTimestamp}
                     </p>
                   </div>
                 ) : (
@@ -255,7 +255,7 @@ const Navbar = () => {
                   <p className={classes.update}>
                     Last Updated on
                     <br />
-                    {LivePrice[0]?._id}
+                    {indexTimestamp}
                   </p>
                 </div>
               )}

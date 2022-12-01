@@ -15,9 +15,10 @@ const StockResponse = () => {
         process.env.REACT_APP_STOCKS_DATA
       );
       const responseJSON = await response.json();
-      const data = responseJSON[0].data[0];
+      const data = responseJSON[0]?.data[0];
+      const time= new Date(responseJSON[0]._id);
       setMarketStatus((responseJSON[0].marketStatus));
-      setStockTimestamp(responseJSON[0]._id);
+      setStockTimestamp(time.toLocaleString());
       //assign value to stockdata and store reponse in local storage for future need
       
       data.length === 51 && setStockData(data);

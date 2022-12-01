@@ -10,8 +10,10 @@ import { Tabs, Tab } from "@tarragon/swipeable-tabs";
 const useStyles = makeStyles((theme) => {
   return {
     niftypageDiv: {
-      marginBottom: "5em",
+      marginBottom: "3.5em",
       marginTop:"-2em",
+     
+
       // display: "flex",
       // flexDirection: "column",
       // alignItems: "center",
@@ -61,7 +63,7 @@ const IndexOI = () => {
         }}
       >
         <Tab label="NIFTY OI" key={0}>
-          <div style={{height:"60vh"}}>
+          <div style={{height:"63.5vh"}}>
             <Paper elevation={3} className={classes.paperDiv}>
               <TotalOIChange indices={NiftyData} />
             </Paper>
@@ -74,7 +76,7 @@ const IndexOI = () => {
           </div>
         </Tab>
         <Tab label="BANKNIFTY OI" key={1}>
-          <div style={{height:"60vh"}}>
+          <div style={{height:"63.5vh"}}>
             <Paper elevation={3} className={classes.paperDiv}>
               <TotalOIChange indices={BankData} />
             </Paper>

@@ -29,12 +29,15 @@ export default function PopupOrder({ name, niftyData, bankData, orderType }) {
   const dispatch = useDispatch();
   const message = useSelector((state) => state.auth.message?.info);
   const classes = useStyles();
-  const { marketStatus, niftyTimestamp, bankTimestamp,niftyDaydata } = useStateContext();
+  const { marketStatus, niftyTimestamp, bankTimestamp, niftyDaydata } =
+    useStateContext();
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [pos, setPos] = useState(1);
   const [cepePos, setCepePos] = useState(3);
   const [data, setData] = useState(niftyData);
-  const [selectedStrike, setSelectedStrike] = useState(niftyData[20]?.stp);
+  const [selectedStrike, setSelectedStrike] = useState(
+    niftyData[niftyData.length / 2]?.stp
+  );
   const [lots, setLots] = useState(0);
   const [isclick, setIsclick] = useState(false);
 
@@ -47,7 +50,7 @@ export default function PopupOrder({ name, niftyData, bankData, orderType }) {
     entryTime: "",
     orderType: "",
     margin: "",
-    expiryDate:"",
+    expiryDate: "",
   });
 
   const [isnifty, setIsnifty] = useState(true);
@@ -65,8 +68,8 @@ export default function PopupOrder({ name, niftyData, bankData, orderType }) {
     setPos(event.target.value);
 
     isnifty
-      ? setSelectedStrike(bankData[20]?.stp)
-      : setSelectedStrike(niftyData[20]?.stp);
+      ? setSelectedStrike(bankData[bankData.length / 2]?.stp)
+      : setSelectedStrike(niftyData[niftyData.length / 2]?.stp);
 
     isnifty ? setData(bankData) : setData(niftyData);
 
@@ -122,7 +125,7 @@ export default function PopupOrder({ name, niftyData, bankData, orderType }) {
 
   useEffect(() => {
     setOrderDetails({
-      symbol : isnifty ? "NIFTY" : "BANKNIFTY",
+      symbol: isnifty ? "NIFTY" : "BANKNIFTY",
       stp: selectedStrike,
       optionType: cepePos === 3 ? "CE" : "PE",
       buyPrice: currentPrice,
@@ -130,7 +133,7 @@ export default function PopupOrder({ name, niftyData, bankData, orderType }) {
       entryTime: isnifty ? niftyTimestamp : bankTimestamp,
       orderType: orderType,
       margin: requiredMargin,
-      expiryDate:niftyDaydata[0]?.expiryDate,
+      expiryDate: niftyDaydata[0]?.expiryDate,
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
@@ -204,9 +207,9 @@ export default function PopupOrder({ name, niftyData, bankData, orderType }) {
               onChange={handleChange2}
               MenuProps={{
                 style: {
-                   maxHeight: 275,
-                      },
-                }}
+                  maxHeight: 275,
+                },
+              }}
             >
               {data?.map((x) => (
                 <MenuItem key={x?.stp} value={x?.stp}>
@@ -276,7 +279,7 @@ export default function PopupOrder({ name, niftyData, bankData, orderType }) {
             disableElevation
             onClick={order}
           >
-            {isclick ? <CircularProgress size={24}/> : "Click to Place Order"}
+            {isclick ? <CircularProgress size={24} /> : "Click to Place Order"}
           </Button>
         </div>
       </Popover>
