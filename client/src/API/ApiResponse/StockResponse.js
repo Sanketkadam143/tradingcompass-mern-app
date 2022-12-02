@@ -16,9 +16,8 @@ const StockResponse = () => {
       );
       const responseJSON = await response.json();
       const data = responseJSON[0]?.data[0];
-      const time= new Date(responseJSON[0]._id);
       setMarketStatus((responseJSON[0].marketStatus));
-      setStockTimestamp(time.toLocaleString());
+      setStockTimestamp(responseJSON[0]?.timestamp);
       //assign value to stockdata and store reponse in local storage for future need
       
       data.length === 51 && setStockData(data);

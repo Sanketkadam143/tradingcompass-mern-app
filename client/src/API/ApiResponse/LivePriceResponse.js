@@ -13,9 +13,8 @@ const LivePriceResponse = () => {
         process.env.REACT_APP_LIVEPRICE_DATA
       );
       const responseJSON = await response.json();
-      const time= new Date(responseJSON[0]?._id);
-      const timestamp=time.toLocaleString("IST",{  month:"short",day:"2-digit" })+" "+time.toLocaleTimeString();
-      setIndexTimestamp(timestamp);
+      setIndexTimestamp(responseJSON[0]?.timestamp);
+     
       //assign value to liveprice and store response in local storage for future need
 
       responseJSON[0].data[0].length === 71 && setLivePrice(responseJSON);

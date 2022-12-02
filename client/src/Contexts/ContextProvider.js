@@ -29,14 +29,8 @@ export const ContextProvider = ({ children }) => {
   const [niftyTimestamp, setNiftyTimestamp] = useState(null);
   const [bankTimestamp, setBankTimestamp] = useState(null);
   const [stockTimestamp, setStockTimestamp] = useState(null);
-
-  const timestamp = new Date(
-    JSON.parse(localStorage.getItem("prevLiveRes"))[0]._id
-  );
   const [indexTimestamp, setIndexTimestamp] = useState(
-    timestamp.toLocaleString("IST", { month: "short", day: "2-digit" }) +
-      " " +
-      timestamp.toLocaleTimeString()
+    JSON.parse(localStorage.getItem("prevLiveRes"))[0]?.timestamp
   );
 
   return (
