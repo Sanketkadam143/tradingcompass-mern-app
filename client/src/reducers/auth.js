@@ -1,9 +1,11 @@
 import { AUTH, LOGOUT, CLIENT_MSG } from "../constants/actionTypes";
+import { socket } from "../API";
 
 const authReducer = (state = { authData: null, message: null }, action) => {
   switch (action.type) {
     case AUTH:
       localStorage.setItem("profile", JSON.stringify({ ...action?.data }));
+      socket.emit("login",action?.data?.token);
       return { ...state, authData: action?.data };
 
     case LOGOUT:

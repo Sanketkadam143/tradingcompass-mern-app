@@ -92,17 +92,17 @@ const SecNav = () => {
                   </Typography>
 
                   <Typography color={"black"}>
-                    {LivePrice[0]?.data[0][index.id]?.last}&nbsp;
+                    {LivePrice[0]?.indexdata[index.id]?.last}&nbsp;
                     <span
                       className={classes.pChange}
                       style={{
                         color:
-                          LivePrice[0]?.data[0][index.id]?.percentChange < 0
+                          LivePrice[0]?.indexdata[index.id]?.percentChange < 0
                             ? "#a84032"
                             : "#32a852",
                       }}
                     >
-                      {LivePrice[0]?.data[0][index.id]?.percentChange}%
+                      {LivePrice[0]?.indexdata[index.id]?.percentChange}%
                     </span>
                   </Typography>
                 </div>

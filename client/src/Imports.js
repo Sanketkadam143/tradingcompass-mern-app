@@ -5,15 +5,12 @@ import { useSnackbar } from "notistack";
 import Navbar from "./components/Navbar/Navbar";
 import SecNav from "./components/Navbar/SecNav";
 import BottomNav from "./components/Navbar/BottomNav";
-import NiftyResponse from "./API/ApiResponse/NiftyResponse";
-import BankResponse from "./API/ApiResponse/BankResponse";
-import LivePriceResponse from "./API/ApiResponse/LivePriceResponse";
-import StockResponse from "./API/ApiResponse/StockResponse";
 import { useStateContext } from "./Contexts/ContextProvider";
 import useNetworkStatus from "./Contexts/Networkstatus";
 import Offlinepage from "./Pages/Offlinepage";
 import { CLIENT_MSG } from "./constants/actionTypes";
 import CircularProgress from "@mui/material/CircularProgress";
+import useSocketConnection from "./API/socket";
 
 const Selecttime = lazy(() => import("./components/TimeperiodOI/Selecttime"));
 const Auth = lazy(() => import("./components/Auth/Auth"));
@@ -30,6 +27,7 @@ const Imports = () => {
   const dispatch = useDispatch();
   const { user } = useStateContext();
   const { isOnline } = useNetworkStatus();
+  const socket = useSocketConnection();
   const message = useSelector((state) => state.auth.message?.info);
   const status = useSelector((state) => state.auth.message?.status);
   const { enqueueSnackbar } = useSnackbar();
@@ -54,7 +52,7 @@ const Imports = () => {
     dispatch({ type: CLIENT_MSG, message: { info: null, status: null } });
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [message, isOnline]);
+  }, [message, isOnline, socket]);
 
   return (
     <>
@@ -64,10 +62,6 @@ const Imports = () => {
       <div className="App" style={{ marginTop: "10em" }}>
         {isOnline ? (
           <>
-            <NiftyResponse />
-            <BankResponse />
-            <LivePriceResponse />
-            <StockResponse />
             <Suspense
               fallback={
                 <div

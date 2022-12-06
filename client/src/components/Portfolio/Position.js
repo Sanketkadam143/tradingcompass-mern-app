@@ -1,5 +1,5 @@
 import { React, useState, useEffect, useRef } from "react";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector} from "react-redux";
 import { Paper, Divider, Typography, IconButton } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import PopupOrder from "./PopupOrder";
@@ -10,7 +10,6 @@ import AlertTitle from "@mui/material/AlertTitle";
 import Calculateprofit from "./Calculateprofit";
 import BuyStocks from "./BuyStocks";
 import { Tabs, Tab } from "@tarragon/swipeable-tabs";
-import { getOrders } from "../../actions/order";
 import Fab from "@mui/material/Fab";
 import NavigationIcon from "@mui/icons-material/Navigation";
 
@@ -73,8 +72,6 @@ const useStyles = makeStyles((theme) => {
 const Position = () => {
   const classes = useStyles();
   const ref = useRef();
-  const dispatch = useDispatch();
-  const { user } = useStateContext();
   const [selectedTab, setSelectedTab] = useState("POSITIONS");
   const [pos, setPos] = useState(false);
   const [isExpiry, setIsExpiry] = useState(false);
@@ -125,7 +122,6 @@ const Position = () => {
   );
 
   useEffect(() => {
-    user && dispatch(getOrders());
     setIsExpiry(
       niftyDaydata.length === 0
         ? false

@@ -30,7 +30,7 @@ export const ContextProvider = ({ children }) => {
   const [bankTimestamp, setBankTimestamp] = useState(null);
   const [stockTimestamp, setStockTimestamp] = useState(null);
   const [indexTimestamp, setIndexTimestamp] = useState(
-    JSON.parse(localStorage.getItem("prevLiveRes"))[0]?.timestamp
+    JSON.parse(localStorage.getItem("prevLiveRes"))?.[0]?.timestamp||null
   );
 
   return (
