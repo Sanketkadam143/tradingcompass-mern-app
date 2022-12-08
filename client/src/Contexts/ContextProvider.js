@@ -7,18 +7,10 @@ const StateContext = createContext();
 export const ContextProvider = ({ children }) => {
   const theme = useTheme();
 
-  const [NiftyData, setNiftyData] = useState(
-    JSON.parse(localStorage.getItem("prevNiftyRes")) || []
-  );
-  const [BankData, setBankData] = useState(
-    JSON.parse(localStorage.getItem("prevBankRes")) || []
-  );
-  const [LivePrice, setLivePrice] = useState(
-    JSON.parse(localStorage.getItem("prevLiveRes")) || []
-  );
-  const [StockData, setStockData] = useState(
-    JSON.parse(localStorage.getItem("prevStockRes")) || []
-  );
+  const [NiftyData, setNiftyData] = useState([]);
+  const [BankData, setBankData] = useState([]);
+  const [LivePrice, setLivePrice] = useState([]);
+  const [StockData, setStockData] = useState([]);
   const [marketStatus, setMarketStatus] = useState([]);
   const [isMatch, setisMatch] = useState(
     useMediaQuery(theme.breakpoints.down("md"))
@@ -30,8 +22,10 @@ export const ContextProvider = ({ children }) => {
   const [bankTimestamp, setBankTimestamp] = useState(null);
   const [stockTimestamp, setStockTimestamp] = useState(null);
   const [indexTimestamp, setIndexTimestamp] = useState(
-    JSON.parse(localStorage.getItem("prevLiveRes"))?.[0]?.timestamp||null
+    JSON.parse(localStorage.getItem("prevLiveRes"))?.[0]?.timestamp || null
   );
+  const [niftyPrice, setNiftyPrice] = useState(0);
+  const [bankPrice, setBankPrice] = useState(0);
 
   return (
     <StateContext.Provider
@@ -62,6 +56,10 @@ export const ContextProvider = ({ children }) => {
         setStockTimestamp,
         indexTimestamp,
         setIndexTimestamp,
+        niftyPrice,
+        setNiftyPrice,
+        bankPrice,
+        setBankPrice,
       }}
     >
       {children}

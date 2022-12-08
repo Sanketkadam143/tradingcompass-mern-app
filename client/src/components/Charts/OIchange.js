@@ -2,16 +2,26 @@ import React from "react";
 import { Bar } from "react-chartjs-2";
 import { useStateContext } from "../../Contexts/ContextProvider";
 import { Chart, registerables } from "chart.js";
+import annotationPlugin from "chartjs-plugin-annotation";
+
+Chart.register(annotationPlugin);
 
 Chart.register(...registerables);
 
 const OIchange = ({ indices }) => {
   //reveived pass on data  as indices
-
-  const { isMatch } = useStateContext();
-
+  const { isMatch,niftyPrice,bankPrice } = useStateContext();
   //received media size as is match from use state
-
+var ATM;
+const bankATM=bankPrice-(bankPrice%100);
+const niftyATM=niftyPrice-(niftyPrice%50);
+if(indices.length!==0){
+  if(indices.findIndex((x)=>x.stp===niftyATM)!==-1){
+    ATM=indices.findIndex((x)=>x.stp===niftyATM);
+  }else{
+    ATM=indices.findIndex((x)=>x.stp===bankATM);
+  }
+}
   const data = {
     // mapping label to stp
     labels: indices?.map((x) => x?.stp),
@@ -30,8 +40,8 @@ const OIchange = ({ indices }) => {
         label: "CE OI Change",
         //mapping ce oi change
         data: indices?.map((x) => x?.CE?.OIchg),
-        backgroundColor:(color) => {
-          let colors = color.raw > 0 ? "#e76d67" :"#40b0b2" ;
+        backgroundColor: (color) => {
+          let colors = color.raw > 0 ? "#e76d67" : "#40b0b2";
           return colors;
         },
         borderWidth: 1,
@@ -65,6 +75,26 @@ const OIchange = ({ indices }) => {
     legend: {
       labels: {
         fontSize: 26,
+      },
+    },
+    plugins: {
+      autocolors: false,
+      annotation: {
+        annotations: {
+          line1: {
+            type: "line",
+            scaleID: "x",
+            borderWidth: 2,
+            borderColor: "grey",
+            value:ATM,
+            borderDash:[5],
+            label: {
+              content: "ATM",
+              display: true,
+              position:"start",
+            },
+          },
+        },
       },
     },
   };

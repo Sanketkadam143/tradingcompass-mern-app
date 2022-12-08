@@ -17,6 +17,8 @@ const useSocketConnection = () => {
     setStockData,
     setMarketStatus,
     setStockTimestamp,
+    setNiftyPrice,
+    setBankPrice,
   } = useStateContext();
 
   const dispatch = useDispatch();
@@ -33,6 +35,7 @@ const useSocketConnection = () => {
       const nifty = res[0].datedata[daydata.length - 1].data;
       setNiftyTimestamp(res[0]?.datedata[daydata.length - 1]?.timestamp);
       setNiftyData(nifty);
+      setNiftyPrice(res[0].datedata[daydata.length - 1].indexLTP);
       localStorage.setItem("prevNiftyRes", JSON.stringify(nifty));
     });
 
@@ -42,6 +45,7 @@ const useSocketConnection = () => {
       const bank = res[0].datedata[daydata.length - 1].data;
       setBankTimestamp(res[0]?.datedata[daydata.length - 1]?.timestamp);
       setBankData(bank);
+      setBankPrice(res[0].datedata[daydata.length - 1].indexLTP);
       localStorage.setItem("prevBankRes", JSON.stringify(bank));
     });
 
@@ -62,12 +66,14 @@ const useSocketConnection = () => {
     socket.on("updateNifty", (res) => {
       setNiftyData(res.data);
       setNiftyTimestamp(res.timestamp);
+      setNiftyPrice(res.indexLTP);
       setNiftyDaydata((old) => update(old, res));
     });
 
     socket.on("updateBank", (res) => {
       setBankData(res.data);
       setBankTimestamp(res.timestamp);
+      setBankPrice(res.indexLTP);
       setBankDaydata((old) => update(old, res));
     });
 

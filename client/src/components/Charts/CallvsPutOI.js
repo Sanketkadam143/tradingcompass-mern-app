@@ -2,8 +2,8 @@ import React from "react";
 import { useStateContext } from "../../Contexts/ContextProvider";
 import { Line } from "react-chartjs-2";
 import { Chart, registerables } from "chart.js";
-
 Chart.register(...registerables);
+
 
 const  CallvsPutOI=({indexData,name})=> {
 
@@ -15,6 +15,7 @@ const  CallvsPutOI=({indexData,name})=> {
       let chopptime = indexData[i]?.timestamp.slice(12, 17);
       timearr.push(chopptime);
     }
+
 
    
 const data = {
@@ -49,7 +50,9 @@ const data = {
     indexAxis: "x",
     interaction: {
       mode: "index",
+      intersect: false,
     },
+    responsive: true,
 
     maintainAspectRation: false,
     scales: {
@@ -72,6 +75,16 @@ const data = {
         fontSize: 26,
       },
     },
+    plugins: {
+      tooltip: {
+        mode: 'index',
+        intersect: false
+     },
+     hover: {
+        mode: 'index',
+        intersect: false
+     },
+    }
   };
 
   return (
@@ -80,7 +93,25 @@ const data = {
       <Line data={data} 
       width={isMatch? 380:800}
       height={isMatch? 200:300}
-      options={options}/>
+      options={options}
+      plugins={ [{
+        afterDraw: chart => {
+            if (chart.tooltip?._active?.length) {
+                let x = chart.tooltip._active[0].element.x;
+                let yAxis = chart.scales.y;
+                let ctx = chart.ctx;
+                ctx.save();
+                ctx.beginPath();
+                ctx.setLineDash([5,7]);
+                ctx.moveTo(x, yAxis.top);
+                ctx.lineTo(x, yAxis.bottom);
+                ctx.lineWidth = 2;
+                ctx.strokeStyle = 'grey';
+                ctx.stroke();
+                ctx.restore();
+            }
+        }
+    }]}/>
     </div>
   );
 }
