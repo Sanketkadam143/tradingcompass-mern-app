@@ -10,40 +10,48 @@ Chart.register(...registerables);
 
 const OIchange = ({ indices }) => {
   //reveived pass on data  as indices
-  const { isMatch,niftyPrice,bankPrice } = useStateContext();
+  const { isMatch, niftyPrice, bankPrice } = useStateContext();
   //received media size as is match from use state
-var ATM;
-const bankATM=bankPrice-(bankPrice%100);
-const niftyATM=niftyPrice-(niftyPrice%50);
-if(indices.length!==0){
-  if(indices.findIndex((x)=>x.stp===niftyATM)!==-1){
-    ATM=indices.findIndex((x)=>x.stp===niftyATM);
-  }else{
-    ATM=indices.findIndex((x)=>x.stp===bankATM);
+  var ATM;
+  const bankATM = bankPrice - (bankPrice % 100);
+  const niftyATM = niftyPrice - (niftyPrice % 50);
+  if (indices.length !== 0) {
+    if (indices.findIndex((x) => x.stp === niftyATM) !== -1) {
+      ATM = indices.findIndex((x) => x.stp === niftyATM);
+    } else {
+      ATM = indices.findIndex((x) => x.stp === bankATM);
+    }
   }
-}
   const data = {
     // mapping label to stp
     labels: indices?.map((x) => x?.stp),
     datasets: [
       {
-        label: "PE OI Change",
+        label: "Long Buildup",
         //mapping pe oi change
-        data: indices?.map((x) => x?.PE?.OIchg),
-        backgroundColor: (color) => {
-          let colors = color.raw > 0 ? "#40b0b2" : "#e76d67";
-          return colors;
-        },
+        data: indices?.map((x) => (x?.PE?.OIchg > 0 ? x?.PE?.OIchg : 0)),
+        backgroundColor: "#40b0b2",
         borderWidth: 1,
       },
       {
-        label: "CE OI Change",
+        label: "Short Buildup",
         //mapping ce oi change
-        data: indices?.map((x) => x?.CE?.OIchg),
-        backgroundColor: (color) => {
-          let colors = color.raw > 0 ? "#e76d67" : "#40b0b2";
-          return colors;
-        },
+        data: indices?.map((x) => (x?.CE?.OIchg > 0 ? x?.CE?.OIchg : 0)),
+        backgroundColor: "#e76d67",
+        borderWidth: 1,
+      },
+      {
+        label: "Long unwinding",
+        //mapping pe oi change
+        data: indices?.map((x) => (x?.PE?.OIchg < 0 ? x?.PE?.OIchg : 0)),
+        backgroundColor: "#e76d67",
+        borderWidth: 1,
+      },
+      {
+        label: "Short Covering",
+        //mapping ce oi change
+        data: indices?.map((x) => (x?.CE?.OIchg < 0 ? x?.CE?.OIchg : 0)),
+        backgroundColor: "#40b0b2",
         borderWidth: 1,
       },
     ],
@@ -72,26 +80,21 @@ if(indices.length!==0){
       },
     },
 
-    legend: {
-      labels: {
-        fontSize: 26,
-      },
-    },
     plugins: {
       autocolors: false,
       annotation: {
         annotations: {
           line1: {
             type: "line",
-            scaleID: "x",
+            scaleID: isMatch ? "y" : "x",
             borderWidth: 2,
             borderColor: "grey",
-            value:ATM,
-            borderDash:[5],
+            value: ATM,
+            borderDash: [5],
             label: {
               content: "ATM",
               display: true,
-              position:"start",
+              position: isMatch ? "end" : "start",
             },
           },
         },
