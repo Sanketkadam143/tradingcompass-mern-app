@@ -61,11 +61,11 @@ const SectorialFlow = () => {
       },
     },
 
-    legend: {
-      labels: {
-        fontSize: 26,
+    plugins:{
+      legend:{
+        display:false
       },
-    },
+    }
   };
   //specified height and width for 2 media screen
   return (
