@@ -66,6 +66,7 @@ const Calculateprofit = (orderDetails) => {
 
   }
 
+  orderDetails?.orderType === "optionSelling" && (profit = -profit);
 
 
   return { latestPrice, profit };

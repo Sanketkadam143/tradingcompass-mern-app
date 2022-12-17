@@ -113,8 +113,6 @@ const Showorders = ({ orderDetails, index, type }) => {
     setIsclick(false);
   };
 
-  orderDetails.orderType === "optionSelling" && (profit = -profit);
-
   const brokerage =
     parseInt(orderDetails.lots) *
     (orderDetails.orderType === "stockBuying" ? 5 : 50);

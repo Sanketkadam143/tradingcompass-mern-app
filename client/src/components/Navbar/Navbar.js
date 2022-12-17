@@ -124,7 +124,7 @@ const Navbar = () => {
     if (token) {
       const decodedToken = decode(token);
 
-      if (decodedToken.exp * 1000 < new Date().getTime()) logout();
+      if (decodedToken.exp * 1000 < new Date().getTime()) logout("sessionExpire");
     }
 
     //JWT
@@ -133,12 +133,12 @@ const Navbar = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [location]);
 
-  const logout = () => {
+  const logout = (variant) => {
     dispatch({ type: LOGOUT });
     dispatch({
       type: CLIENT_MSG,
       message: {
-        info: "You are Successfully Logged out",
+        info: variant==="sessionExpire"? "Session Expire Please Login Again":"You are Successfully Logged out",
         status: 200,
       },
     });
