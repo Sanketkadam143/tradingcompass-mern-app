@@ -7,18 +7,10 @@ const StateContext = createContext();
 export const ContextProvider = ({ children }) => {
   const theme = useTheme();
 
-  const [NiftyData, setNiftyData] = useState(
-    JSON.parse(localStorage.getItem("prevNiftyRes")) || []
-  );
-  const [BankData, setBankData] = useState(
-    JSON.parse(localStorage.getItem("prevBankRes")) || []
-  );
-  const [LivePrice, setLivePrice] = useState(
-    JSON.parse(localStorage.getItem("prevLiveRes")) || []
-  );
-  const [StockData, setStockData] = useState(
-    JSON.parse(localStorage.getItem("prevStockRes")) || []
-  );
+  const [NiftyData, setNiftyData] = useState([]);
+  const [BankData, setBankData] = useState([]);
+  const [LivePrice, setLivePrice] = useState([]);
+  const [StockData, setStockData] = useState([]);
   const [marketStatus, setMarketStatus] = useState([]);
   const [isMatch, setisMatch] = useState(
     useMediaQuery(theme.breakpoints.down("md"))
