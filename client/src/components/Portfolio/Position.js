@@ -1,5 +1,5 @@
 import { React, useState, useEffect, useRef } from "react";
-import { useSelector} from "react-redux";
+import { useSelector } from "react-redux";
 import { Paper, Divider, Typography, IconButton } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import PopupOrder from "./PopupOrder";
@@ -121,6 +121,9 @@ const Position = () => {
     (x) => x?.symbol === "NIFTY" || x?.symbol === "BANKNIFTY"
   );
 
+  const formatNumber = (num) =>
+    num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+
   useEffect(() => {
     setIsExpiry(
       niftyDaydata.length === 0
@@ -163,7 +166,9 @@ const Position = () => {
                     <div>
                       <div>Invested</div>
                       <div>
-                        <Typography variant="h5">{invested}</Typography>
+                        <Typography variant="h5">
+                          {formatNumber(invested)}
+                        </Typography>
                       </div>
                     </div>
                     <div>
@@ -177,7 +182,7 @@ const Position = () => {
                         }}
                       >
                         <Typography variant="h5">
-                          {invested + investedProfit}
+                          {formatNumber(invested + investedProfit)}
                         </Typography>
                         <Typography variant="subtitle2">
                           {invested === 0
@@ -199,7 +204,7 @@ const Position = () => {
                       }}
                     >
                       {totalProfit > 0 && "+"}
-                      {totalProfit}
+                      {formatNumber(totalProfit)}
                     </span>
                   </div>
                 </Paper>
@@ -221,7 +226,9 @@ const Position = () => {
                     <div>
                       <div>Invested</div>
                       <div>
-                        <Typography variant="h5">{invested}</Typography>
+                        <Typography variant="h5">
+                          {formatNumber(invested)}
+                        </Typography>
                       </div>
                     </div>
                     <div>
@@ -235,7 +242,7 @@ const Position = () => {
                         }}
                       >
                         <Typography variant="h5">
-                          {invested + investedProfit}
+                          {formatNumber(invested + investedProfit)}
                         </Typography>
                         <Typography variant="subtitle2">
                           {invested === 0
@@ -257,7 +264,7 @@ const Position = () => {
                       }}
                     >
                       {totalProfit > 0 && "+"}
-                      {totalProfit}
+                      {formatNumber(totalProfit)}
                     </span>
                   </div>
                 </Paper>

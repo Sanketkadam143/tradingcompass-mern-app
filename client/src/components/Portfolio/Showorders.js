@@ -188,6 +188,8 @@ const Showorders = ({ orderDetails, index, type }) => {
           : "Option Selling")
       : orderDetails.symbol;
 
+  const formatNumber = (num) =>
+    num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   return (
     <div className={classes.paperDiv}>
       {isSold && (
@@ -210,7 +212,7 @@ const Showorders = ({ orderDetails, index, type }) => {
             {orderDetails.orderType === "optionSelling"
               ? "Sell Price"
               : "Buy Price"}{" "}
-            {orderDetails.buyPrice}
+            {formatNumber(orderDetails.buyPrice)}
           </div>
 
           <div>
@@ -232,7 +234,7 @@ const Showorders = ({ orderDetails, index, type }) => {
             </div>
           )}
 
-          <div>Current Price {latestPrice}</div>
+          <div>Current Price {formatNumber(latestPrice)}</div>
           <div>
             P&L{" "}
             <span
@@ -241,7 +243,7 @@ const Showorders = ({ orderDetails, index, type }) => {
               }}
             >
               {profit > 0 && "+"}
-              {!isSold ? profit : profit}{" "}
+              {formatNumber(profit)}{" "}
               {((profit / orderDetails.margin) * 100).toFixed(2)} %
             </span>
           </div>

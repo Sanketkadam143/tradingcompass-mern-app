@@ -34,12 +34,12 @@ const Calculateprofit = (orderDetails) => {
         ? (
             (orderDetails?.sellPrice - orderDetails?.buyPrice) *
             (orderDetails?.symbol === "NIFTY" ? 50 : 25) *
-            orderDetails?.lots
-          ).toFixed(2) - brokerage
+            (orderDetails?.lots)- brokerage
+          ).toFixed(2) 
         : (
             (latestPrice - orderDetails?.buyPrice) *
             (orderDetails?.symbol === "NIFTY" ? 50 : 25) *
-            orderDetails?.lots
+            (orderDetails?.lots)
           ).toFixed(2);
   }
  
@@ -57,11 +57,11 @@ const Calculateprofit = (orderDetails) => {
       orderDetails?.sellPrice !== undefined
         ? (
             (orderDetails?.sellPrice - orderDetails?.buyPrice) *
-            orderDetails?.lots
-          ).toFixed(2) - brokerage
+            (orderDetails?.lots)- brokerage
+          ).toFixed(2) 
         : (
             (latestPrice - orderDetails?.buyPrice) *
-            orderDetails?.lots
+           ( orderDetails?.lots)
           ).toFixed(2);
 
   }

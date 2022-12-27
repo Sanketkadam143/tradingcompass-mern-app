@@ -32,7 +32,7 @@ const useSocketConnection = () => {
     socket.on("niftydata", (res) => {
       setNiftyDaydata(res);
       const daydata = res[0].datedata;
-      const nifty = res[0].datedata[daydata.length - 1].data;
+      const nifty = res[0].datedata[daydata.length - 1]?.data;
       setNiftyTimestamp(res[0]?.datedata[daydata.length - 1]?.timestamp);
       setNiftyData(nifty);
       setNiftyPrice(res[0].datedata[daydata.length - 1].indexLTP);
@@ -42,7 +42,7 @@ const useSocketConnection = () => {
     socket.on("bankdata", (res) => {
       setBankDaydata(res);
       const daydata = res[0].datedata;
-      const bank = res[0].datedata[daydata.length - 1].data;
+      const bank = res[0].datedata[daydata.length - 1]?.data;
       setBankTimestamp(res[0]?.datedata[daydata.length - 1]?.timestamp);
       setBankData(bank);
       setBankPrice(res[0].datedata[daydata.length - 1].indexLTP);
