@@ -1,10 +1,8 @@
-import React, { useState } from "react";
+import React, {useState,useMemo} from "react";
 import MultiRangeSlider from "multi-range-slider-react";
 import { useStateContext } from "../../Contexts/ContextProvider";
 import Comparedata from "./Comparedata";
 import { makeStyles } from "@mui/styles";
-
-
 
 const labels = [
   "9:15",
@@ -35,35 +33,35 @@ const labels = [
   "03:30",
 ];
 
-const mobileLabels=["09:15","10:48","12:22","01:57","03:30"];
+const mobileLabels = ["09:15", "10:48", "12:22", "01:57", "03:30"];
 
 const useStyles = makeStyles((theme) => {
   return {
     sliderDiv: {
-  
       marginTop: "-7.9em",
       position: "fixed",
       width: "95%",
       backgroundColor: "#ffff",
       paddingTop: "0em",
-      marginRight:"3%",
-      marginLeft:"3%",
-      zIndex:"1250",
-      
+      marginRight: "3%",
+      marginLeft: "3%",
+      zIndex: "1250",
     },
     grpdiv: {
       marginTop: "15em",
-      width:"100%",
+      width: "100%",
     },
   };
 });
 
 const Selecttime = () => {
   const classes = useStyles();
-  const { niftyDaydata, bankDaydata ,isMatch } = useStateContext();
+  const { niftyDaydata, bankDaydata, isMatch } = useStateContext();
   const [minTimeCaption, set_minTimeCaption] = useState("");
   const [maxTimeCaption, set_maxTimeCaption] = useState("");
   const [initialhand, setInitialhand] = useState(0);
+  const [minTime, setMinTime] = useState("");
+  const [maxTime, setMaxTime] = useState("");
 
   const handleTimeChange = (e) => {
     setInitialhand(e.minValue);
@@ -80,12 +78,14 @@ const Selecttime = () => {
     set_maxTimeCaption(maxH + ":" + maxM);
   };
 
-  let firsttime = minTimeCaption.split(":");
-  let minTime = firsttime[0] + firsttime[1];
-
-  let secondtime = maxTimeCaption.split(":");
-  let maxTime = secondtime[0] + secondtime[1];
-
+  const handleChange = () => {
+      let firsttime = minTimeCaption.split(":");
+      setMinTime (firsttime[0] + firsttime[1]);
+  
+      let secondtime = maxTimeCaption.split(":");
+      setMaxTime(secondtime[0] + secondtime[1]); 
+  };
+  
   var minV = 15;
   var maxV = 30;
   const timeMax = 390;
@@ -97,46 +97,45 @@ const Selecttime = () => {
     maxV = totmin;
     initialhand > maxV && (minV = maxV - 15);
   }
- 
+
+  const comparedData = useMemo(() => (
+    <>
+      <Comparedata
+        minTime={minTime}
+        maxTime={maxTime}
+        indexData={niftyDaydata}
+        name="Nifty50"
+      />
+
+      <Comparedata
+        minTime={minTime}
+        maxTime={maxTime}
+        indexData={bankDaydata}
+        name="Bank Nifty"
+      />
+    </>
+  ), [minTime, maxTime, niftyDaydata, bankDaydata]);
 
   return (
     <div className={classes.grpdiv}>
-     
-        <div className={classes.sliderDiv}>
-          
-            <MultiRangeSlider
-              labels={isMatch ? mobileLabels:labels}
-              min={timeMin}
-              max={timeMax}
-              minValue={minV}
-              maxValue={maxV}
-              step={5}
-              minCaption={minTimeCaption}
-              maxCaption={maxTimeCaption}
-              onInput={handleTimeChange}
-              ruler={false}
-              style={{boxShadow:"none",border:"none"}}
-              barInnerColor="#ffffff"
-              
-            />
-        
-        </div>
-
-        
-          <Comparedata
-            minTime={minTime}
-            maxTime={maxTime}
-            indexData={niftyDaydata}
-            name="Nifty50"
-          />
-          <Comparedata
-            minTime={minTime}
-            maxTime={maxTime}
-            indexData={bankDaydata}
-            name="Bank Nifty"
-          />
-       
-    
+      <div className={classes.sliderDiv}>
+        <MultiRangeSlider
+          labels={isMatch ? mobileLabels : labels}
+          min={timeMin}
+          max={timeMax}
+          minValue={minV}
+          maxValue={maxV}
+          step={15}
+          minCaption={minTimeCaption}
+          maxCaption={maxTimeCaption}
+          onInput={handleTimeChange}
+          onChange={handleChange}
+          ruler={false}
+          style={{ boxShadow: "none", border: "none" }}
+          barInnerColor="#ffffff"
+        />
+      </div>
+      {comparedData}
     </div>
   );
 };

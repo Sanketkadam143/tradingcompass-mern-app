@@ -3,72 +3,79 @@ import { useStateContext } from "../../Contexts/ContextProvider";
 const Calculateprofit = (orderDetails) => {
   const { NiftyData, BankData, StockData } = useStateContext();
 
-  
-  var latestPrice = 0;
-  var profit = 0;
+  // Declare variables that will be used in the function
+  let latestPrice = 0;
+  let profit = 0;
+  let brokerage = 0;
+  let optionType = "";
+  let symbol = "";
+  let lots = 0;
+  let sellPrice = 0;
+  let buyPrice = 0;
+
+  // Check if the order is not a stock buying order
   if (orderDetails.orderType !== "stockBuying") {
-    const brokerage = parseInt(orderDetails.lots) * 50;
-    latestPrice =
-      orderDetails?.symbol === "NIFTY"
-        ? orderDetails?.optionType === "CE"
-          ? NiftyData[
-              NiftyData?.findIndex(
-                (element) => element?.stp === orderDetails?.stp
-              )
-            ]?.CE?.LTP
-          : NiftyData[
-              NiftyData?.findIndex(
-                (element) => element?.stp === orderDetails?.stp
-              )
-            ]?.PE?.LTP
-        : orderDetails?.optionType === "CE"
-        ? BankData[
-            BankData?.findIndex((element) => element?.stp === orderDetails?.stp)
-          ]?.CE?.LTP
-        : BankData[
-            BankData?.findIndex((element) => element?.stp === orderDetails?.stp)
-          ]?.PE?.LTP;
+    // Calculate the brokerage and set the symbol, option type, lots, sell price, and buy price variables
+    brokerage = parseInt(orderDetails.lots) * 50;
+    symbol = orderDetails?.symbol;
+    optionType = orderDetails?.optionType;
+    lots = orderDetails?.lots;
+    sellPrice = orderDetails?.sellPrice;
+    buyPrice = orderDetails?.buyPrice;
 
-    profit =
-      orderDetails?.sellPrice !== undefined
-        ? (
-            (orderDetails?.sellPrice - orderDetails?.buyPrice) *
-            (orderDetails?.symbol === "NIFTY" ? 50 : 25) *
-            (orderDetails?.lots)- brokerage
-          ).toFixed(2) 
-        : (
-            (latestPrice - orderDetails?.buyPrice) *
-            (orderDetails?.symbol === "NIFTY" ? 50 : 25) *
-            (orderDetails?.lots)
-          ).toFixed(2);
+    // Find the latest price based on the symbol and option type
+    if (symbol === "NIFTY") {
+      latestPrice = NiftyData.find(
+        (element) => element?.stp === orderDetails?.stp
+      )?.[optionType]?.LTP;
+    } else {
+      latestPrice = BankData.find(
+        (element) => element?.stp === orderDetails?.stp
+      )?.[optionType]?.LTP;
+    }
+
+    // Calculate the profit
+    if (sellPrice !== undefined) {
+      profit = (
+        (sellPrice - buyPrice) *
+        (symbol === "NIFTY" ? 50 : 25) *
+        lots -
+        brokerage
+      ).toFixed(2);
+    } else {
+      profit = (
+        (latestPrice - buyPrice) *
+        (symbol === "NIFTY" ? 50 : 25) *
+        lots
+      ).toFixed(2);
+    }
   }
- 
+
+  // Check if the order is a stock buying order
   if (orderDetails.orderType === "stockBuying") {
-    const brokerage = parseInt(orderDetails.lots) * 5;
-    
-    latestPrice=StockData[
-      StockData?.findIndex(
-        (element) => element?.symbol === orderDetails?.symbol
-      )
-    ]?.last;
-   
-    
-    profit =
-      orderDetails?.sellPrice !== undefined
-        ? (
-            (orderDetails?.sellPrice - orderDetails?.buyPrice) *
-            (orderDetails?.lots)- brokerage
-          ).toFixed(2) 
-        : (
-            (latestPrice - orderDetails?.buyPrice) *
-           ( orderDetails?.lots)
-          ).toFixed(2);
+    // Calculate the brokerage and set the symbol, lots, sell price, and buy price variables
+    brokerage = parseInt(orderDetails.lots) * 5;
+    symbol = orderDetails?.symbol;
+    lots = orderDetails?.lots;
+    sellPrice = orderDetails?.sellPrice;
+    buyPrice = orderDetails?.buyPrice;
 
+    // Find the latest price based on the symbol
+    latestPrice = StockData.find(
+      (element) => element?.symbol === symbol
+    )?.last;
+
+    // Calculate the profit
+    if (sellPrice !== undefined) {
+      profit = (sellPrice - buyPrice) * lots - brokerage;
+    } else {
+      profit = (latestPrice - buyPrice) * lots;
+    }
   }
 
+  // If the order is an option selling order, make the profit negative
   orderDetails?.orderType === "optionSelling" && (profit = -profit);
-
-
+  
   return { latestPrice, profit };
 };
 
