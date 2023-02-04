@@ -36,7 +36,7 @@ export default function PopupOrder({ name, niftyData, bankData, orderType }) {
   const [cepePos, setCepePos] = useState(3);
   const [data, setData] = useState(niftyData);
   const [selectedStrike, setSelectedStrike] = useState(
-    niftyData[niftyData.length / 2]?.stp
+    niftyData[niftyData?.length / 2]?.stp
   );
   const [lots, setLots] = useState(0);
   const [isclick, setIsclick] = useState(false);
@@ -68,8 +68,8 @@ export default function PopupOrder({ name, niftyData, bankData, orderType }) {
     setPos(event.target.value);
 
     isnifty
-      ? setSelectedStrike(bankData[bankData.length / 2]?.stp)
-      : setSelectedStrike(niftyData[niftyData.length / 2]?.stp);
+      ? setSelectedStrike(bankData[bankData?.length / 2]?.stp)
+      : setSelectedStrike(niftyData[niftyData?.length / 2]?.stp);
 
     isnifty ? setData(bankData) : setData(niftyData);
 
@@ -97,7 +97,7 @@ export default function PopupOrder({ name, niftyData, bankData, orderType }) {
       dispatch({
         type: CLIENT_MSG,
         message: {
-          info: `Market will open on ${marketStatus.tradeDate} 9:15 AM`,
+          info: `Market is closed as of ${marketStatus.tradeDate}`,
           status: 400,
         },
       });

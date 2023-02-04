@@ -73,7 +73,7 @@ export default function BuyStocks({ name, stockData, orderType }) {
       dispatch({
         type: CLIENT_MSG,
         message: {
-          info: `Market will open on ${marketStatus.tradeDate} 9:15 AM`,
+          info: `Market is closed as of ${marketStatus.tradeDate}`,
           status: 400,
         },
       });

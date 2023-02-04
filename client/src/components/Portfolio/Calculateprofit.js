@@ -67,9 +67,9 @@ const Calculateprofit = (orderDetails) => {
 
     // Calculate the profit
     if (sellPrice !== undefined) {
-      profit = (sellPrice - buyPrice) * lots - brokerage;
+      profit =( (sellPrice - buyPrice) * (lots - brokerage)).toFixed(2);
     } else {
-      profit = (latestPrice - buyPrice) * lots;
+      profit = ((latestPrice - buyPrice) * lots).toFixed(2);
     }
   }
 

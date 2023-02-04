@@ -1,8 +1,7 @@
 import {socket} from "./index"
 import { useEffect } from "react";
-import { useDispatch} from "react-redux";
 import { useStateContext } from "../Contexts/ContextProvider";
-import { FETCH_ALL } from "../constants/actionTypes";
+
 
 const useSocketConnection = () => {
   const {
@@ -21,8 +20,6 @@ const useSocketConnection = () => {
     setBankPrice,
   } = useStateContext();
 
-  const dispatch = useDispatch();
- 
   const update = (old, res) => {
     old[0]?.datedata.push(res);
     return old;
@@ -77,9 +74,9 @@ const useSocketConnection = () => {
       setBankDaydata((old) => update(old, res));
     });
 
-    socket.on("updateOrders",(res)=>{
-      dispatch({ type: FETCH_ALL, payload: res });
-    })
+    // socket.on("updateOrders",(res)=>{
+    //   dispatch({ type: FETCH_ALL, payload: res });
+    // })
 
     return () => {
       socket.off("niftydata");
@@ -88,7 +85,7 @@ const useSocketConnection = () => {
       socket.off("stocks");
       socket.off("updateNifty");
       socket.off("updateBank");
-      socket.off("updateOrders");
+     // socket.off("updateOrders");
     };
 
     // eslint-disable-next-line

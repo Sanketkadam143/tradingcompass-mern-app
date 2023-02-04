@@ -13,8 +13,8 @@ const reducer = (order = [], action) => {
       return action.payload.reverse();
 
     case PLACE_ORDER:
-      return order;
-      //return [action.payload, ...order];
+      //return order;
+      return [action.payload, ...order];
 
     case UPDATE: 
       return order.map((details) =>
