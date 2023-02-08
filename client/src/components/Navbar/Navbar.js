@@ -94,7 +94,8 @@ const useStyles = makeStyles((theme) => {
 
 const Navbar = () => {
   //imported and set ismatch value on breakpoints
-  const {isMatch, setisMatch, user, setUser ,indexTimestamp} = useStateContext();
+  const { isMatch, setisMatch, user, setUser, indexTimestamp } =
+    useStateContext();
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -124,7 +125,8 @@ const Navbar = () => {
     if (token) {
       const decodedToken = decode(token);
 
-      if (decodedToken.exp * 1000 < new Date().getTime()) logout("sessionExpire");
+      if (decodedToken.exp * 1000 < new Date().getTime())
+        logout("sessionExpire");
     }
 
     //JWT
@@ -134,14 +136,17 @@ const Navbar = () => {
   }, [location]);
 
   const logout = (variant) => {
-    dispatch({ type: LOGOUT });
     dispatch({
       type: CLIENT_MSG,
       message: {
-        info: variant==="sessionExpire"? "Session Expire Please Login Again":"You are Successfully Logged out",
-        status: 200,
+        info:
+          variant === "sessionExpire"
+            ? "Session Expire Please Login Again"
+            : "You are Successfully Logged out",
+        status: variant === "sessionExpire" ? 400 : 200,
       },
     });
+    dispatch({ type: LOGOUT });
     setUser(null);
     navigate("/auth");
   };
@@ -187,6 +192,14 @@ const Navbar = () => {
               ) : (
                 <>
                   <div className={classes.buttonContainer}>
+                    <PopupMenu
+                      name="Contest"
+                      menuItems={[
+                        <Link to="/leaderboard" className={classes.link}>
+                          Leaderboard
+                        </Link>,
+                      ]}
+                    />
                     <PopupMenu
                       name="Options"
                       menuItems={[

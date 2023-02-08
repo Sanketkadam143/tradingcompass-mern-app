@@ -1,7 +1,6 @@
-import {socket} from "./index"
+import { socket } from "./index";
 import { useEffect } from "react";
 import { useStateContext } from "../Contexts/ContextProvider";
-
 
 const useSocketConnection = () => {
   const {
@@ -18,6 +17,7 @@ const useSocketConnection = () => {
     setStockTimestamp,
     setNiftyPrice,
     setBankPrice,
+    setLeaderboard,
   } = useStateContext();
 
   const update = (old, res) => {
@@ -74,6 +74,10 @@ const useSocketConnection = () => {
       setBankDaydata((old) => update(old, res));
     });
 
+    socket.on("leaderboard", (res) => {
+      setLeaderboard(res);
+    });
+
     // socket.on("updateOrders",(res)=>{
     //   dispatch({ type: FETCH_ALL, payload: res });
     // })
@@ -85,7 +89,7 @@ const useSocketConnection = () => {
       socket.off("stocks");
       socket.off("updateNifty");
       socket.off("updateBank");
-     // socket.off("updateOrders");
+      // socket.off("updateOrders");
     };
 
     // eslint-disable-next-line

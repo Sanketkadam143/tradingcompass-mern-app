@@ -1,11 +1,10 @@
-import { AUTH, FETCH_ALL, CLIENT_MSG } from "../constants/actionTypes";
+import { AUTH,  CLIENT_MSG } from "../constants/actionTypes";
 import * as api from "../API";
 
 export const signin = (formData, navigate) => async (dispatch) => {
   try {
     const { data, status } = await api.signIn(formData);
     dispatch({ type: AUTH, data });
-    dispatch({ type: FETCH_ALL, payload: data.result.orderDetails });
     dispatch({
       type: CLIENT_MSG,
       message: { info: data.successMessage, status },
@@ -50,7 +49,6 @@ export const googleSignin = (token, navigate) => async (dispatch) => {
   try {
     const { data, status } = await api.googleSignIn(token);
     dispatch({ type: AUTH, data });
-    dispatch({ type: FETCH_ALL, payload: data.result.orderDetails });
     dispatch({
       type: CLIENT_MSG,
       message: { info: data.successMessage, status },

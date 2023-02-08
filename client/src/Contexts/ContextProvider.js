@@ -34,6 +34,7 @@ export const ContextProvider = ({ children }) => {
   );
   const [niftyPrice, setNiftyPrice] = useState(0);
   const [bankPrice, setBankPrice] = useState(0);
+  const [leaderboard, setLeaderboard] = useState([]);
 
   return (
     <StateContext.Provider
@@ -68,6 +69,8 @@ export const ContextProvider = ({ children }) => {
         setNiftyPrice,
         bankPrice,
         setBankPrice,
+        leaderboard,
+        setLeaderboard,
       }}
     >
       {children}

@@ -37,3 +37,6 @@ export const googleSignIn = (token) => API.post("/users/googlesignin", token);
 
 export const resetPassword = (formData) =>
   API.post("/users/resetpassword", formData);
+
+export const contestRegistration=()=>API.post("contest/registration");
+export const getRegistration=()=>API.get("contest/getregistration");

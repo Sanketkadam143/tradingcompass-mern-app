@@ -198,6 +198,14 @@ const Position = () => {
                         </Typography>
                       </div>
                     </div>
+                    <div>
+                      <div>Available</div>
+                      <div>
+                        <Typography variant="h5">
+                          {formatNumber(100000-invested)}
+                        </Typography>
+                      </div>
+                    </div>
                   </div>
                   <Divider style={{ width: "90%", margin: "1em" }} />
                   <div className={classes.pnlDiv}>
@@ -255,6 +263,14 @@ const Position = () => {
                                 2
                               )}{" "}
                           %
+                        </Typography>
+                      </div>
+                    </div>
+                    <div>
+                      <div>Available</div>
+                      <div>
+                        <Typography variant="h5">
+                          {formatNumber(100000-invested)}
                         </Typography>
                       </div>
                     </div>

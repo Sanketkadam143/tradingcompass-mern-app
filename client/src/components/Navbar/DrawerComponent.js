@@ -33,14 +33,22 @@ const DrawerComponent = () => {
         <Toolbar />
         <List style={{ marginTop: "1em" }}>
           <PopupMenu
+            name="Contest"
+            menuItems={[
+              <Link to="/leaderboard" className={classes.link}>
+                Leaderboard
+              </Link>,
+            ]}
+          />
+          <PopupMenu
             name="Options"
             menuItems={[
               <Link to="/oi-intervalwise" className={classes.link}>
                 OI Analysis
               </Link>,
               <Link to="/callvsput" className={classes.link}>
-              Call vs Put OI
-             </Link>,
+                Call vs Put OI
+              </Link>,
               "Multi-Strike OI",
               "OI Interval wise",
             ]}

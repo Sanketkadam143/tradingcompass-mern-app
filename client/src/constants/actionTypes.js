@@ -5,3 +5,4 @@ export const DELETE = 'DELETE';
 export const AUTH='AUTH';
 export const LOGOUT='LOGOUT';
 export const CLIENT_MSG='CLIENT_MSG';
+export const REGISTRATION='REGISTRATION';

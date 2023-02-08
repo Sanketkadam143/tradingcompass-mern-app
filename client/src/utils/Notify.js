@@ -25,10 +25,8 @@ const Notify = () => {
     !isOnline && setofflineCheck(true);
     if (offlineCheck && isOnline) {
       toast.success("Back Online");
-
       setofflineCheck(false);
     }
-
     dispatch({ type: CLIENT_MSG, message: { info: null, status: null } });
 
     // eslint-disable-next-line react-hooks/exhaustive-deps

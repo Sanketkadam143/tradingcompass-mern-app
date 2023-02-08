@@ -18,6 +18,7 @@ const {
   Disclaimer,
   About,
   Offlinepage,
+  Leaderboard
 } = pages;
 
 export default function Router() {
@@ -55,6 +56,10 @@ export default function Router() {
         {
           path: "/oi-intervalwise",
           element: <SimpleLayout Component={SectorialFlow} />,
+        },
+        {
+          path: "/leaderboard",
+          element: <Leaderboard />,
         },
         {
           path: "/callvsput",

@@ -13,7 +13,7 @@ import PrivacyPolicy from "./Pages/PrivacyPolicy";
 import Disclaimer from "./Pages/Disclaimer";
 import About from "./Pages/About";
 import Offlinepage from "./Pages/Offlinepage";
-
+import Leaderboard from "./Pages/Leaderboard";
 const pages = {
   Navbar,
   SecNav,
@@ -30,6 +30,7 @@ const pages = {
   Disclaimer,
   About,
   Offlinepage,
+  Leaderboard
 };
 
 export default pages;
