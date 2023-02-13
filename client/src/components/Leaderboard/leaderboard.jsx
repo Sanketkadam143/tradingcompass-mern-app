@@ -1,38 +1,53 @@
-import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { Box, Button, Grid, Container, Typography } from "@mui/material";
+import React from "react";
+import Container from "@mui/material/Container";
+import Button from "@mui/material/Button";
+import { Grid } from "@mui/material";
+import { Typography } from "@mui/material";
 import { makeStyles } from "@mui/styles";
+import Avatar from '@mui/material/Avatar';
+import AddIcon from '@mui/icons-material/Add';
+import AvatarGroup from '@mui/material/AvatarGroup';
+import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
+import Cards from "./allCards";
+import RemoveIcon from '@mui/icons-material/Remove';
+
+
+
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { Box } from "@mui/material";
+
 import Dialog from "@mui/material/Dialog";
 import Slide from "@mui/material/Slide";
 import Alert from "@mui/material/Alert";
 import AlertTitle from "@mui/material/AlertTitle";
 import CircularProgress from "@mui/material/CircularProgress";
-import CustomTable from "../components/Charts/Table/Table";
-import { getRegistration, registration } from "../actions/contest";
-import App from "../components/Leaderboard/leaderboard";
-import Navbar from "../components/Navbar/Navbar"
+import CustomTable from "../Charts/Table/Table";
+import { getRegistration, registration } from "../../actions/contest";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
+
 const useStyles = makeStyles({
   btn_styles: {
     marginLeft: 10,
+    marginTop: 10,
     display: "flex",
     gap: 20,
     alignItems: "center",
     justifyContent: "center",
   },
-  outerDiv: {
-    backgroundColor: "#f0f0f0",
-    marginTop:"60px"
+  heading:{
+    paddingTop:"20px"
   }
 });
 
-const Leaderboard = () => {
-  const dispatch = useDispatch();
+
+const App = () => {
   const classes = useStyles();
+  const dispatch = useDispatch();
   const isregister = useSelector((state) => state.auth.isregister);
   const [confirm, setConfirm] = useState(null);
   const [isclick, setIsclick] = useState(false);
@@ -52,41 +67,47 @@ const Leaderboard = () => {
     // eslint-disable-next-line
   }, []);
 
+  const cardSx = {
+    "&:hover": {
+      marginTop: -2,
+    },
+  };
+
   return (
     <>
-      <Navbar />
-      <div className={classes.outerDiv}>
-        <App />
-        {/* <Container align="center" >
-          <Typography
-            variant="h4"
-            align="center"
-            fontFamily="revert-layer"
-            color="black
-"
-            gutterBottom
-          >
-            Leaderboard
-          </Typography>
-          <Grid className={classes.btn_styles}>
-            <Button
-              disabled={isregister === null || isclick}
-              variant="contained"
-              align="center"
-              color="primary"
-              onClick={confirmExit}
-            >
-              {!isclick && (isregister ? "unregister" : "register")}
-              {isclick && <CircularProgress size={24} />}
-            </Button>
-          </Grid>
-        </Container> */}
+      <Container align="center">
+        <Typography
+          variant="h4"
+          align="center"
+          fontFamily="revert-layer"
+          color="black"
+          className={classes.heading}
+          gutterBottom
+        >
+          Leaderboard
+        </Typography>
+        {/* ------------------------card component --------------------------------- */}
 
-        {/* <Box>
-          <span>Leaderboard is refreshed every 2 min</span>
-        </Box> */}
-        {/* <div>
-          <Dialog
+        <Cards />
+
+        {/* ------------------------card component --------------------------------- */}
+
+        <Grid className={classes.btn_styles}>
+          <Button variant="contained" startIcon={<AddIcon />}
+            disabled={isregister === null || isclick}
+            onClick={confirmExit}
+          >
+            {!isclick && (isregister ? "unregister" : "register")}
+            {isclick && <CircularProgress size={24} />}
+          </Button>
+          <Button  variant="outlined" startIcon={<ArrowUpwardIcon />}>
+            Top Winners
+          </Button>
+        </Grid>
+
+      </Container>
+      <div>
+      <Dialog
             open={confirm}
             TransitionComponent={Transition}
             keepMounted
@@ -98,6 +119,11 @@ const Leaderboard = () => {
             <Alert
               action={
                 <>
+                <Button variant="contained" startIcon={<AddIcon />} disabled={isregister === null || isclick} onClick={confirmExit}>
+  {!isclick && (isregister ? <span>unregister <RemoveIcon /></span> : "register")}
+  {isclick && <CircularProgress size={24} />}
+</Button>
+
                   <Button
                     variant="contained"
                     color="primary"
@@ -130,13 +156,13 @@ const Leaderboard = () => {
                 "Your Order Details will be visible in Public Leaderboard"}
             </Alert>
           </Dialog>
-        </div> */}
-        <div style={{ margin: "1em" }}>
-          <CustomTable />
         </div>
-      </div >
+      <Container>
+        
+
+      </Container>
     </>
   );
 };
 
-export default Leaderboard;
+export default App;
