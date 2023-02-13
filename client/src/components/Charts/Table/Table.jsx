@@ -4,7 +4,7 @@ import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
 import TableRow from "@mui/material/TableRow";
 import TableHead from "@mui/material/TableHead";
-import { Container, withTheme } from "@mui/material";
+import { Container} from "@mui/material";
 import { Avatar, Typography } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import "./Table.css";
@@ -21,16 +21,13 @@ const useStyles = makeStyles(() => ({
     fontFamily: "'Poppins', sans-serif",
     letterSpacing: ".00625em",
     fontSize: "1rem",
-    textAlign: "left",
+    textAlign: "center",
   },
   table_row: {
     fontWeight: 600,
-    backgroundColor: 'white',
+    backgroundColor: "white",
     boxShadow: "rgba(0, 0, 0, 0.09)  3px 3px 2px",
-    borderColor: "1px solid white"
-
-
-
+    borderColor: "1px solid white",
   },
   profit_cell: {
     color: "#137333",
@@ -43,18 +40,21 @@ const useStyles = makeStyles(() => ({
 
 const CustomTable = (props) => {
   const { leaderboard } = useStateContext();
+  const ranking = leaderboard.slice(3);
   const symbol = "₹";
 
   const classes = useStyles();
   return (
     <>
-      <section >
+      <section>
         <Container maxWidth="70%">
           <Typography
             variant="h6"
-
-
-            sx={{ marginTop: '20px', marginLeft: "20px", fontFamily: 'sans-serif' }}
+            sx={{
+              marginTop: "20px",
+              marginLeft: "20px",
+              fontFamily: "sans-serif",
+            }}
             fontFamily="revert-layer"
             color="black
         "
@@ -65,12 +65,20 @@ const CustomTable = (props) => {
 
           <div className={classes.tcontainer}>
             <TableContainer>
-              <Table sx={{
-                borderCollapse: 'separate',
-                borderSpacing: '0px 10px',
-                borderRadius: "60px",
-              }}>
-                <TableHead sx={{ backgroundColor: "white", padding: "20px", boxShadow: "rgba(0, 0, 0, 0.09)  3px 3px 2px", }}>
+              <Table
+                sx={{
+                  borderCollapse: "separate",
+                  borderSpacing: "0px 10px",
+                  borderRadius: "60px",
+                }}
+              >
+                <TableHead
+                  sx={{
+                    backgroundColor: "white",
+                    padding: "20px",
+                    boxShadow: "rgba(0, 0, 0, 0.09)  3px 3px 2px",
+                  }}
+                >
                   <TableRow>
                     {[
                       "Rank",
@@ -90,7 +98,6 @@ const CustomTable = (props) => {
                           fontSize: "18px",
                           padding: "10px 6px 6px 15px",
                         }}
-
                         key={data}
                       >
                         {data}
@@ -98,27 +105,31 @@ const CustomTable = (props) => {
                     ))}
                   </TableRow>
                 </TableHead>
-                <TableBody className="table_body" >
-                  {leaderboard.map((user, index) => {
+                <TableBody className="table_body">
+                  {ranking.map((user, index) => {
                     const current = user?.margin + user?.investedProfit;
-                    const percentGain = user.margin === 0 ? 0 : (
-                      (user?.investedProfit / user?.margin) *
-                      100
-                    ).toFixed(2);
+                    const percentGain =
+                      user.margin === 0
+                        ? 0
+                        : ((user?.investedProfit / user?.margin) * 100).toFixed(
+                            2
+                          );
                     return (
-                      <TableRow className={classes.table_row} key={user?.id} >
+                      <TableRow className={classes.table_row} key={user?.id}>
                         {/* Ranking*/}
                         <TableCell
                           align="center"
                           className={classes.table_cell}
                           style={{ fontWeight: "500" }}
-
                         >
-                          {index + 1}
+                          {index + 4}
                         </TableCell>
 
                         {/* Profile picture */}
-                        <TableCell align="center" className={classes.table_cell}>
+                        <TableCell
+                          align="center"
+                          className={classes.table_cell}
+                        >
                           <Avatar
                             className={classes.purple}
                             alt={user?.name}
@@ -137,7 +148,10 @@ const CustomTable = (props) => {
                           {user?.name}
                         </TableCell>
                         {/* Invested Amount*/}
-                        <TableCell align="center" className={classes.table_cell}>
+                        <TableCell
+                          align="center"
+                          className={classes.table_cell}
+                        >
                           {symbol}
                           {user?.margin}
                         </TableCell>
@@ -147,7 +161,8 @@ const CustomTable = (props) => {
                           align="center"
                           className={classes.table_cell}
                           style={{
-                            color: current >= user?.margin ? "#137333" : "#a50e0e",
+                            color:
+                              current >= user?.margin ? "#137333" : "#a50e0e",
                           }}
                         >
                           {symbol}
@@ -167,8 +182,6 @@ const CustomTable = (props) => {
                           {user?.investedProfit}
                         </TableCell>
 
-
-
                         {/* Percent Gain */}
                         <TableCell
                           className={classes.table_cell}
@@ -183,7 +196,8 @@ const CustomTable = (props) => {
                             className={classes.profit_cell}
                             style={{
                               color: percentGain >= 0 ? "#137333" : "#a50e0e",
-                              background: percentGain >= 0 ? "#e6f4ea" : "#fce8e6",
+                              background:
+                                percentGain >= 0 ? "#e6f4ea" : "#fce8e6",
                             }}
                           >
                             <span style={{ marginRight: "6px" }}>
@@ -202,13 +216,13 @@ const CustomTable = (props) => {
                           className={classes.table_cell}
                           align="center"
                           style={{
-                            color: user?.totalProfit >= 0 ? "#137333" : "#a50e0e",
+                            color:
+                              user?.totalProfit >= 0 ? "#137333" : "#a50e0e",
                           }}
                         >
                           {symbol}
                           {user?.totalProfit}
                         </TableCell>
-
                       </TableRow>
                     );
                   })}

@@ -4,31 +4,21 @@ import Button from "@mui/material/Button";
 import { Grid } from "@mui/material";
 import { Typography } from "@mui/material";
 import { makeStyles } from "@mui/styles";
-import Avatar from '@mui/material/Avatar';
-import AddIcon from '@mui/icons-material/Add';
-import AvatarGroup from '@mui/material/AvatarGroup';
-import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
+import AddIcon from "@mui/icons-material/Add";
+import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
 import Cards from "./allCards";
-import RemoveIcon from '@mui/icons-material/Remove';
-
-
-
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Box } from "@mui/material";
-
 import Dialog from "@mui/material/Dialog";
 import Slide from "@mui/material/Slide";
 import Alert from "@mui/material/Alert";
 import AlertTitle from "@mui/material/AlertTitle";
 import CircularProgress from "@mui/material/CircularProgress";
-import CustomTable from "../Charts/Table/Table";
 import { getRegistration, registration } from "../../actions/contest";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
-
 
 const useStyles = makeStyles({
   btn_styles: {
@@ -39,13 +29,12 @@ const useStyles = makeStyles({
     alignItems: "center",
     justifyContent: "center",
   },
-  heading:{
-    paddingTop:"20px"
-  }
+  heading: {
+    paddingTop: "20px",
+  },
 });
 
-
-const App = () => {
+const Leaderboard = () => {
   const classes = useStyles();
   const dispatch = useDispatch();
   const isregister = useSelector((state) => state.auth.isregister);
@@ -67,11 +56,11 @@ const App = () => {
     // eslint-disable-next-line
   }, []);
 
-  const cardSx = {
-    "&:hover": {
-      marginTop: -2,
-    },
-  };
+  // const cardSx = {
+  //   "&:hover": {
+  //     marginTop: -2,
+  //   },
+  // };
 
   return (
     <>
@@ -93,76 +82,70 @@ const App = () => {
         {/* ------------------------card component --------------------------------- */}
 
         <Grid className={classes.btn_styles}>
-          <Button variant="contained" startIcon={<AddIcon />}
+          <Button
+            variant="contained"
+            startIcon={<AddIcon />}
             disabled={isregister === null || isclick}
             onClick={confirmExit}
           >
             {!isclick && (isregister ? "unregister" : "register")}
             {isclick && <CircularProgress size={24} />}
           </Button>
-          <Button  variant="outlined" startIcon={<ArrowUpwardIcon />}>
+          <Button variant="outlined" startIcon={<ArrowUpwardIcon />}>
             Top Winners
           </Button>
         </Grid>
-
       </Container>
       <div>
-      <Dialog
-            open={confirm}
-            TransitionComponent={Transition}
-            keepMounted
-            onClose={() => {
-              handleClose();
-            }}
-            aria-describedby="alert-dialog-slide-description"
+        <Dialog
+          open={confirm}
+          TransitionComponent={Transition}
+          keepMounted
+          onClose={() => {
+            handleClose();
+          }}
+          aria-describedby="alert-dialog-slide-description"
+        >
+          <Alert
+            action={
+              <>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  onClick={() => {
+                    dispatch(registration());
+                    handleClose();
+                  }}
+                >
+                  {isregister ? "unregister" : "register"}
+                </Button>
+                <Button
+                  onClick={() => {
+                    handleClose();
+                  }}
+                >
+                  Cancel
+                </Button>
+              </>
+            }
+            severity="warning"
           >
-            <Alert
-              action={
-                <>
-                <Button variant="contained" startIcon={<AddIcon />} disabled={isregister === null || isclick} onClick={confirmExit}>
-  {!isclick && (isregister ? <span>unregister <RemoveIcon /></span> : "register")}
-  {isclick && <CircularProgress size={24} />}
-</Button>
-
-                  <Button
-                    variant="contained"
-                    color="primary"
-                    onClick={() => {
-                      dispatch(registration());
-                      handleClose();
-                    }}
-                  >
-                    {isregister ? "unregister" : "register"}
-                  </Button>
-                  <Button
-                    onClick={() => {
-                      handleClose();
-                    }}
-                  >
-                    Cancel
-                  </Button>
-                </>
-              }
-              severity="warning"
-            >
-              <AlertTitle>
-                <strong>
-                  {`Are you sure you want ${isregister ? "unregister" : "register"
-                    }
+            <AlertTitle>
+              <strong>
+                {`Are you sure you want ${
+                  isregister ? "unregister" : "register"
+                }
                 ?`}
-                </strong>
-              </AlertTitle>
-              {!isregister &&
-                "Your Order Details will be visible in Public Leaderboard"}
-            </Alert>
-          </Dialog>
-        </div>
-      <Container>
-        
-
-      </Container>
+              </strong>
+            </AlertTitle>
+            {!isregister &&
+              "Your Order Details will be visible in Public Leaderboard"}
+          </Alert>
+        </Dialog>
+      </div>
+      <Container></Container>
     </>
   );
 };
 
-export default App;
+export default Leaderboard;

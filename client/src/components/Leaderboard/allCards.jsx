@@ -1,36 +1,38 @@
-import TopCard from './TopCard';
+import TopCard from "./TopCard";
+import { useStateContext } from "../../Contexts/ContextProvider";
 
 function Cards() {
-    return (
-        <div>
-            <TopCard
-                backgroundColor="#64b5f6"
-                backgroundImage="linear-gradient(to right,#FF6F91, #FF9671)"
-                avatarSrc="https://expertphotography.b-cdn.net/wp-content/uploads/2020/08/social-media-profile-photos-3.jpg"
-                name="Mr.Demo Name 2"
-                subName="Rs 20,231,65"
-                imageSrc="https://i.postimg.cc/L8FFG0kn/card2.png"
-
-            />
-            <TopCard
-                backgroundColor="#9575cd"
-                backgroundImage="linear-gradient(to right,#B83FAE, #845EC2)"
-                avatarSrc="https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500"
-                name="Mr.Demo Name 1"
-                subName="Rs 19,231,65"
-                imageSrc="https://i.postimg.cc/yYbk9Bz2/card.png"
-
-            />
-            <TopCard
-                backgroundColor="#64b5f6"
-                backgroundImage="linear-gradient(to right,#FF6F91, #FF9671)"
-                avatarSrc="https://thumbs.dreamstime.com/b/businessman-man-white-shirt-costume-red-tie-36358040.jpg"
-                name="Mr.Demo Name 3"
-                subName="Rs 20,231,65"
-                imageSrc="https://i.postimg.cc/DZMt6Cyf/card3.png"
-
-            />
-        </div>
-    )
+  const { leaderboard } = useStateContext();
+  return (
+    <div>
+      <TopCard
+        backgroundColor="#64b5f6"
+        backgroundImage="linear-gradient(to right,#FF6F91, #FF9671)"
+        avatarSrc={leaderboard[1]?.picture}
+        name={leaderboard[1]?.name}
+        subName={`Rs ${leaderboard[1]?.totalProfit}`}
+        imageSrc="https://i.postimg.cc/L8FFG0kn/card2.png"
+        rank={2}
+      />
+      <TopCard
+        backgroundColor="#9575cd"
+        backgroundImage="linear-gradient(to right,#B83FAE, #845EC2)"
+        avatarSrc={leaderboard[0]?.picture}
+        name={leaderboard[0]?.name}
+        subName={`Rs ${leaderboard[0]?.totalProfit}`}
+        imageSrc="https://i.postimg.cc/yYbk9Bz2/card.png"
+        rank={1}
+      />
+      <TopCard
+        backgroundColor="#64b5f6"
+        backgroundImage="linear-gradient(to right,#FF6F91, #FF9671)"
+        avatarSrc={leaderboard[2]?.picture}
+        name={leaderboard[2]?.name}
+        subName={`Rs ${leaderboard[2]?.totalProfit}`}
+        imageSrc="https://i.postimg.cc/DZMt6Cyf/card3.png"
+        rank={3}
+      />
+    </div>
+  );
 }
 export default Cards;
