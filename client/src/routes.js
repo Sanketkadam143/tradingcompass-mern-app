@@ -5,6 +5,7 @@ import { useStateContext } from "./Contexts/ContextProvider";
 import pages from "./pages";
 import SimpleLayout from "./layouts/SimpleLayout";
 
+
 const {
   Page404,
   OIcomparison,
@@ -18,7 +19,8 @@ const {
   Disclaimer,
   About,
   Offlinepage,
-  Leaderboard
+  Leaderboard,
+  TrendingOI
 } = pages;
 
 export default function Router() {
@@ -80,6 +82,10 @@ export default function Router() {
         {
           path: "/about",
           element: <SimpleLayout Component={About} />,
+        },
+        {
+          path: "/trending-oi",
+          element: <SimpleLayout Component={TrendingOI} />,
         },
         {
           path: "/404",

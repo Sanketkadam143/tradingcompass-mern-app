@@ -43,12 +43,16 @@ const DrawerComponent = () => {
           <PopupMenu
             name="Options"
             menuItems={[
-              <Link to="/oi-intervalwise" className={classes.link}>
-                OI Analysis
+              <Link to="/trending-oi" className={classes.link}>
+                Trending OI
               </Link>,
               <Link to="/callvsput" className={classes.link}>
                 Call vs Put OI
               </Link>,
+              <Link to="/oi-intervalwise" className={classes.link}>
+                OI Analysis
+              </Link>,
+
               "Multi-Strike OI",
               "OI Interval wise",
             ]}

@@ -14,6 +14,8 @@ import Disclaimer from "./Pages/Disclaimer";
 import About from "./Pages/About";
 import Offlinepage from "./Pages/Offlinepage";
 import Leaderboard from "./Pages/Leaderboard";
+import TrendingOI from "./Pages/TrendingOI";
+
 const pages = {
   Navbar,
   SecNav,
@@ -30,7 +32,8 @@ const pages = {
   Disclaimer,
   About,
   Offlinepage,
-  Leaderboard
+  Leaderboard,
+  TrendingOI
 };
 
 export default pages;
