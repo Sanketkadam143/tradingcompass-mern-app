@@ -15,6 +15,7 @@ import About from "./Pages/About";
 import Offlinepage from "./Pages/Offlinepage";
 import Leaderboard from "./Pages/Leaderboard";
 import TrendingOI from "./Pages/TrendingOI";
+import CePeRatio from "./Pages/CePeRatio";
 
 const pages = {
   Navbar,
@@ -27,6 +28,7 @@ const pages = {
   SectorialFlow,
   Portfolio,
   CallvsPutpage,
+  CePeRatio,
   ResetPass,
   PrivacyPolicy,
   Disclaimer,

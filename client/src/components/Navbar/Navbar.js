@@ -206,6 +206,9 @@ const Navbar = () => {
                         <Link to="/trending-oi" className={classes.link}>
                           Trending OI
                         </Link>,
+                        <Link to="/cepe-ratio" className={classes.link}>
+                          CE-PE Ratio
+                        </Link>,
                         <Link to="/callvsput" className={classes.link}>
                           Call vs Put OI
                         </Link>,

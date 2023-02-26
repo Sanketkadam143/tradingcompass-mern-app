@@ -20,7 +20,8 @@ const {
   About,
   Offlinepage,
   Leaderboard,
-  TrendingOI
+  TrendingOI,
+  CePeRatio
 } = pages;
 
 export default function Router() {
@@ -66,6 +67,10 @@ export default function Router() {
         {
           path: "/callvsput",
           element: <SimpleLayout Component={CallvsPutpage} />,
+        },
+        {
+          path: "/cepe-ratio",
+          element: <SimpleLayout Component={CePeRatio} />,
         },
         {
           path: "/forget-password",
