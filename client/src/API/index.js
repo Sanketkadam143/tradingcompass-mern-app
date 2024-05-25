@@ -2,15 +2,15 @@ import axios from "axios";
 import io from "socket.io-client";
 const token = JSON.parse(localStorage.getItem("profile"))?.token || null;
 
-const API = axios.create({ baseURL: "http://localhost:5000/" });
-export const socket = io.connect("http://localhost:5000/", {
-  query: { token },
-});
-
-// const API = axios.create({ baseURL: process.env.REACT_APP_API });
-// export const socket = io.connect(process.env.REACT_APP_API, {
+// const API = axios.create({ baseURL: "http://localhost:5000/" });
+// export const socket = io.connect("http://localhost:5000/", {
 //   query: { token },
 // });
+
+const API = axios.create({ baseURL: process.env.REACT_APP_API });
+export const socket = io.connect(process.env.REACT_APP_API, {
+  query: { token },
+});
 
 API.interceptors.request.use((req) => {
   if (localStorage.getItem("profile")) {
