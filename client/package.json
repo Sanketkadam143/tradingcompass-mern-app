@@ -44,9 +44,7 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject",
-    "custom-install": "npm install --force or --legacy-peer-deps",
-    "postinstall": "npm run custom-install"
+    "eject": "react-scripts eject"
   },
   "eslintConfig": {
     "extends": [
@@ -67,6 +65,7 @@
     ]
   },
   "devDependencies": {
+    "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
     "dotenv": "^16.0.2"
   }
 }

@@ -189,7 +189,7 @@ const Showorders = ({ orderDetails, index, type }) => {
       : orderDetails.symbol;
 
   const formatNumber = (num) =>
-    num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    num?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   return (
     <div className={classes.paperDiv}>
       {isSold && (

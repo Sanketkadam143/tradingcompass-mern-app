@@ -41,6 +41,7 @@ const TrendingOI = ({ indexData, name }) => {
         backgroundColor: ["#e76d67"],
         pointRadius: 1,
         pointHoverRadius: 6,
+
       },
       {
         label: strikes[1]?.stp

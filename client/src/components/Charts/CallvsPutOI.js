@@ -23,7 +23,7 @@ const data = {
     datasets: [
       {
         label: "CE OI",
-        data:indexData?.map((x)=>x?.totCEchg),
+        data:indexData?.map((x)=>x?.totPEchg-x?.totCEchg),
         fill: false,
         borderColor: ["#e76d67"],
         backgroundColor:  ["#e76d67"],
@@ -34,7 +34,7 @@ const data = {
       },
       {
         label: "PE OI",
-        data:indexData?.map((x)=>x?.totPEchg),
+        data:indexData?.map((x)=>x?.totPEchg-x?.totCEchg),
         fill: false,
         borderColor: ["#40b0b2"],
         backgroundColor:   ["#40b0b2"],

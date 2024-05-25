@@ -69,7 +69,7 @@ export default function Router() {
           element: <SimpleLayout Component={CallvsPutpage} />,
         },
         {
-          path: "/cepe-ratio",
+          path: "/pece-ratio",
           element: <SimpleLayout Component={CePeRatio} />,
         },
         {

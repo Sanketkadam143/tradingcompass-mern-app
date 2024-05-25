@@ -18,8 +18,8 @@ const CePeRatio = ({ indexData, name }) => {
     labels: timearr,
     datasets: [
       {
-        label: "Call Put Ratio",
-        data: indexData?.map((x) => x?.totCEchg / x?.totPEchg),
+        label: "Put Call Ratio",
+        data: indexData?.map((x) =>x?.totPEchg /x?.totCEchg  ),
         fill: false,
         borderColor: ["#e76d67"],
         backgroundColor: ["#e76d67"],
@@ -79,7 +79,7 @@ const CePeRatio = ({ indexData, name }) => {
 
   return (
     <div>
-      <span>{name} CE PE Ratio</span>
+      <span>{name} Put Call Ratio</span>
       <Line
         data={data}
         width={isMatch ? 380 : 800}
