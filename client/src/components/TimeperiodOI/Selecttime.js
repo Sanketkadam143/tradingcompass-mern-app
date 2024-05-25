@@ -60,8 +60,8 @@ const Selecttime = () => {
   const [minTimeCaption, set_minTimeCaption] = useState("");
   const [maxTimeCaption, set_maxTimeCaption] = useState("");
   const [initialhand, setInitialhand] = useState(0);
-  const [minTime, setMinTime] = useState("");
-  const [maxTime, setMaxTime] = useState("");
+  const [minTime, setMinTime] = useState("0915");
+  const [maxTime, setMaxTime] = useState("1530");
 
   const handleTimeChange = (e) => {
     setInitialhand(e.minValue);
